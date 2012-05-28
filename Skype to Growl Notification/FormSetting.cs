@@ -83,17 +83,39 @@ namespace Skype_to_Growl_Notification
             NotifiGrowl(notificationTypeChat, "Test Title", "Test Message");
         }
 
+        private void toolStripMenuItemGetAttachmentStatus_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(((ISkype)skype).AttachmentStatus.ToString());
+        }
+
         #region "Growl"
 
         private void RegisterGrowl()
         {
             connector.Register(application, new NotificationType[] { notificationTypeChat, notificationTypeOnline });
             connector.ErrorResponse += new GrowlConnector.ResponseEventHandler(connector_ErrorResponse);
+            connector.NotificationCallback += new GrowlConnector.CallbackEventHandler(connector_NotificationCallback);
+        }
+
+        private void connector_NotificationCallback(Response response, CallbackData callbackData, object state)
+        {
+            if (callbackData.Result == Growl.CoreLibrary.CallbackResult.CLICK)
+            {
+                if (callbackData.Data != "")
+                {
+                    skype.Chat[callbackData.Data].OpenWindow();
+                }
+            }
         }
 
         private void NotifiGrowl(NotificationType type, string title, string message)
         {
             connector.Notify(new Notification(application.Name, type.Name, DateTime.Now.Ticks.ToString(), title, message));
+        }
+
+        private void NotifiGrowl(NotificationType type, string title, string message, CallbackContext callbackContext)
+        {
+            connector.Notify(new Notification(application.Name, type.Name, DateTime.Now.Ticks.ToString(), title, message), callbackContext);
         }
 
         private void connector_ErrorResponse(Response response, object state)
@@ -114,13 +136,15 @@ namespace Skype_to_Growl_Notification
 
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
         {
+            
             string title = pMessage.FromDisplayName + "(" + pMessage.Sender.FullName + ")" + "さんからのチャット";
             switch (Status)
             {
                 case TChatMessageStatus.cmsRead:
                     break;
                 case TChatMessageStatus.cmsReceived:
-                    NotifiGrowl(notificationTypeChat, title , pMessage.Body);
+                    CallbackContext callbackContext = new CallbackContext(pMessage.Chat.Name, "MessageStatus");
+                    NotifiGrowl(notificationTypeChat, title , pMessage.Body, callbackContext);
                     break;
                 case TChatMessageStatus.cmsSending:
                     break;
@@ -133,6 +157,7 @@ namespace Skype_to_Growl_Notification
 
         private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
         {
+            CallbackContext callbackContext = new CallbackContext(pUser.Handle, "OnlineStatus");
             string message = pUser.DisplayName + "(" + pUser.FullName + ")" + "さんが\n「";
             switch (Status)
             {
@@ -162,7 +187,7 @@ namespace Skype_to_Growl_Notification
                     break;
             }
             message += "」になりました。";
-            NotifiGrowl(notificationTypeOnline, "オンラインステータスの変更", message);
+            NotifiGrowl(notificationTypeOnline, "オンラインステータスの変更", message, callbackContext);
         }
 
         #endregion

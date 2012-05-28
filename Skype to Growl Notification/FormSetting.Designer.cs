@@ -42,6 +42,7 @@
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemSendTestMessage = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemGetAttachmentStatus = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripRightClick.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,6 +73,7 @@
             // 
             this.toolStripMenuItemCommands.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemAttachSkype,
+            this.toolStripMenuItemGetAttachmentStatus,
             this.toolStripSeparator3,
             this.toolStripMenuItemRegisterGrowl,
             this.toolStripMenuItemTestNotification});
@@ -128,6 +130,13 @@
             this.toolStripMenuItemSendTestMessage.Size = new System.Drawing.Size(172, 22);
             this.toolStripMenuItemSendTestMessage.Text = "テスト通知を送信";
             // 
+            // toolStripMenuItemGetAttachmentStatus
+            // 
+            this.toolStripMenuItemGetAttachmentStatus.Name = "toolStripMenuItemGetAttachmentStatus";
+            this.toolStripMenuItemGetAttachmentStatus.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItemGetAttachmentStatus.Text = "接続状況の確認";
+            this.toolStripMenuItemGetAttachmentStatus.Click += new System.EventHandler(this.toolStripMenuItemGetAttachmentStatus_Click);
+            // 
             // FormSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -156,6 +165,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRegisterGrowl;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemTestNotification;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGetAttachmentStatus;
     }
 }
 
