@@ -35,6 +35,7 @@
             this.toolStripMenuItemOpenSetting = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCommands = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAttachSkype = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemGetAttachmentStatus = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemRegisterGrowl = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemTestNotification = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,7 +43,6 @@
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemSendTestMessage = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemGetAttachmentStatus = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripRightClick.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -88,6 +88,13 @@
             this.toolStripMenuItemAttachSkype.Text = "Skypeへ接続";
             this.toolStripMenuItemAttachSkype.Click += new System.EventHandler(this.toolStripMenuItemAttachSkype_Click);
             // 
+            // toolStripMenuItemGetAttachmentStatus
+            // 
+            this.toolStripMenuItemGetAttachmentStatus.Name = "toolStripMenuItemGetAttachmentStatus";
+            this.toolStripMenuItemGetAttachmentStatus.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItemGetAttachmentStatus.Text = "接続状況の確認";
+            this.toolStripMenuItemGetAttachmentStatus.Click += new System.EventHandler(this.toolStripMenuItemGetAttachmentStatus_Click);
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -130,18 +137,12 @@
             this.toolStripMenuItemSendTestMessage.Size = new System.Drawing.Size(172, 22);
             this.toolStripMenuItemSendTestMessage.Text = "テスト通知を送信";
             // 
-            // toolStripMenuItemGetAttachmentStatus
-            // 
-            this.toolStripMenuItemGetAttachmentStatus.Name = "toolStripMenuItemGetAttachmentStatus";
-            this.toolStripMenuItemGetAttachmentStatus.Size = new System.Drawing.Size(172, 22);
-            this.toolStripMenuItemGetAttachmentStatus.Text = "接続状況の確認";
-            this.toolStripMenuItemGetAttachmentStatus.Click += new System.EventHandler(this.toolStripMenuItemGetAttachmentStatus_Click);
-            // 
             // FormSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormSetting";
             this.Text = "設定";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSetting_FormClosing);

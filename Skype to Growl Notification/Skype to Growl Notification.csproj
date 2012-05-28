@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\skype.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Growl.Connector">
       <HintPath>..\..\..\..\..\Downloads\Growl_NET_Connector_SDK\libraries\Growl.Connector.dll</HintPath>

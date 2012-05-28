@@ -19,6 +19,7 @@ namespace Skype_to_Growl_Notification
         //通知の種類
         private static readonly NotificationType notificationTypeOnline = new NotificationType("Online Status");
         private static readonly NotificationType notificationTypeChat = new NotificationType("Chat Received");
+        private static readonly NotificationType notificationTypeMood = new NotificationType("Mood Message");
 
         //Growlのアプリケーション登録に使う定数
         private readonly static string APPLICATION_NAME = "Skype Notification";
@@ -92,7 +93,7 @@ namespace Skype_to_Growl_Notification
 
         private void RegisterGrowl()
         {
-            connector.Register(application, new NotificationType[] { notificationTypeChat, notificationTypeOnline });
+            connector.Register(application, new NotificationType[] { notificationTypeChat, notificationTypeOnline, notificationTypeMood });
             connector.ErrorResponse += new GrowlConnector.ResponseEventHandler(connector_ErrorResponse);
             connector.NotificationCallback += new GrowlConnector.CallbackEventHandler(connector_NotificationCallback);
         }
@@ -132,6 +133,14 @@ namespace Skype_to_Growl_Notification
             skype.Attach(7, false);
             skype.MessageStatus += new _ISkypeEvents_MessageStatusEventHandler(skype_MessageStatus);
             skype.OnlineStatus += new _ISkypeEvents_OnlineStatusEventHandler(skype_OnlineStatus);
+            skype.UserMood += new _ISkypeEvents_UserMoodEventHandler(skype_UserMood);
+        }
+
+        private void skype_UserMood(User pUser, string MoodText)
+        {
+            string message = MoodText == "" ? "ムードメッセージが削除されました" : MoodText;
+            CallbackContext callbackContext = new CallbackContext(pUser.Handle, "Mood Message");
+            NotifiGrowl(notificationTypeMood, pUser.DisplayName + "(" + pUser.FullName + ")さんのムードメッセージ", message, callbackContext);
         }
 
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
