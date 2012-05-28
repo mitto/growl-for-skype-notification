@@ -48,6 +48,7 @@
             this.tabPageLog = new System.Windows.Forms.TabPage();
             this.listViewLog = new System.Windows.Forms.ListView();
             this.columnHeaderTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderEvent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageAbout = new System.Windows.Forms.TabPage();
@@ -58,7 +59,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.columnHeaderType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStripRightClick.SuspendLayout();
             this.tabControlSetting.SuspendLayout();
             this.tabPageLog.SuspendLayout();
@@ -70,6 +70,7 @@
             this.notifyIconTray.ContextMenuStrip = this.contextMenuStripRightClick;
             this.notifyIconTray.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIconTray.Icon")));
             this.notifyIconTray.Visible = true;
+            this.notifyIconTray.Click += new System.EventHandler(this.notifyIconTray_Click);
             // 
             // contextMenuStripRightClick
             // 
@@ -199,6 +200,7 @@
             this.columnHeaderName,
             this.columnHeaderEvent});
             this.listViewLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewLog.FullRowSelect = true;
             this.listViewLog.Location = new System.Drawing.Point(3, 3);
             this.listViewLog.Name = "listViewLog";
             this.listViewLog.Size = new System.Drawing.Size(246, 177);
@@ -209,6 +211,10 @@
             // columnHeaderTime
             // 
             this.columnHeaderTime.Text = "時間";
+            // 
+            // columnHeaderType
+            // 
+            this.columnHeaderType.Text = "種類";
             // 
             // columnHeaderName
             // 
@@ -302,10 +308,6 @@
             this.buttonCancel.Text = "キャンセル";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-            // 
-            // columnHeaderType
-            // 
-            this.columnHeaderType.Text = "種類";
             // 
             // FormSetting
             // 

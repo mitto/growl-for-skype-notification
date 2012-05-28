@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 using SKYPE4COMLib;
 using Growl.Connector;
+using System.IO;
 
 namespace Skype_to_Growl_Notification
 {
@@ -23,6 +24,8 @@ namespace Skype_to_Growl_Notification
 
         //Growlのアプリケーション登録に使う定数
         private readonly static string APPLICATION_NAME = "Skype Notification";
+
+        private static string LogPath = System.Windows.Forms.Application.StartupPath;
 
         public FormSetting()
         {
@@ -41,6 +44,8 @@ namespace Skype_to_Growl_Notification
             application.Icon = (Growl.CoreLibrary.Resource)Properties.Resources.skype.ToBitmap();
 
             labelVersion.Text += System.Windows.Forms.Application.ProductVersion;
+
+            LogPath += LogPath.EndsWith("\\") ? "log.txt" : "\\log.txt";
 
             if (!Properties.Settings.Default.IsFirstRun)
             {
@@ -156,7 +161,7 @@ namespace Skype_to_Growl_Notification
         private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
         {
             CallbackContext callbackContext = new CallbackContext(pUser.Handle, "OnlineStatus");
-            string message = pUser.DisplayName + "(" + pUser.FullName + ")" + "さんが\n「";
+            string message = pUser.FullName + "(" + pUser.Handle + ")" + "さんが\n「";
             switch (Status)
             {
                 case TOnlineStatus.olsAway:
@@ -193,21 +198,13 @@ namespace Skype_to_Growl_Notification
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
         {
             
-            string title = pMessage.FromDisplayName + "(" + pMessage.Sender.FullName + ")" + "さんからのチャット";
+            string title = pMessage.Sender.FullName + "(" + pMessage.Sender.Handle + ")" + "さんからのチャット";
             switch (Status)
             {
-                case TChatMessageStatus.cmsRead:
-                    break;
                 case TChatMessageStatus.cmsReceived:
                     CallbackContext callbackContext = new CallbackContext(pMessage.Chat.Name, "MessageStatus");
                     NotifiGrowl(notificationTypeChat, title , pMessage.Body, callbackContext);
                     AddLog(DateTime.Now, "チャット", pMessage.Sender.FullName + "(" + pMessage.Sender.Handle + ")", pMessage.Body);
-                    break;
-                case TChatMessageStatus.cmsSending:
-                    break;
-                case TChatMessageStatus.cmsSent:
-                    break;
-                case TChatMessageStatus.cmsUnknown:
                     break;
             }
         }
@@ -216,7 +213,7 @@ namespace Skype_to_Growl_Notification
         {
             string message = MoodText == "" ? "ムードメッセージが削除されました" : MoodText;
             CallbackContext callbackContext = new CallbackContext(pUser.Handle, "Mood Message");
-            NotifiGrowl(notificationTypeMood, pUser.DisplayName + "(" + pUser.FullName + ")さんのムードメッセージ", message, callbackContext);
+            NotifiGrowl(notificationTypeMood, pUser.FullName + "(" + pUser.Handle + ")さんのムードメッセージ", message, callbackContext);
             AddLog(DateTime.Now, "ムードメッセージ", pUser.FullName + "(" + pUser.Handle + ")", MoodText);
         }
 
@@ -226,10 +223,22 @@ namespace Skype_to_Growl_Notification
 
         private void AddLog(DateTime time, string type, string name, string message)
         {
-            string[] item = { time.ToLongDateString() + time.ToLongTimeString(), type, name, message};
+            string date = time.ToLongDateString() + time.ToLongTimeString();
+            string[] item = { date, type, name, message};
             listViewLog.Items.Add(new ListViewItem(item));
+
+            using (var writer = File.AppendText(LogPath))
+            {
+                writer.WriteLine("{0}\t{1}\t{2}\t{3}", date, type, name, message);
+            }
         }
 
         #endregion
+
+        private void notifyIconTray_Click(object sender, EventArgs e)
+        {
+            this.Visible = !this.Visible;
+            this.Focus();
+        }
     }
 }
