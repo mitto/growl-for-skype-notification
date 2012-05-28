@@ -40,6 +40,8 @@ namespace Skype_to_Growl_Notification
             application = new Growl.Connector.Application(APPLICATION_NAME);
             application.Icon = (Growl.CoreLibrary.Resource)Properties.Resources.skype.ToBitmap();
 
+            labelVersion.Text += System.Windows.Forms.Application.ProductVersion;
+
             if (!Properties.Settings.Default.IsFirstRun)
             {
                 MessageBox.Show("初回起動です。\nGrowlへの登録とSkypeへの接続を行います。", "確認");
@@ -50,11 +52,6 @@ namespace Skype_to_Growl_Notification
             AttachSkype();
         }
 
-        private void toolStripMenuItemExit_Click(object sender, EventArgs e)
-        {
-            System.Windows.Forms.Application.Exit();
-        }
-
         private void FormSetting_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
@@ -62,6 +59,26 @@ namespace Skype_to_Growl_Notification
                 e.Cancel = true;
                 this.Visible = false;
             }
+        }
+
+        private void buttonOK_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void linkLabelHome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(linkLabelHome.Text);
+        }
+
+        private void toolStripMenuItemExit_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Application.Exit();
         }
 
         private void toolStripMenuItemOpenSetting_Click(object sender, EventArgs e)
@@ -136,34 +153,6 @@ namespace Skype_to_Growl_Notification
             skype.UserMood += new _ISkypeEvents_UserMoodEventHandler(skype_UserMood);
         }
 
-        private void skype_UserMood(User pUser, string MoodText)
-        {
-            string message = MoodText == "" ? "ムードメッセージが削除されました" : MoodText;
-            CallbackContext callbackContext = new CallbackContext(pUser.Handle, "Mood Message");
-            NotifiGrowl(notificationTypeMood, pUser.DisplayName + "(" + pUser.FullName + ")さんのムードメッセージ", message, callbackContext);
-        }
-
-        private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
-        {
-            
-            string title = pMessage.FromDisplayName + "(" + pMessage.Sender.FullName + ")" + "さんからのチャット";
-            switch (Status)
-            {
-                case TChatMessageStatus.cmsRead:
-                    break;
-                case TChatMessageStatus.cmsReceived:
-                    CallbackContext callbackContext = new CallbackContext(pMessage.Chat.Name, "MessageStatus");
-                    NotifiGrowl(notificationTypeChat, title , pMessage.Body, callbackContext);
-                    break;
-                case TChatMessageStatus.cmsSending:
-                    break;
-                case TChatMessageStatus.cmsSent:
-                    break;
-                case TChatMessageStatus.cmsUnknown:
-                    break;
-            }
-        }
-
         private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
         {
             CallbackContext callbackContext = new CallbackContext(pUser.Handle, "OnlineStatus");
@@ -197,6 +186,48 @@ namespace Skype_to_Growl_Notification
             }
             message += "」になりました。";
             NotifiGrowl(notificationTypeOnline, "オンラインステータスの変更", message, callbackContext);
+
+            AddLog(DateTime.Now, "オンラインステータス", pUser.FullName + "(" + pUser.Handle + ")", message);
+        }
+
+        private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
+        {
+            
+            string title = pMessage.FromDisplayName + "(" + pMessage.Sender.FullName + ")" + "さんからのチャット";
+            switch (Status)
+            {
+                case TChatMessageStatus.cmsRead:
+                    break;
+                case TChatMessageStatus.cmsReceived:
+                    CallbackContext callbackContext = new CallbackContext(pMessage.Chat.Name, "MessageStatus");
+                    NotifiGrowl(notificationTypeChat, title , pMessage.Body, callbackContext);
+                    AddLog(DateTime.Now, "チャット", pMessage.Sender.FullName + "(" + pMessage.Sender.Handle + ")", pMessage.Body);
+                    break;
+                case TChatMessageStatus.cmsSending:
+                    break;
+                case TChatMessageStatus.cmsSent:
+                    break;
+                case TChatMessageStatus.cmsUnknown:
+                    break;
+            }
+        }
+
+        private void skype_UserMood(User pUser, string MoodText)
+        {
+            string message = MoodText == "" ? "ムードメッセージが削除されました" : MoodText;
+            CallbackContext callbackContext = new CallbackContext(pUser.Handle, "Mood Message");
+            NotifiGrowl(notificationTypeMood, pUser.DisplayName + "(" + pUser.FullName + ")さんのムードメッセージ", message, callbackContext);
+            AddLog(DateTime.Now, "ムードメッセージ", pUser.FullName + "(" + pUser.Handle + ")", MoodText);
+        }
+
+        #endregion
+
+        #region "Other"
+
+        private void AddLog(DateTime time, string type, string name, string message)
+        {
+            string[] item = { time.ToLongDateString() + time.ToLongTimeString(), type, name, message};
+            listViewLog.Items.Add(new ListViewItem(item));
         }
 
         #endregion
