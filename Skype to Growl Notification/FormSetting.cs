@@ -68,12 +68,7 @@ namespace Skype_to_Growl_Notification
             }
         }
 
-        private void buttonOK_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void buttonClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
@@ -110,7 +105,25 @@ namespace Skype_to_Growl_Notification
 
         private void toolStripMenuItemGetAttachmentStatus_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(((ISkype)skype).AttachmentStatus.ToString());
+            string message = ((ISkype)skype).AttachmentStatus.ToString() + "\n";
+            switch (((ISkype)skype).AttachmentStatus)
+            {
+                case TAttachmentStatus.apiAttachSuccess:
+                    message += "Skypeに接続成功しています。";
+                    break;
+                case TAttachmentStatus.apiAttachAvailable:
+                case TAttachmentStatus.apiAttachNotAvailable:
+                case TAttachmentStatus.apiAttachUnknown:
+                    message += "うまく接続できていないようです。\nタスクトレイアイコンのコマンドメニューから「Skypeへ接続」を試してみてください。";
+                    break;
+                case TAttachmentStatus.apiAttachPendingAuthorization:
+                    message += "接続許可申請をSkype側にリクエストしています。\nSkypeで接続を許可してください。";
+                    break;
+                case TAttachmentStatus.apiAttachRefused:
+                    message += "Skypeへの接続が失敗しました。\nSkype側で接続拒否を行っていないか確認してください。";
+                    break;
+            }
+            MessageBox.Show(message);
         }
 
         #region "Growl"
@@ -157,6 +170,8 @@ namespace Skype_to_Growl_Notification
         private void AttachSkype()
         {
             skype.Attach(7, false);
+            
+            //イベントハンドラの多重登録を防ぐため登録解除してから登録し直す
             skype.MessageStatus -= new _ISkypeEvents_MessageStatusEventHandler(skype_MessageStatus);
             skype.OnlineStatus -= new _ISkypeEvents_OnlineStatusEventHandler(skype_OnlineStatus);
             skype.UserMood -= new _ISkypeEvents_UserMoodEventHandler(skype_UserMood);
@@ -167,21 +182,10 @@ namespace Skype_to_Growl_Notification
 
         private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
         {
-            if (pUser.Handle == skype.CurrentUser.Handle)
+            //オンラインとオフラインの状態が切り替わった際に全アカウント分のオンラインステータスが投げられてくる事への対処
+            if (pUser.Handle == skype.CurrentUser.Handle | isOffline)
             {
-                if (Status == TOnlineStatus.olsOffline)
-                {
-                    isOffline = true;
-                }
-                else
-                {
-                    isOffline = false;
-                }
-                return;
-            }
-
-            if (isOffline)
-            {
+                isOffline = (Status == TOnlineStatus.olsOffline) ? true : false;
                 return;
             }
 
