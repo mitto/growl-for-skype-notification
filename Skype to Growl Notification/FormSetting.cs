@@ -27,6 +27,8 @@ namespace Skype_to_Growl_Notification
 
         private static string LogPath = System.Windows.Forms.Application.StartupPath;
 
+        private bool isOffline = false;
+
         public FormSetting()
         {
             InitializeComponent();
@@ -165,6 +167,24 @@ namespace Skype_to_Growl_Notification
 
         private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
         {
+            if (pUser.Handle == skype.CurrentUser.Handle)
+            {
+                if (Status == TOnlineStatus.olsOffline)
+                {
+                    isOffline = true;
+                }
+                else
+                {
+                    isOffline = false;
+                }
+                return;
+            }
+
+            if (isOffline)
+            {
+                return;
+            }
+
             CallbackContext callbackContext = new CallbackContext(pUser.Handle, "OnlineStatus");
             string message = pUser.FullName + "(" + pUser.Handle + ")" + "さんが\n「";
             switch (Status)
@@ -197,7 +217,7 @@ namespace Skype_to_Growl_Notification
             message += "」になりました。";
             NotifiGrowl(notificationTypeOnline, "オンラインステータスの変更", message, callbackContext);
 
-            AddLog(DateTime.Now, "オンラインステータス", pUser.FullName + "(" + pUser.Handle + ")", message);
+            AddLog(DateTime.Now, "オンラインステータス", pUser.FullName + "(" + pUser.Handle + ")", message.Replace("\n", ""));
         }
 
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
@@ -240,10 +260,13 @@ namespace Skype_to_Growl_Notification
 
         #endregion
 
-        private void notifyIconTray_Click(object sender, EventArgs e)
+        private void notifyIconTray_MouseClick(object sender, MouseEventArgs e)
         {
-            this.Visible = !this.Visible;
-            this.Focus();
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                this.Visible = !this.Visible;
+                this.Focus();
+            }
         }
     }
 }

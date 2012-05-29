@@ -70,7 +70,7 @@
             this.notifyIconTray.ContextMenuStrip = this.contextMenuStripRightClick;
             this.notifyIconTray.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIconTray.Icon")));
             this.notifyIconTray.Visible = true;
-            this.notifyIconTray.Click += new System.EventHandler(this.notifyIconTray_Click);
+            this.notifyIconTray.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIconTray_MouseClick);
             // 
             // contextMenuStripRightClick
             // 
