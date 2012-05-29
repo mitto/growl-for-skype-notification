@@ -116,6 +116,8 @@ namespace Skype_to_Growl_Notification
         private void RegisterGrowl()
         {
             connector.Register(application, new NotificationType[] { notificationTypeChat, notificationTypeOnline, notificationTypeMood });
+            connector.ErrorResponse -= new GrowlConnector.ResponseEventHandler(connector_ErrorResponse);
+            connector.NotificationCallback -= new GrowlConnector.CallbackEventHandler(connector_NotificationCallback);
             connector.ErrorResponse += new GrowlConnector.ResponseEventHandler(connector_ErrorResponse);
             connector.NotificationCallback += new GrowlConnector.CallbackEventHandler(connector_NotificationCallback);
         }
@@ -153,6 +155,9 @@ namespace Skype_to_Growl_Notification
         private void AttachSkype()
         {
             skype.Attach(7, false);
+            skype.MessageStatus -= new _ISkypeEvents_MessageStatusEventHandler(skype_MessageStatus);
+            skype.OnlineStatus -= new _ISkypeEvents_OnlineStatusEventHandler(skype_OnlineStatus);
+            skype.UserMood -= new _ISkypeEvents_UserMoodEventHandler(skype_UserMood);
             skype.MessageStatus += new _ISkypeEvents_MessageStatusEventHandler(skype_MessageStatus);
             skype.OnlineStatus += new _ISkypeEvents_OnlineStatusEventHandler(skype_OnlineStatus);
             skype.UserMood += new _ISkypeEvents_UserMoodEventHandler(skype_UserMood);
