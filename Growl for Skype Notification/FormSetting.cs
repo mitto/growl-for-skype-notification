@@ -9,7 +9,7 @@ using SKYPE4COMLib;
 using Growl.Connector;
 using System.IO;
 
-namespace Skype_to_Growl_Notification
+namespace Growl_for_Skype_Notification
 {
     public partial class FormSetting : Form
     {

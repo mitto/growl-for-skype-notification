@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Skype_to_Growl_Notification
+namespace Growl_for_Skype_Notification
 {
     static class Program
     {

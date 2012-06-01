@@ -1,4 +1,4 @@
-﻿namespace Skype_to_Growl_Notification
+﻿namespace Growl_for_Skype_Notification
 {
     partial class FormSetting
     {
