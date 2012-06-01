@@ -8,8 +8,8 @@
     <ProjectGuid>{6D93FC73-0D26-4530-BD44-72E051FE0114}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Skype_for_Growl_Notification</RootNamespace>
-    <AssemblyName>Skype for Growl Notification</AssemblyName>
+    <RootNamespace>Growl_for_Skype_Notification</RootNamespace>
+    <AssemblyName>Growl for Skype Notification</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -26,7 +26,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://mittostar.info/app/skypenotify/</InstallUrl>
     <UpdateUrl>http://mittostar.info/app/skypenotify/</UpdateUrl>
-    <ProductName>Skype for Growl Notification</ProductName>
+    <ProductName>Growl for Skype Notification</ProductName>
     <PublisherName>mitto</PublisherName>
     <WebPage>index.html</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
@@ -59,7 +59,7 @@
     <ApplicationIcon>Resources\skype.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -69,6 +69,18 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>595D70DD46609B63B2E159B006C2DB2CFF153055</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Growl for Skype Notification_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Growl for Skype Notification_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Growl.Connector">
@@ -109,6 +121,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="Growl for Skype Notification_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

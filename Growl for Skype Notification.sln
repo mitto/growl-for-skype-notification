@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skype for Growl Notification", "Skype for Growl Notification\Skype for Growl Notification.csproj", "{6D93FC73-0D26-4530-BD44-72E051FE0114}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Growl for Skype Notification", "Growl for Skype Notification\Growl for Skype Notification.csproj", "{6D93FC73-0D26-4530-BD44-72E051FE0114}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
