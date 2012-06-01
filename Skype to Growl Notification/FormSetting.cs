@@ -57,6 +57,7 @@ namespace Skype_to_Growl_Notification
                 Properties.Settings.Default.Save();
             }
             AttachSkype();
+            RegisterGrowlEvent();
         }
 
         private void FormSetting_FormClosing(object sender, FormClosingEventArgs e)
@@ -131,6 +132,11 @@ namespace Skype_to_Growl_Notification
         private void RegisterGrowl()
         {
             connector.Register(application, new NotificationType[] { notificationTypeChat, notificationTypeOnline, notificationTypeMood });
+            RegisterGrowlEvent();
+        }
+
+        private void RegisterGrowlEvent()
+        {
             connector.ErrorResponse -= new GrowlConnector.ResponseEventHandler(connector_ErrorResponse);
             connector.NotificationCallback -= new GrowlConnector.CallbackEventHandler(connector_NotificationCallback);
             connector.ErrorResponse += new GrowlConnector.ResponseEventHandler(connector_ErrorResponse);
@@ -139,11 +145,14 @@ namespace Skype_to_Growl_Notification
 
         private void connector_NotificationCallback(Response response, CallbackData callbackData, object state)
         {
+            Debug.WriteLine("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data);
+            Trace.WriteLine(String.Format("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data));
             if (callbackData.Result == Growl.CoreLibrary.CallbackResult.CLICK)
             {
                 if (callbackData.Data != "")
                 {
                     skype.Chat[callbackData.Data].OpenWindow();
+                    skype.Client.Start();
                 }
             }
         }
@@ -183,9 +192,14 @@ namespace Skype_to_Growl_Notification
         private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
         {
             //オンラインとオフラインの状態が切り替わった際に全アカウント分のオンラインステータスが投げられてくる事への対処
-            if (pUser.Handle == skype.CurrentUser.Handle | isOffline)
+            if (pUser.Handle == skype.CurrentUser.Handle)
             {
                 isOffline = (Status == TOnlineStatus.olsOffline) ? true : false;
+                return;
+            }
+
+            if (isOffline)
+            {
                 return;
             }
 
