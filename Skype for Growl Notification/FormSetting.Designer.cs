@@ -281,9 +281,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(16, 14);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(146, 12);
+            this.label1.Size = new System.Drawing.Size(150, 12);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Skype to Growl Notification";
+            this.label1.Text = "Skype for Growl Notification";
             // 
             // buttonClose
             // 
