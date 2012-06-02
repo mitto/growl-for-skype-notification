@@ -26,12 +26,12 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://mittostar.info/app/skypenotify/</InstallUrl>
     <UpdateUrl>http://mittostar.info/app/skypenotify/</UpdateUrl>
+    <SupportUrl>http://mittostar.info/</SupportUrl>
     <ProductName>Growl for Skype Notification</ProductName>
-    <PublisherName>mitto</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>0.9.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

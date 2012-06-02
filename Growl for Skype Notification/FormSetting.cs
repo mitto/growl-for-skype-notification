@@ -328,7 +328,7 @@ namespace Growl_for_Skype_Notification
 
         private void ChangeLogPath()
         {
-            Properties.Settings.Default.LogPath = AppendBackSlash(System.Windows.Forms.Application.StartupPath);
+            Properties.Settings.Default.LogPath = Properties.Settings.Default.LogPath == "" ? AppendBackSlash(System.Windows.Forms.Application.StartupPath) : Properties.Settings.Default.LogPath;
             Properties.Settings.Default.Save();
         }
 
@@ -338,8 +338,14 @@ namespace Growl_for_Skype_Notification
             {
                 dialog.ShowNewFolderButton = true;
                 dialog.SelectedPath = oldpath;
-                while (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) { }
-                Properties.Settings.Default.LogPath = AppendBackSlash(dialog.SelectedPath);
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    Properties.Settings.Default.LogPath = AppendBackSlash(dialog.SelectedPath);
+                }
+                else
+                {
+                    ChangeLogPath();
+                }
             }
             Properties.Settings.Default.Save();
             UpdateLogPath();
@@ -354,6 +360,10 @@ namespace Growl_for_Skype_Notification
 
         private void UpdateLogPath()
         {
+            if (Properties.Settings.Default.LogPath == "")
+            {
+                ChangeLogPath();
+            }
             LogPath = Properties.Settings.Default.LogPath + FileName;
             textBoxLogPath.Text = Properties.Settings.Default.LogPath;
         }
