@@ -34,5 +34,29 @@ namespace Growl_for_Skype_Notification.Properties {
                 this["IsFirstRun"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LogPath {
+            get {
+                return ((string)(this["LogPath"]));
+            }
+            set {
+                this["LogPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsUpgrade {
+            get {
+                return ((bool)(this["IsUpgrade"]));
+            }
+            set {
+                this["IsUpgrade"] = value;
+            }
+        }
     }
 }

@@ -45,6 +45,9 @@
             this.toolStripMenuItemSendTestMessage = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlSetting = new System.Windows.Forms.TabControl();
             this.tabPageSetting = new System.Windows.Forms.TabPage();
+            this.buttonChangeLogPath = new System.Windows.Forms.Button();
+            this.textBoxLogPath = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabPageLog = new System.Windows.Forms.TabPage();
             this.listViewLog = new System.Windows.Forms.ListView();
             this.columnHeaderTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -60,6 +63,7 @@
             this.buttonClose = new System.Windows.Forms.Button();
             this.contextMenuStripRightClick.SuspendLayout();
             this.tabControlSetting.SuspendLayout();
+            this.tabPageSetting.SuspendLayout();
             this.tabPageLog.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
             this.SuspendLayout();
@@ -172,6 +176,9 @@
             // 
             // tabPageSetting
             // 
+            this.tabPageSetting.Controls.Add(this.buttonChangeLogPath);
+            this.tabPageSetting.Controls.Add(this.textBoxLogPath);
+            this.tabPageSetting.Controls.Add(this.label4);
             this.tabPageSetting.Location = new System.Drawing.Point(4, 22);
             this.tabPageSetting.Name = "tabPageSetting";
             this.tabPageSetting.Padding = new System.Windows.Forms.Padding(3);
@@ -179,6 +186,36 @@
             this.tabPageSetting.TabIndex = 0;
             this.tabPageSetting.Text = "設定";
             this.tabPageSetting.UseVisualStyleBackColor = true;
+            // 
+            // buttonChangeLogPath
+            // 
+            this.buttonChangeLogPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonChangeLogPath.Location = new System.Drawing.Point(162, 25);
+            this.buttonChangeLogPath.Name = "buttonChangeLogPath";
+            this.buttonChangeLogPath.Size = new System.Drawing.Size(75, 23);
+            this.buttonChangeLogPath.TabIndex = 2;
+            this.buttonChangeLogPath.Text = "変更";
+            this.buttonChangeLogPath.UseVisualStyleBackColor = true;
+            this.buttonChangeLogPath.Click += new System.EventHandler(this.buttonChangeLogPath_Click);
+            // 
+            // textBoxLogPath
+            // 
+            this.textBoxLogPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxLogPath.Location = new System.Drawing.Point(17, 27);
+            this.textBoxLogPath.Name = "textBoxLogPath";
+            this.textBoxLogPath.ReadOnly = true;
+            this.textBoxLogPath.Size = new System.Drawing.Size(139, 19);
+            this.textBoxLogPath.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(15, 12);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(92, 12);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "ログの保存フォルダ";
             // 
             // tabPageLog
             // 
@@ -283,7 +320,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(150, 12);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Skype for Growl Notification";
+            this.label1.Text = "Growl for Skype Notification";
             // 
             // buttonClose
             // 
@@ -305,12 +342,15 @@
             this.Controls.Add(this.tabControlSetting);
             this.Controls.Add(this.buttonClose);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(300, 300);
             this.Name = "FormSetting";
             this.Text = "設定";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSetting_FormClosing);
             this.Load += new System.EventHandler(this.FormSetting_Load);
             this.contextMenuStripRightClick.ResumeLayout(false);
             this.tabControlSetting.ResumeLayout(false);
+            this.tabPageSetting.ResumeLayout(false);
+            this.tabPageSetting.PerformLayout();
             this.tabPageLog.ResumeLayout(false);
             this.tabPageAbout.ResumeLayout(false);
             this.tabPageAbout.PerformLayout();
@@ -348,6 +388,9 @@
         private System.Windows.Forms.ColumnHeader columnHeaderName;
         private System.Windows.Forms.ColumnHeader columnHeaderEvent;
         private System.Windows.Forms.ColumnHeader columnHeaderType;
+        private System.Windows.Forms.Button buttonChangeLogPath;
+        private System.Windows.Forms.TextBox textBoxLogPath;
+        private System.Windows.Forms.Label label4;
     }
 }
 
