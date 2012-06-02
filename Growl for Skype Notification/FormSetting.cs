@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Deployment.Application;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
 using SKYPE4COMLib;
 using Growl.Connector;
-using System.IO;
 
 namespace Growl_for_Skype_Notification
 {
@@ -142,6 +143,36 @@ namespace Growl_for_Skype_Notification
             MessageBox.Show(message);
         }
 
+        private void toolStripMenuItemCheckUpdate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!ApplicationDeployment.IsNetworkDeployed) return;
+
+                ApplicationDeployment currentDeploy = ApplicationDeployment.CurrentDeployment;
+
+                if (currentDeploy.CheckForUpdate())
+                {
+                    if ((MessageBox.Show(this, "最新版が利用できます。更新しますか？", "更新の確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question)) == DialogResult.No)
+                    {
+                        return;
+                    }
+
+                    currentDeploy.Update();
+
+                    if ((MessageBox.Show(this, "更新が完了しました。更新を有効にするにはアプリケーションを再起動する必要があります。再起動しますか？", "再起動の確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question)) == DialogResult.No)
+                    {
+                        return;
+                    }
+                    System.Windows.Forms.Application.Restart();
+                }
+            }
+            catch (DeploymentException exp)
+            {
+                MessageBox.Show(this, exp.Message, "更新エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         #endregion
 
         #region "Growl"
@@ -230,13 +261,13 @@ namespace Growl_for_Skype_Notification
             switch (Status)
             {
                 case TOnlineStatus.olsAway:
-                    message += "退席中";
+                    message += "一時退席中";
                     break;
                 case TOnlineStatus.olsDoNotDisturb:
                     message += "取り込み中";
                     break;
                 case TOnlineStatus.olsNotAvailable:
-                    message += "NotAvailable";
+                    message += "退席中";
                     break;
                 case TOnlineStatus.olsOffline:
                     message += "オフライン";
@@ -257,7 +288,7 @@ namespace Growl_for_Skype_Notification
             message += "」になりました。";
             NotifiGrowl(notificationTypeOnline, "オンラインステータスの変更", message, callbackContext);
 
-            AddLog(DateTime.Now, "オンラインステータス", pUser.FullName + "(" + pUser.Handle + ")", message.Replace("\n", ""));
+            AddLog(DateTime.Now, "オンラインステータス", pUser.FullName, pUser.Handle, message.Replace("\n", ""));
         }
 
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
@@ -269,7 +300,7 @@ namespace Growl_for_Skype_Notification
                 case TChatMessageStatus.cmsReceived:
                     CallbackContext callbackContext = new CallbackContext(pMessage.Chat.Name, "MessageStatus");
                     NotifiGrowl(notificationTypeChat, title , pMessage.Body, callbackContext);
-                    AddLog(DateTime.Now, "チャット", pMessage.Sender.FullName + "(" + pMessage.Sender.Handle + ")", pMessage.Body);
+                    AddLog(DateTime.Now, "チャット", pMessage.Sender.FullName, pMessage.Sender.Handle , pMessage.Body);
                     break;
             }
         }
@@ -279,17 +310,17 @@ namespace Growl_for_Skype_Notification
             string message = MoodText == "" ? "ムードメッセージが削除されました" : MoodText;
             CallbackContext callbackContext = new CallbackContext(pUser.Handle, "Mood Message");
             NotifiGrowl(notificationTypeMood, pUser.FullName + "(" + pUser.Handle + ")さんのムードメッセージ", message, callbackContext);
-            AddLog(DateTime.Now, "ムードメッセージ", pUser.FullName + "(" + pUser.Handle + ")", MoodText);
+            AddLog(DateTime.Now, "ムードメッセージ", pUser.FullName, pUser.Handle, MoodText);
         }
 
         #endregion
 
         #region "Other"
 
-        private void AddLog(DateTime time, string type, string name, string message)
+        private void AddLog(DateTime time, string type, string name, string id, string message)
         {
             string date = time.ToLongDateString() + time.ToLongTimeString();
-            string[] item = { date, type, name, message};
+            string[] item = { date, type, name, id, message};
             listViewLog.Items.Add(new ListViewItem(item));
 
             using (var writer = File.AppendText(LogPath))

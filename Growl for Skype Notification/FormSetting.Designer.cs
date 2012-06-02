@@ -40,6 +40,7 @@
             this.toolStripMenuItemRegisterGrowl = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemTestNotification = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItemCheckUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemSendTestMessage = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,6 +54,7 @@
             this.columnHeaderTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderEvent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageAbout = new System.Windows.Forms.TabPage();
             this.labelVersion = new System.Windows.Forms.Label();
@@ -81,14 +83,15 @@
             this.toolStripMenuItemOpenSetting,
             this.toolStripMenuItemCommands,
             this.toolStripSeparator1,
+            this.toolStripMenuItemCheckUpdate,
             this.toolStripMenuItemExit});
             this.contextMenuStripRightClick.Name = "contextMenuStripRightClick";
-            this.contextMenuStripRightClick.Size = new System.Drawing.Size(161, 76);
+            this.contextMenuStripRightClick.Size = new System.Drawing.Size(197, 98);
             // 
             // toolStripMenuItemOpenSetting
             // 
             this.toolStripMenuItemOpenSetting.Name = "toolStripMenuItemOpenSetting";
-            this.toolStripMenuItemOpenSetting.Size = new System.Drawing.Size(160, 22);
+            this.toolStripMenuItemOpenSetting.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemOpenSetting.Text = "設定画面を表示";
             this.toolStripMenuItemOpenSetting.Click += new System.EventHandler(this.toolStripMenuItemOpenSetting_Click);
             // 
@@ -101,7 +104,7 @@
             this.toolStripMenuItemRegisterGrowl,
             this.toolStripMenuItemTestNotification});
             this.toolStripMenuItemCommands.Name = "toolStripMenuItemCommands";
-            this.toolStripMenuItemCommands.Size = new System.Drawing.Size(160, 22);
+            this.toolStripMenuItemCommands.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemCommands.Text = "コマンド";
             // 
             // toolStripMenuItemAttachSkype
@@ -140,12 +143,19 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(193, 6);
+            // 
+            // toolStripMenuItemCheckUpdate
+            // 
+            this.toolStripMenuItemCheckUpdate.Name = "toolStripMenuItemCheckUpdate";
+            this.toolStripMenuItemCheckUpdate.Size = new System.Drawing.Size(196, 22);
+            this.toolStripMenuItemCheckUpdate.Text = "最新バージョンを確認";
+            this.toolStripMenuItemCheckUpdate.Click += new System.EventHandler(this.toolStripMenuItemCheckUpdate_Click);
             // 
             // toolStripMenuItemExit
             // 
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
-            this.toolStripMenuItemExit.Size = new System.Drawing.Size(160, 22);
+            this.toolStripMenuItemExit.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemExit.Text = "終了 (&X)";
             this.toolStripMenuItemExit.Click += new System.EventHandler(this.toolStripMenuItemExit_Click);
             // 
@@ -234,6 +244,7 @@
             this.columnHeaderTime,
             this.columnHeaderType,
             this.columnHeaderName,
+            this.columnHeaderId,
             this.columnHeaderEvent});
             this.listViewLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewLog.FullRowSelect = true;
@@ -247,18 +258,26 @@
             // columnHeaderTime
             // 
             this.columnHeaderTime.Text = "時間";
+            this.columnHeaderTime.Width = 80;
             // 
             // columnHeaderType
             // 
             this.columnHeaderType.Text = "種類";
+            this.columnHeaderType.Width = 80;
             // 
             // columnHeaderName
             // 
             this.columnHeaderName.Text = "名前";
+            this.columnHeaderName.Width = 80;
+            // 
+            // columnHeaderId
+            // 
+            this.columnHeaderId.Text = "Skype ID";
             // 
             // columnHeaderEvent
             // 
             this.columnHeaderEvent.Text = "内容";
+            this.columnHeaderEvent.Width = 100;
             // 
             // tabPageAbout
             // 
@@ -391,6 +410,8 @@
         private System.Windows.Forms.Button buttonChangeLogPath;
         private System.Windows.Forms.TextBox textBoxLogPath;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCheckUpdate;
+        private System.Windows.Forms.ColumnHeader columnHeaderId;
     }
 }
 
