@@ -31,6 +31,7 @@ namespace Growl_for_Skype_Notification
         private static string FileName = "";
 
         private bool isOffline = false;
+        private bool isAttachAlert = false;
 
         public FormSetting()
         {
@@ -41,8 +42,7 @@ namespace Growl_for_Skype_Notification
 
         private void FormSetting_Load(object sender, EventArgs e)
         {
-            this.Visible = false;
-            this.ShowInTaskbar = false;
+            SetVisible(false);
 
             skype = new Skype();
             connector = new GrowlConnector();
@@ -54,7 +54,7 @@ namespace Growl_for_Skype_Notification
 
             labelVersion.Text += System.Windows.Forms.Application.ProductVersion;
 
-            FileName = String.Format("log-{0}.txt", DateTime.Now.ToString("yyyyMMddhhmmss"));
+            FileName = String.Format("log-{0}.txt", DateTime.Now.ToString("yyyyMMddHHmmss"));
 
             LoadSettings();
 
@@ -67,7 +67,7 @@ namespace Growl_for_Skype_Notification
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = true;
-                this.Visible = false;
+                SetVisible(false);
             }
         }
 
@@ -90,9 +90,61 @@ namespace Growl_for_Skype_Notification
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                this.Visible = !this.Visible;
-                this.Focus();
+                SetVisible(!this.Visible);
             }
+        }
+
+        private void timerSkypeStatusCheck_Tick(object sender, EventArgs e)
+        {
+            switch (((ISkype)skype).AttachmentStatus)
+            {
+                case TAttachmentStatus.apiAttachSuccess:
+                    isAttachAlert = false;
+                    break;
+                case TAttachmentStatus.apiAttachAvailable:
+                case TAttachmentStatus.apiAttachNotAvailable:
+                    if (!isAttachAlert)
+                    {
+                        isAttachAlert = true;
+                        if (MessageBox.Show(this, "Skypeにうまく接続できません。\nSkypeを起動してみますか？", "情報", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes)
+                        {
+                            skype.Client.Start();
+                        }
+                    }
+                    AttachSkype();
+                    break;
+                case TAttachmentStatus.apiAttachPendingAuthorization:
+                    if (!isAttachAlert)
+                    {
+                        isAttachAlert = true;
+                        MessageBox.Show(this, "Skype側でアプリ連携を許可してください", "情報", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        isAttachAlert = false;
+                    }
+                    break;
+                case TAttachmentStatus.apiAttachRefused:
+                    if (!isAttachAlert)
+                    {
+                        isAttachAlert = true;
+                        MessageBox.Show(this, "Skype側でアプリ連携が拒否されているようです。\n\nSkypeの設定画面を開いて\n「詳細」→「詳細設定」と進み\n「他のプログラムからのSkypeへのアクセスを管理」から\nこのアプリケーションの連携を許可するように変更してください。", "情報", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        skype.Client.Start();
+                    }
+                    break;
+                case TAttachmentStatus.apiAttachUnknown:
+                    if (!isAttachAlert)
+                    {
+                        if (MessageBox.Show("Skypeがうまくみつかりませんでした。\n起動してみますか？", "情報", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes)
+                        {
+                            isAttachAlert = true;
+                            skype.Client.Start();
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private void checkBoxStartupRegister_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeStartupRegister();
         }
 
         private void toolStripMenuItemExit_Click(object sender, EventArgs e)
@@ -102,7 +154,7 @@ namespace Growl_for_Skype_Notification
 
         private void toolStripMenuItemOpenSetting_Click(object sender, EventArgs e)
         {
-            this.Visible = true;
+            SetVisible(true);
         }
 
         private void toolStripMenuItemAttachSkype_Click(object sender, EventArgs e)
@@ -122,55 +174,63 @@ namespace Growl_for_Skype_Notification
 
         private void toolStripMenuItemGetAttachmentStatus_Click(object sender, EventArgs e)
         {
-            string message = ((ISkype)skype).AttachmentStatus.ToString() + "\n";
-            switch (((ISkype)skype).AttachmentStatus)
-            {
-                case TAttachmentStatus.apiAttachSuccess:
-                    message += "Skypeに接続成功しています。";
-                    break;
-                case TAttachmentStatus.apiAttachAvailable:
-                case TAttachmentStatus.apiAttachNotAvailable:
-                case TAttachmentStatus.apiAttachUnknown:
-                    message += "うまく接続できていないようです。\nタスクトレイアイコンのコマンドメニューから「Skypeへ接続」を試してみてください。";
-                    break;
-                case TAttachmentStatus.apiAttachPendingAuthorization:
-                    message += "接続許可申請をSkype側にリクエストしています。\nSkypeで接続を許可してください。";
-                    break;
-                case TAttachmentStatus.apiAttachRefused:
-                    message += "Skypeへの接続が失敗しました。\nSkype側で接続拒否を行っていないか確認してください。";
-                    break;
-            }
-            MessageBox.Show(message);
+            TAttachmentStatus status = ((ISkype)skype).AttachmentStatus;
+            MessageBox.Show(String.Format("{0}\n{1}", status.ToString(), GetAttachmentStatusMessage(status)));
         }
 
         private void toolStripMenuItemCheckUpdate_Click(object sender, EventArgs e)
         {
-            try
+            if (ApplicationDeployment.IsNetworkDeployed)
             {
-                if (!ApplicationDeployment.IsNetworkDeployed) return;
+                Boolean updateAvailable = false;
+                ApplicationDeployment ad = ApplicationDeployment.CurrentDeployment;
 
-                ApplicationDeployment currentDeploy = ApplicationDeployment.CurrentDeployment;
-
-                if (currentDeploy.CheckForUpdate())
+                try
                 {
-                    if ((MessageBox.Show(this, "最新版が利用できます。更新しますか？", "更新の確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question)) == DialogResult.No)
+                    updateAvailable = ad.CheckForUpdate();
+                }
+                catch (DeploymentDownloadException dde)
+                {
+                    MessageBox.Show("更新を確認中にエラーが発生しました。\nネットワークに繋がっているかを確認して再度お試しください。\n\nError:" + dde);
+                    return;
+                }
+                catch (InvalidDeploymentException ide)
+                {
+                    MessageBox.Show("アプリケーションがうまく配置されていない可能性があります。\n再インストールをお試しください。\n\nError: " + ide.Message);
+                    return;
+                }
+                catch (InvalidOperationException ioe)
+                {
+                    MessageBox.Show("すでに更新を確認中です。\n\nError: " + ioe.Message);
+                    return;
+                }
+
+                if (updateAvailable && MessageBox.Show(this, "最新版が利用できます。更新しますか？", "更新の確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    try
                     {
-                        return;
+                        ad.Update();
+                    }
+                    catch (DeploymentDownloadException dde)
+                    {
+                        MessageBox.Show("更新をインストールできませんでした。\n更新サーバーがダウンしているかネットワークに接続していない可能性があります。\nネットワークに接続しているか確認して再度お試しください。\n\nError: " + dde.Message);
+                    }
+                    catch (TrustNotGrantedException tnge)
+                    {
+                        MessageBox.Show("更新をインストールできませんでした。\n\n\nError: " + tnge.Message);
+                    }
+                    if ((MessageBox.Show(this, "更新が完了しました。更新を有効にするにはアプリケーションを再起動する必要があります。再起動しますか？", "再起動の確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question)) == DialogResult.Yes)
+                    {
+                        System.Windows.Forms.Application.Restart();
                     }
 
-                    currentDeploy.Update();
-
-                    if ((MessageBox.Show(this, "更新が完了しました。更新を有効にするにはアプリケーションを再起動する必要があります。再起動しますか？", "再起動の確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question)) == DialogResult.No)
-                    {
-                        return;
-                    }
-                    System.Windows.Forms.Application.Restart();
                 }
             }
-            catch (DeploymentException exp)
-            {
-                MessageBox.Show(this, exp.Message, "更新エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        }
+
+        private void toolStripMenuItemMonitoringSkype_Click(object sender, EventArgs e)
+        {
+            ChangeMonitoringSkype();
         }
 
         #endregion
@@ -251,55 +311,23 @@ namespace Growl_for_Skype_Notification
                 return;
             }
 
-            if (isOffline)
-            {
-                return;
-            }
+            if (isOffline) return;
 
             CallbackContext callbackContext = new CallbackContext(pUser.Handle, "OnlineStatus");
-            string message = pUser.FullName + "(" + pUser.Handle + ")" + "さんが\n「";
-            switch (Status)
-            {
-                case TOnlineStatus.olsAway:
-                    message += "一時退席中";
-                    break;
-                case TOnlineStatus.olsDoNotDisturb:
-                    message += "取り込み中";
-                    break;
-                case TOnlineStatus.olsNotAvailable:
-                    message += "退席中";
-                    break;
-                case TOnlineStatus.olsOffline:
-                    message += "オフライン";
-                    break;
-                case TOnlineStatus.olsOnline:
-                    message += "オンライン";
-                    break;
-                case TOnlineStatus.olsSkypeMe:
-                    message += "SkypeMe";
-                    break;
-                case TOnlineStatus.olsSkypeOut:
-                    message += "SkypeOut";
-                    break;
-                case TOnlineStatus.olsUnknown:
-                    message += "Unknown";
-                    break;
-            }
-            message += "」になりました。";
-            NotifiGrowl(notificationTypeOnline, "オンラインステータスの変更", message, callbackContext);
+            NotifiGrowl(notificationTypeOnline, "オンラインステータスの変更", 
+                String.Format("{0}({1})さんが\n「{2}」になりました。", pUser.FullName, pUser.Handle, GetOnlineStatusMessage(Status)), callbackContext);
 
-            AddLog(DateTime.Now, "オンラインステータス", pUser.FullName, pUser.Handle, message.Replace("\n", ""));
+            AddLog(DateTime.Now, "オンラインステータス", pUser.FullName, pUser.Handle, String.Format("「{0}」になりました。", GetOnlineStatusMessage(Status)));
         }
 
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
         {
-            
-            string title = pMessage.Sender.FullName + "(" + pMessage.Sender.Handle + ")" + "さんからのチャット";
             switch (Status)
             {
                 case TChatMessageStatus.cmsReceived:
                     CallbackContext callbackContext = new CallbackContext(pMessage.Chat.Name, "MessageStatus");
-                    NotifiGrowl(notificationTypeChat, title , pMessage.Body, callbackContext);
+                    NotifiGrowl(notificationTypeChat, String.Format("{0}({1})さんからのチャット",
+                        pMessage.Sender.FullName, pMessage.Sender.Handle) , pMessage.Body, callbackContext);
                     AddLog(DateTime.Now, "チャット", pMessage.Sender.FullName, pMessage.Sender.Handle , pMessage.Body);
                     break;
             }
@@ -307,10 +335,54 @@ namespace Growl_for_Skype_Notification
 
         private void skype_UserMood(User pUser, string MoodText)
         {
-            string message = MoodText == "" ? "ムードメッセージが削除されました" : MoodText;
             CallbackContext callbackContext = new CallbackContext(pUser.Handle, "Mood Message");
-            NotifiGrowl(notificationTypeMood, pUser.FullName + "(" + pUser.Handle + ")さんのムードメッセージ", message, callbackContext);
+            NotifiGrowl(notificationTypeMood, String.Format("{0}({1})さんのムードメッセージ", pUser.FullName, pUser.Handle),
+                MoodText == "" ? "ムードメッセージが削除されました" : MoodText, callbackContext);
             AddLog(DateTime.Now, "ムードメッセージ", pUser.FullName, pUser.Handle, MoodText);
+        }
+
+        private string GetOnlineStatusMessage(TOnlineStatus status)
+        {
+            switch (status)
+            {
+                case TOnlineStatus.olsAway:
+                    return "一時退席中";
+                case TOnlineStatus.olsDoNotDisturb:
+                    return "取り込み中";
+                case TOnlineStatus.olsNotAvailable:
+                    return "退席中";
+                case TOnlineStatus.olsOffline:
+                    return "オフライン";
+                case TOnlineStatus.olsOnline:
+                    return "オンライン";
+                case TOnlineStatus.olsSkypeMe:
+                    return "SkypeMe";
+                case TOnlineStatus.olsSkypeOut:
+                    return "SkypeOut";
+                case TOnlineStatus.olsUnknown:
+                    return "Unknown";
+                default:
+                    return "その他";
+            }
+        }
+
+        private string GetAttachmentStatusMessage(TAttachmentStatus status)
+        {
+            switch (status)
+            {
+                case TAttachmentStatus.apiAttachSuccess:
+                    return "Skypeに接続成功しています。";
+                case TAttachmentStatus.apiAttachAvailable:
+                case TAttachmentStatus.apiAttachNotAvailable:
+                case TAttachmentStatus.apiAttachUnknown:
+                    return "うまく接続できていないようです。\nタスクトレイアイコンのコマンドメニューから「Skypeへ接続」を試してみてください。";
+                case TAttachmentStatus.apiAttachPendingAuthorization:
+                    return "接続許可申請をSkype側にリクエストしています。\nSkypeで接続を許可してください。";
+                case TAttachmentStatus.apiAttachRefused:
+                    return "Skypeへの接続が失敗しました。\nSkype側で接続拒否を行っていないか確認してください。";
+                default:
+                    return "";
+            }
         }
 
         #endregion
@@ -355,6 +427,11 @@ namespace Growl_for_Skype_Notification
             }
 
             UpdateLogPath();
+
+            timerSkypeStatusCheck.Enabled = Properties.Settings.Default.IsMonitoringSkype;
+            toolStripMenuItemMonitoringSkype.Checked = Properties.Settings.Default.IsMonitoringSkype;
+
+            checkBoxStartupRegister.Checked = Properties.Settings.Default.IsStartupRegister;
         }
 
         private void ChangeLogPath()
@@ -382,6 +459,13 @@ namespace Growl_for_Skype_Notification
             UpdateLogPath();
         }
 
+        private void ChangeMonitoringSkype()
+        {
+            Properties.Settings.Default.IsMonitoringSkype = !Properties.Settings.Default.IsMonitoringSkype;
+            Properties.Settings.Default.Save();
+            timerSkypeStatusCheck.Enabled = Properties.Settings.Default.IsMonitoringSkype;
+            toolStripMenuItemMonitoringSkype.Checked = Properties.Settings.Default.IsMonitoringSkype;
+        }
 
         private string AppendBackSlash(string path)
         {
@@ -397,6 +481,39 @@ namespace Growl_for_Skype_Notification
             }
             LogPath = Properties.Settings.Default.LogPath + FileName;
             textBoxLogPath.Text = Properties.Settings.Default.LogPath;
+        }
+
+        private void SetVisible(Boolean isVisible)
+        {
+            this.ShowInTaskbar = isVisible;
+            this.Visible = isVisible;
+            if (isVisible)
+            {
+                this.Focus();
+            }
+        }
+
+        private void ChangeStartupRegister()
+        {
+            Properties.Settings.Default.IsStartupRegister = !Properties.Settings.Default.IsStartupRegister;
+            Properties.Settings.Default.Save();
+            checkBoxStartupRegister.Checked = Properties.Settings.Default.IsStartupRegister;
+
+
+            if (Properties.Settings.Default.IsStartupRegister)
+            {
+                using (Microsoft.Win32.RegistryKey regkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
+                {
+                    regkey.SetValue(System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ExecutablePath);
+                }
+            }
+            else
+            {
+                using (Microsoft.Win32.RegistryKey regkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
+                {
+                    regkey.DeleteValue(System.Windows.Forms.Application.ProductName, false);
+                }
+            }
         }
 
         #endregion

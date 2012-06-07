@@ -58,5 +58,29 @@ namespace Growl_for_Skype_Notification.Properties {
                 this["IsUpgrade"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsMonitoringSkype {
+            get {
+                return ((bool)(this["IsMonitoringSkype"]));
+            }
+            set {
+                this["IsMonitoringSkype"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsStartupRegister {
+            get {
+                return ((bool)(this["IsStartupRegister"]));
+            }
+            set {
+                this["IsStartupRegister"] = value;
+            }
+        }
     }
 }

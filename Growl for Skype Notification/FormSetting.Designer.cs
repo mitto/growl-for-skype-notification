@@ -33,6 +33,8 @@
             this.notifyIconTray = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStripRightClick = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemOpenSetting = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItemMonitoringSkype = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCommands = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAttachSkype = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemGetAttachmentStatus = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +48,7 @@
             this.toolStripMenuItemSendTestMessage = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlSetting = new System.Windows.Forms.TabControl();
             this.tabPageSetting = new System.Windows.Forms.TabPage();
+            this.checkBoxStartupRegister = new System.Windows.Forms.CheckBox();
             this.buttonChangeLogPath = new System.Windows.Forms.Button();
             this.textBoxLogPath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -63,6 +66,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonClose = new System.Windows.Forms.Button();
+            this.timerSkypeStatusCheck = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripRightClick.SuspendLayout();
             this.tabControlSetting.SuspendLayout();
             this.tabPageSetting.SuspendLayout();
@@ -81,12 +85,14 @@
             // 
             this.contextMenuStripRightClick.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemOpenSetting,
+            this.toolStripSeparator4,
+            this.toolStripMenuItemMonitoringSkype,
             this.toolStripMenuItemCommands,
             this.toolStripSeparator1,
             this.toolStripMenuItemCheckUpdate,
             this.toolStripMenuItemExit});
             this.contextMenuStripRightClick.Name = "contextMenuStripRightClick";
-            this.contextMenuStripRightClick.Size = new System.Drawing.Size(197, 98);
+            this.contextMenuStripRightClick.Size = new System.Drawing.Size(197, 126);
             // 
             // toolStripMenuItemOpenSetting
             // 
@@ -94,6 +100,20 @@
             this.toolStripMenuItemOpenSetting.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemOpenSetting.Text = "設定画面を表示";
             this.toolStripMenuItemOpenSetting.Click += new System.EventHandler(this.toolStripMenuItemOpenSetting_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(193, 6);
+            // 
+            // toolStripMenuItemMonitoringSkype
+            // 
+            this.toolStripMenuItemMonitoringSkype.Checked = true;
+            this.toolStripMenuItemMonitoringSkype.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripMenuItemMonitoringSkype.Name = "toolStripMenuItemMonitoringSkype";
+            this.toolStripMenuItemMonitoringSkype.Size = new System.Drawing.Size(196, 22);
+            this.toolStripMenuItemMonitoringSkype.Text = "Skypeの状態を監視";
+            this.toolStripMenuItemMonitoringSkype.Click += new System.EventHandler(this.toolStripMenuItemMonitoringSkype_Click);
             // 
             // toolStripMenuItemCommands
             // 
@@ -186,6 +206,7 @@
             // 
             // tabPageSetting
             // 
+            this.tabPageSetting.Controls.Add(this.checkBoxStartupRegister);
             this.tabPageSetting.Controls.Add(this.buttonChangeLogPath);
             this.tabPageSetting.Controls.Add(this.textBoxLogPath);
             this.tabPageSetting.Controls.Add(this.label4);
@@ -196,6 +217,17 @@
             this.tabPageSetting.TabIndex = 0;
             this.tabPageSetting.Text = "設定";
             this.tabPageSetting.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxStartupRegister
+            // 
+            this.checkBoxStartupRegister.AutoSize = true;
+            this.checkBoxStartupRegister.Location = new System.Drawing.Point(17, 67);
+            this.checkBoxStartupRegister.Name = "checkBoxStartupRegister";
+            this.checkBoxStartupRegister.Size = new System.Drawing.Size(216, 16);
+            this.checkBoxStartupRegister.TabIndex = 3;
+            this.checkBoxStartupRegister.Text = "OS起動時に自動的に起動するようにする";
+            this.checkBoxStartupRegister.UseVisualStyleBackColor = true;
+            this.checkBoxStartupRegister.CheckedChanged += new System.EventHandler(this.checkBoxStartupRegister_CheckedChanged);
             // 
             // buttonChangeLogPath
             // 
@@ -353,6 +385,11 @@
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
+            // timerSkypeStatusCheck
+            // 
+            this.timerSkypeStatusCheck.Interval = 5000;
+            this.timerSkypeStatusCheck.Tick += new System.EventHandler(this.timerSkypeStatusCheck_Tick);
+            // 
             // FormSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -361,6 +398,7 @@
             this.Controls.Add(this.tabControlSetting);
             this.Controls.Add(this.buttonClose);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(300, 300);
             this.Name = "FormSetting";
             this.Text = "設定";
@@ -412,6 +450,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCheckUpdate;
         private System.Windows.Forms.ColumnHeader columnHeaderId;
+        private System.Windows.Forms.Timer timerSkypeStatusCheck;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemMonitoringSkype;
+        private System.Windows.Forms.CheckBox checkBoxStartupRegister;
     }
 }
 
