@@ -31,7 +31,6 @@ namespace Growl_for_Skype_Notification
         private static string FileName = "";
 
         private bool isOffline = false;
-        private bool isAttachAlert = false;
 
         public FormSetting()
         {
@@ -100,16 +99,8 @@ namespace Growl_for_Skype_Notification
 
             if (status == TAttachmentStatus.apiAttachSuccess)
             {
-                isAttachAlert = false;
                 return;
             }
-
-            if (isAttachAlert)
-            {
-                return;
-            }
-
-            isAttachAlert = true;
 
             var title = "情報";
             var body = "";
@@ -145,7 +136,7 @@ namespace Growl_for_Skype_Notification
             notifyIconTray.BalloonTipTitle = title;
             notifyIconTray.BalloonTipText = body;
             notifyIconTray.BalloonTipIcon = icon;
-            notifyIconTray.ShowBalloonTip(3000);
+            notifyIconTray.ShowBalloonTip(10000);
         }
 
         private void checkBoxStartupRegister_CheckedChanged(object sender, EventArgs e)
