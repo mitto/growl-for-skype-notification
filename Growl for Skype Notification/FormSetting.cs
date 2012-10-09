@@ -96,7 +96,8 @@ namespace Growl_for_Skype_Notification
 
         private void timerSkypeStatusCheck_Tick(object sender, EventArgs e)
         {
-            switch (((ISkype)skype).AttachmentStatus)
+            TAttachmentStatus status = ((ISkype)skype).AttachmentStatus;
+            switch (status)
             {
                 case TAttachmentStatus.apiAttachSuccess:
                     isAttachAlert = false;
@@ -118,6 +119,7 @@ namespace Growl_for_Skype_Notification
                     {
                         isAttachAlert = true;
                         MessageBox.Show(this, "Skype側でアプリ連携を許可してください", "情報", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        isAttachAlert = false;
                     }
                     break;
                 case TAttachmentStatus.apiAttachRefused:
