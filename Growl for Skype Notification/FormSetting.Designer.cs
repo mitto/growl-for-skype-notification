@@ -387,7 +387,7 @@
             // 
             // timerSkypeStatusCheck
             // 
-            this.timerSkypeStatusCheck.Interval = 5000;
+            this.timerSkypeStatusCheck.Interval = 30000;
             this.timerSkypeStatusCheck.Tick += new System.EventHandler(this.timerSkypeStatusCheck_Tick);
             // 
             // FormSetting
