@@ -104,7 +104,7 @@ namespace Growl_for_Skype_Notification
                 return;
             }
 
-            if (!isAttachAlert)
+            if (isAttachAlert)
             {
                 return;
             }
