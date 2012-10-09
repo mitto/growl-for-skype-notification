@@ -97,11 +97,15 @@ namespace Growl_for_Skype_Notification
         private void timerSkypeStatusCheck_Tick(object sender, EventArgs e)
         {
             TAttachmentStatus status = ((ISkype)skype).AttachmentStatus;
+
+            if (status == TAttachmentStatus.apiAttachSuccess)
+            {
+                isAttachAlert = false;
+                return;
+            }
+
             switch (status)
             {
-                case TAttachmentStatus.apiAttachSuccess:
-                    isAttachAlert = false;
-                    break;
                 case TAttachmentStatus.apiAttachAvailable:
                 case TAttachmentStatus.apiAttachNotAvailable:
                     if (!isAttachAlert)
