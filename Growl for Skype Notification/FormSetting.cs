@@ -118,7 +118,6 @@ namespace Growl_for_Skype_Notification
                     {
                         isAttachAlert = true;
                         MessageBox.Show(this, "Skype側でアプリ連携を許可してください", "情報", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        isAttachAlert = false;
                     }
                     break;
                 case TAttachmentStatus.apiAttachRefused:
