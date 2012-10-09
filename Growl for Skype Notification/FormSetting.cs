@@ -111,30 +111,41 @@ namespace Growl_for_Skype_Notification
 
             isAttachAlert = true;
 
+            var title = "情報";
+            var body = "";
+            var icon = ToolTipIcon.Info;
+
             switch (status)
             {
                 case TAttachmentStatus.apiAttachAvailable:
-                case TAttachmentStatus.apiAttachNotAvailable:
-                    if (MessageBox.Show(this, "Skypeにうまく接続できません。\nSkypeを起動してみますか？", "情報", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes)
-                    {
-                        skype.Client.Start();
-                    }
+                    body = "Skypeへの連携ができますが接続されていません。\n接続を試みます。";
                     AttachSkype();
                     break;
+                case TAttachmentStatus.apiAttachNotAvailable:
+                    title = "警告";
+                    body = "Skypeにうまく接続できません。";
+                    icon = ToolTipIcon.Warning;
+                    break;
                 case TAttachmentStatus.apiAttachPendingAuthorization:
-                    MessageBox.Show(this, "Skype側でアプリ連携を許可してください", "情報", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    body = "Skype側でアプリ連携を許可してください";
+                    icon = ToolTipIcon.Warning;
                     break;
                 case TAttachmentStatus.apiAttachRefused:
-                    MessageBox.Show(this, "Skype側でアプリ連携が拒否されているようです。\n\nSkypeの設定画面を開いて\n「詳細」→「詳細設定」と進み\n「他のプログラムからのSkypeへのアクセスを管理」から\nこのアプリケーションの連携を許可するように変更してください。", "情報", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    skype.Client.Start();
+                    title = "エラー";
+                    body = "Skype側でアプリ連携が拒否されているようです。\nSkypeの設定画面を開き\n「詳細」→「詳細設定」と進み\n「他のプログラムからのSkypeへのアクセスを管理」から\nこのアプリケーションの連携を許可するように変更してください。";
+                    icon = ToolTipIcon.Error;
                     break;
                 case TAttachmentStatus.apiAttachUnknown:
-                    if (MessageBox.Show("Skypeがうまくみつかりませんでした。\n起動してみますか？", "情報", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes)
-                    {
-                        skype.Client.Start();
-                    }
+                    title = "エラー";
+                    body = "不明なエラー為Skypeへ接続することができませんでした。";
+                    icon = ToolTipIcon.Error;
                     break;
             }
+
+            notifyIconTray.BalloonTipTitle = title;
+            notifyIconTray.BalloonTipText = body;
+            notifyIconTray.BalloonTipIcon = icon;
+            notifyIconTray.ShowBalloonTip(3000);
         }
 
         private void checkBoxStartupRegister_CheckedChanged(object sender, EventArgs e)
@@ -287,7 +298,7 @@ namespace Growl_for_Skype_Notification
             {
                 notifyIconTray.Text = String.Format("{0}\nLoggin:{1}", TRAY_ICON_MESSAGE, skype.CurrentUser.Handle);
             }
-            
+
             //イベントハンドラの多重登録を防ぐため登録解除してから登録し直す
             skype.MessageStatus -= new _ISkypeEvents_MessageStatusEventHandler(skype_MessageStatus);
             skype.OnlineStatus -= new _ISkypeEvents_OnlineStatusEventHandler(skype_OnlineStatus);
@@ -309,7 +320,7 @@ namespace Growl_for_Skype_Notification
             if (isOffline) return;
 
             CallbackContext callbackContext = new CallbackContext(pUser.Handle, "OnlineStatus");
-            NotifiGrowl(notificationTypeOnline, "オンラインステータスの変更", 
+            NotifiGrowl(notificationTypeOnline, "オンラインステータスの変更",
                 String.Format("{0}({1})さんが\n「{2}」になりました。", pUser.FullName, pUser.Handle, GetOnlineStatusMessage(Status)), callbackContext);
 
             AddLog(DateTime.Now, "オンラインステータス", pUser.FullName, pUser.Handle, String.Format("「{0}」になりました。", GetOnlineStatusMessage(Status)));
@@ -322,8 +333,8 @@ namespace Growl_for_Skype_Notification
                 case TChatMessageStatus.cmsReceived:
                     CallbackContext callbackContext = new CallbackContext(pMessage.Chat.Name, "MessageStatus");
                     NotifiGrowl(notificationTypeChat, String.Format("{0}({1})さんからのチャット",
-                        pMessage.Sender.FullName, pMessage.Sender.Handle) , pMessage.Body, callbackContext);
-                    AddLog(DateTime.Now, "チャット", pMessage.Sender.FullName, pMessage.Sender.Handle , pMessage.Body);
+                        pMessage.Sender.FullName, pMessage.Sender.Handle), pMessage.Body, callbackContext);
+                    AddLog(DateTime.Now, "チャット", pMessage.Sender.FullName, pMessage.Sender.Handle, pMessage.Body);
                     break;
             }
         }
@@ -387,7 +398,7 @@ namespace Growl_for_Skype_Notification
         private void AddLog(DateTime time, string type, string name, string id, string message)
         {
             string date = time.ToLongDateString() + time.ToLongTimeString();
-            string[] item = { date, type, name, id, message};
+            string[] item = { date, type, name, id, message };
             listViewLog.Items.Add(new ListViewItem(item));
 
             using (var writer = File.AppendText(LogPath))
