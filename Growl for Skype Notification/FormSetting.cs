@@ -132,9 +132,9 @@ namespace Growl_for_Skype_Notification
                 case TAttachmentStatus.apiAttachUnknown:
                     if (!isAttachAlert)
                     {
+                        isAttachAlert = true;
                         if (MessageBox.Show("Skypeがうまくみつかりませんでした。\n起動してみますか？", "情報", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes)
                         {
-                            isAttachAlert = true;
                             skype.Client.Start();
                         }
                     }
