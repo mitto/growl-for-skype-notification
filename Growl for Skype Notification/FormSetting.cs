@@ -109,11 +109,12 @@ namespace Growl_for_Skype_Notification
                 return;
             }
 
+            isAttachAlert = true;
+
             switch (status)
             {
                 case TAttachmentStatus.apiAttachAvailable:
                 case TAttachmentStatus.apiAttachNotAvailable:
-                    isAttachAlert = true;
                     if (MessageBox.Show(this, "Skypeにうまく接続できません。\nSkypeを起動してみますか？", "情報", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes)
                     {
                         skype.Client.Start();
@@ -121,16 +122,13 @@ namespace Growl_for_Skype_Notification
                     AttachSkype();
                     break;
                 case TAttachmentStatus.apiAttachPendingAuthorization:
-                    isAttachAlert = true;
                     MessageBox.Show(this, "Skype側でアプリ連携を許可してください", "情報", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 case TAttachmentStatus.apiAttachRefused:
-                    isAttachAlert = true;
                     MessageBox.Show(this, "Skype側でアプリ連携が拒否されているようです。\n\nSkypeの設定画面を開いて\n「詳細」→「詳細設定」と進み\n「他のプログラムからのSkypeへのアクセスを管理」から\nこのアプリケーションの連携を許可するように変更してください。", "情報", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     skype.Client.Start();
                     break;
                 case TAttachmentStatus.apiAttachUnknown:
-                    isAttachAlert = true;
                     if (MessageBox.Show("Skypeがうまくみつかりませんでした。\n起動してみますか？", "情報", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes)
                     {
                         skype.Client.Start();
