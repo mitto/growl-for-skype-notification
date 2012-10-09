@@ -31,7 +31,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>0.9.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -86,10 +86,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Growl.Connector">
-      <HintPath>..\..\..\..\..\Downloads\Growl_NET_Connector_SDK\libraries\Growl.Connector.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Growl for Windows\Growl.Connector.dll</HintPath>
     </Reference>
     <Reference Include="Growl.CoreLibrary">
-      <HintPath>..\..\..\..\..\Downloads\Growl_NET_Connector_SDK\libraries\Growl.CoreLibrary.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Growl for Windows\Growl.CoreLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
