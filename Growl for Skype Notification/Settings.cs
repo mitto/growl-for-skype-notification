@@ -1,4 +1,4 @@
-﻿namespace Skype_to_Growl_Notification.Properties {
+﻿namespace Growl_for_Skype_Notification.Properties {
     
     
     // このクラスでは設定クラスでの特定のイベントを処理することができます:
