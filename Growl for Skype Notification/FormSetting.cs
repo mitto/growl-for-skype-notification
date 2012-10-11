@@ -97,14 +97,14 @@ namespace Growl_for_Skype_Notification
         {
             TAttachmentStatus status = ((ISkype)skype).AttachmentStatus;
 
+            var title = "情報";
+            var body = "";
+            var icon = ToolTipIcon.Info;
+
             if (status == TAttachmentStatus.apiAttachSuccess)
             {
                 return;
             }
-
-            var title = "情報";
-            var body = "";
-            var icon = ToolTipIcon.Info;
 
             switch (status)
             {
