@@ -536,6 +536,14 @@ namespace Growl_for_Skype_Notification
             }
         }
 
+        private void DeleteStartupRegistryKey()
+        {
+            using (var regkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(SUBKEY_STARTUP))
+            {
+                regkey.DeleteValue(System.Windows.Forms.Application.ProductName);
+            }
+        }
+
         #endregion
     }
 }
