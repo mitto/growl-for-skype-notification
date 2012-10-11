@@ -528,6 +528,14 @@ namespace Growl_for_Skype_Notification
             }
         }
 
+        private void SetStartupRegistryKey()
+        {
+            using (var regkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(SUBKEY_STARTUP))
+            {
+                regkey.SetValue(System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ExecutablePath);
+            }
+        }
+
         #endregion
     }
 }
