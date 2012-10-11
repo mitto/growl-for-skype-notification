@@ -27,6 +27,8 @@ namespace Growl_for_Skype_Notification
         private readonly static string APPLICATION_NAME = "Skype Notification";
         private readonly static string TRAY_ICON_MESSAGE = String.Format("{0}[{1}]", System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ProductVersion);
 
+        private readonly static string SUBKEY_STARTUP = @"Software\Microsoft\Windows\CurrentVersion\Run";
+
         private static string LogPath = "";
         private static string FileName = "";
 
@@ -510,6 +512,19 @@ namespace Growl_for_Skype_Notification
                 {
                     regkey.DeleteValue(System.Windows.Forms.Application.ProductName, false);
                 }
+            }
+        }
+
+        private bool IsExistsStartupRegistryKey()
+        {
+            using (var regkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(SUBKEY_STARTUP))
+            {
+                var value = regkey.GetValue(System.Windows.Forms.Application.ProductName);
+                if (value != null)
+                {
+                    return true;
+                }
+                return false;
             }
         }
 
