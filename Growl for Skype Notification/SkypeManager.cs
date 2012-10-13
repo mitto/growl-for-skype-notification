@@ -34,6 +34,17 @@ namespace Growl_for_Skype_Notification
 
         #region "プロパティ"
 
+        /// <summary>
+        /// Skype自体が起動しているかどうかのプロパティ
+        /// </summary>
+        public bool IsRunning
+        {
+            get
+            {
+                return skype.Client.IsRunning;
+            }
+        }
+
         #endregion
     }
 }
