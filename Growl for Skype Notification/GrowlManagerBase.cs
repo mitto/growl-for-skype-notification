@@ -7,7 +7,7 @@ using Growl.Connector;
 
 namespace Growl_for_Skype_Notification
 {
-    public class GrowlManager
+    public class GrowlManagerBase
     {
         #region "変数"
 
