@@ -41,6 +41,16 @@ namespace Growl_for_Skype_Notification
         }
 
         /// <summary>
+        /// Skypeへ接続する
+        /// </summary>
+        /// <param name="protocol">接続する際に使うプロトコルバージョン</param>
+        /// <param name="wait">接続が完了するまで処理を待つか待たないか</param>
+        public void AttachSkype(int protocol = 7, bool wait = false)
+        {
+            skype.Attach(protocol, wait);
+        }
+
+        /// <summary>
         /// TAttachmentStatusを渡すと該当する簡易メッセージを返すメソッド
         /// </summary>
         /// <param name="status">取得したいTAttachmentStatus</param>
