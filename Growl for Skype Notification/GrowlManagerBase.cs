@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
 using Growl.Connector;
+using Growl.CoreLibrary;
 
 namespace Growl_for_Skype_Notification
 {
@@ -73,7 +75,8 @@ namespace Growl_for_Skype_Notification
         /// Growlに登録を行う前の初期化を行うメソッド
         /// </summary>
         /// <param name="name">登録に使いたいアプリケーション名</param>
-        public void Initialize(string name)
+        /// <param name="image">アプリケーションを表すアイコンビットマップ</param>
+        public void Initialize(string name, Bitmap image = null)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -81,6 +84,11 @@ namespace Growl_for_Skype_Notification
             }
 
             application = new Application(ApplicationName);
+
+            if (image != null)
+            {
+                application.Icon = (Resource)image;
+            }
         }
 
         /// <summary>
