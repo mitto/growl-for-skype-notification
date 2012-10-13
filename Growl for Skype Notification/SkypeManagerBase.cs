@@ -7,7 +7,7 @@ using SKYPE4COMLib;
 
 namespace Growl_for_Skype_Notification
 {
-    public class SkypeManager
+    public class SkypeManagerBase
     {
         #region "変数"
 
@@ -23,7 +23,7 @@ namespace Growl_for_Skype_Notification
 
         #region "コンストラクタ"
 
-        public SkypeManager()
+        public SkypeManagerBase()
         {
             skype = new Skype();
         }
