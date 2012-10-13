@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Growl.Connector;
+
 namespace Growl_for_Skype_Notification
 {
     public class GrowlManager
