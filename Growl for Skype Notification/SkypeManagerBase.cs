@@ -130,6 +130,17 @@ namespace Growl_for_Skype_Notification
             }
         }
 
+        /// <summary>
+        /// Skypeとのアタッチが完了しているかどうかのプロパティ
+        /// </summary>
+        public bool IsAttached
+        {
+            get
+            {
+                return ((ISkype)skype).AttachmentStatus == TAttachmentStatus.apiAttachSuccess;
+            }
+        }
+
         #endregion
     }
 }
