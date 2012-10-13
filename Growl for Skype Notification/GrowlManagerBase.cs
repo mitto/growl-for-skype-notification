@@ -12,6 +12,7 @@ namespace Growl_for_Skype_Notification
         #region "変数"
 
         private GrowlConnector connector;
+        private Application application;
 
         #endregion
 
@@ -68,9 +69,38 @@ namespace Growl_for_Skype_Notification
 
         #endregion
 
+        /// <summary>
+        /// Growlに登録を行う前の初期化を行うメソッド
+        /// </summary>
+        /// <param name="name"></param>
+        public void Initialize(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException("アプリケーション名が空です。");
+            }
+
+            application = new Application(ApplicationName);
+        }
+
         #endregion
 
         #region "プロパティ"
+
+        /// <summary>
+        /// Growlへの登録に使うアプリケーション名取得するためのプロパティ
+        /// </summary>
+        public string ApplicationName
+        {
+            get
+            {
+                if (application == null)
+                {
+                    return "アプリケーションの登録が完了していません。"; 
+                }
+                return application.Name;
+            }
+        }
 
         #endregion
 
