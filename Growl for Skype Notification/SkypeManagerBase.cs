@@ -11,7 +11,7 @@ namespace Growl_for_Skype_Notification
     {
         #region "変数"
 
-        private Skype skype;
+        protected Skype skype;
 
         #endregion
 
