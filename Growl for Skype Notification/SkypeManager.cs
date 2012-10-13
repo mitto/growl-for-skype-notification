@@ -9,5 +9,8 @@ namespace Growl_for_Skype_Notification
 {
     public class SkypeManager
     {
+        public SkypeManager()
+        {
+        }
     }
 }
