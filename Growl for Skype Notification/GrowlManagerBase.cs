@@ -72,7 +72,7 @@ namespace Growl_for_Skype_Notification
         /// <summary>
         /// Growlに登録を行う前の初期化を行うメソッド
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">登録に使いたいアプリケーション名</param>
         public void Initialize(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -81,6 +81,20 @@ namespace Growl_for_Skype_Notification
             }
 
             application = new Application(ApplicationName);
+        }
+
+        /// <summary>
+        /// Growlへアプリケーション登録を行うメソッド
+        /// </summary>
+        /// <param name="notificationTypeArray">通知の種類を表したNotifcationTypeの配列</param>
+        public void Register(NotificationType[] notificationTypeArray)
+        {
+            if (application == null)
+            {
+                throw new NullReferenceException("初期化が完了していません。Initializeメソッドを用いて初期化を行ってください"); 
+            }
+
+            connector.Register(application, notificationTypeArray);
         }
 
         #endregion
