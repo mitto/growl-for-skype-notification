@@ -16,6 +16,8 @@ namespace Growl_for_Skype_Notification
         private GrowlConnector connector;
         private Application application;
 
+        private bool _isSubscription = false;
+
         #endregion
 
         #region "定数"
@@ -105,6 +107,34 @@ namespace Growl_for_Skype_Notification
             connector.Register(application, notificationTypeArray);
         }
 
+        /// <summary>
+        /// Growl通知の発行を行うメソッド
+        /// </summary>
+        /// <param name="notification">通知用データ</param>
+        /// <param name="context">コールバック処理をしたい場合に指定</param>
+        public void RunNotification(Notification notification, CallbackContext context = null)
+        {
+            if (notification == null)
+            {
+                throw new ArgumentNullException("notificationがnullです。");
+            }
+
+            connector.Notify(notification, context);
+        }
+
+        /// <summary>
+        /// Growl通知のコールバックイベントハンドラーの登録を行うメソッド
+        /// </summary>
+        /// <param name="callbackHandler"></param>
+        public void CallbackSubscription(GrowlConnector.CallbackEventHandler callbackHandler)
+        {
+            if (!IsSubscription)
+            {
+                connector.NotificationCallback += callbackHandler;
+            }
+            IsSubscription = true;
+        }
+
         #endregion
 
         #region "プロパティ"
@@ -121,6 +151,21 @@ namespace Growl_for_Skype_Notification
                     return "アプリケーションの登録が完了していません。"; 
                 }
                 return application.Name;
+            }
+        }
+
+        /// <summary>
+        /// イベントハンドラメソッドの登録が完了しているかどうかのプロパティ
+        /// </summary>
+        public bool IsSubscription
+        {
+            get
+            {
+                return _isSubscription;
+            }
+            private set
+            {
+                _isSubscription = value;
             }
         }
 
