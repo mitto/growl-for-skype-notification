@@ -55,6 +55,17 @@ namespace Growl_for_Skype_Notification
             }
         }
 
+        /// <summary>
+        /// Skypeとのアタッチ状況を取得するプロパティ
+        /// </summary>
+        public TAttachmentStatus AttachmentStatus
+        {
+            get
+            {
+                return ((ISkype)skype).AttachmentStatus;
+            }
+        }
+
         #endregion
     }
 }
