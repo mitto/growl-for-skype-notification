@@ -9,8 +9,31 @@ namespace Growl_for_Skype_Notification
 {
     public class SkypeManager
     {
+        #region "変数"
+
+        private Skype skype;
+
+        #endregion
+
+        #region "定数"
+
+        #endregion
+
+        #region "メソッド"
+
+        #region "コンストラクタ"
+
         public SkypeManager()
         {
+            skype = new Skype();
         }
+
+        #endregion
+
+        #endregion
+
+        #region "プロパティ"
+
+        #endregion
     }
 }
