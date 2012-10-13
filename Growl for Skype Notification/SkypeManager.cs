@@ -65,6 +65,35 @@ namespace Growl_for_Skype_Notification
             return "";
         }
 
+        /// <summary>
+        /// TOnlineStatusを渡すと該当する状態メッセージを返すメソッド
+        /// </summary>
+        /// <param name="status">取得したいTOnlineStatus</param>
+        /// <returns>ユーザーオンライン状態の状態メッセージ</returns>
+        public static string GetOnlineStatusMessage(TOnlineStatus status)
+        {
+            switch (status)
+            {
+                case TOnlineStatus.olsAway:
+                    return "一時退席中";
+                case TOnlineStatus.olsDoNotDisturb:
+                    return "取り込み中";
+                case TOnlineStatus.olsNotAvailable:
+                    return "退席中";
+                case TOnlineStatus.olsOffline:
+                    return "オフライン";
+                case TOnlineStatus.olsOnline:
+                    return "オンライン";
+                case TOnlineStatus.olsSkypeMe:
+                    return "SkypeMe";
+                case TOnlineStatus.olsSkypeOut:
+                    return "SkypeOut";
+                case TOnlineStatus.olsUnknown:
+                    return "不明 or 未知";
+            }
+            return "";
+        }
+
         #endregion
 
         #region "プロパティ"
