@@ -430,7 +430,7 @@ namespace Growl_for_Skype_Notification
             timerSkypeStatusCheck.Enabled = Properties.Settings.Default.IsMonitoringSkype;
             toolStripMenuItemMonitoringSkype.Checked = Properties.Settings.Default.IsMonitoringSkype;
 
-            checkBoxStartupRegister.Checked = Properties.Settings.Default.IsStartupRegister;
+            checkBoxStartupRegister.Checked = IsExistsStartupRegistryKey();
         }
 
         private void ChangeLogPath()
@@ -494,25 +494,16 @@ namespace Growl_for_Skype_Notification
 
         private void ChangeStartupRegister()
         {
-            Properties.Settings.Default.IsStartupRegister = !Properties.Settings.Default.IsStartupRegister;
-            Properties.Settings.Default.Save();
-            checkBoxStartupRegister.Checked = Properties.Settings.Default.IsStartupRegister;
-
-
-            if (Properties.Settings.Default.IsStartupRegister)
+            if (IsExistsStartupRegistryKey())
             {
-                using (Microsoft.Win32.RegistryKey regkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
-                {
-                    regkey.SetValue(System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ExecutablePath);
-                }
+                DeleteStartupRegistryKey();
             }
             else
             {
-                using (Microsoft.Win32.RegistryKey regkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
-                {
-                    regkey.DeleteValue(System.Windows.Forms.Application.ProductName, false);
-                }
+                SetStartupRegistryKey();
             }
+
+            checkBoxStartupRegister.Checked = IsExistsStartupRegistryKey();
         }
 
         private bool IsExistsStartupRegistryKey()
