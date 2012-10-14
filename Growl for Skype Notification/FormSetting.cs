@@ -174,7 +174,7 @@ namespace Growl_for_Skype_Notification
         private void toolStripMenuItemGetAttachmentStatus_Click(object sender, EventArgs e)
         {
             TAttachmentStatus status = ((ISkype)skype).AttachmentStatus;
-            MessageBox.Show(String.Format("{0}\n{1}", status.ToString(), GetAttachmentStatusMessage(status)));
+            MessageBox.Show(String.Format("{0}\n{1}", status.ToString(), SkypeManager.GetAttachmentStatusMessage(status)));
         }
 
         private void toolStripMenuItemCheckUpdate_Click(object sender, EventArgs e)
@@ -338,25 +338,6 @@ namespace Growl_for_Skype_Notification
             NotifiGrowl(notificationTypeMood, String.Format("{0}({1})さんのムードメッセージ", pUser.FullName, pUser.Handle),
                 MoodText == "" ? "ムードメッセージが削除されました" : MoodText, callbackContext);
             AddLog(DateTime.Now, "ムードメッセージ", pUser.FullName, pUser.Handle, MoodText);
-        }
-
-        private string GetAttachmentStatusMessage(TAttachmentStatus status)
-        {
-            switch (status)
-            {
-                case TAttachmentStatus.apiAttachSuccess:
-                    return "Skypeに接続成功しています。";
-                case TAttachmentStatus.apiAttachAvailable:
-                case TAttachmentStatus.apiAttachNotAvailable:
-                case TAttachmentStatus.apiAttachUnknown:
-                    return "うまく接続できていないようです。\nタスクトレイアイコンのコマンドメニューから「Skypeへ接続」を試してみてください。";
-                case TAttachmentStatus.apiAttachPendingAuthorization:
-                    return "接続許可申請をSkype側にリクエストしています。\nSkypeで接続を許可してください。";
-                case TAttachmentStatus.apiAttachRefused:
-                    return "Skypeへの接続が失敗しました。\nSkype側で接続拒否を行っていないか確認してください。";
-                default:
-                    return "";
-            }
         }
 
         #endregion
