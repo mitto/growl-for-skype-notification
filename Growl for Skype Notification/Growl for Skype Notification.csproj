@@ -106,6 +106,9 @@
     <Compile Include="FormSetting.Designer.cs">
       <DependentUpon>FormSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="GrowlManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GrowlManagerBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -26,7 +26,30 @@ namespace Growl_for_Skype_Notification
 
         #region "コンストラクタ"
 
+        public GrowlManager(Cryptography.SymmetricAlgorithmType encryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText)
+            : base(encryptionAlgorithm)
+        {
+        }
+
+        public GrowlManager(string password, Cryptography.SymmetricAlgorithmType encryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText)
+            :base(password, encryptionAlgorithm)
+        {
+        }
+
+        public GrowlManager(string password, string hostname, int port, Cryptography.SymmetricAlgorithmType encryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText)
+            : base(password, hostname, port, encryptionAlgorithm)
+        { 
+        }
+
         #endregion
+
+        /// <summary>
+        /// GrowlManagerの初期化を行うメソッド
+        /// </summary>
+        public void Initialize()
+        {
+            base.Initialize("Skype Notification", Properties.Resources.skype.ToBitmap());
+        }
 
         #endregion
 

@@ -18,8 +18,8 @@ namespace Growl_for_Skype_Notification
         private GrowlConnector connector;
         private Growl.Connector.Application application;
 
-        //Growlのアプリケーション登録に使う定数
-        private readonly static string APPLICATION_NAME = "Skype Notification";
+        private GrowlManager growl = new GrowlManager();
+
         private readonly static string TRAY_ICON_MESSAGE = String.Format("{0}[{1}]", System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ProductVersion);
 
         private readonly static string SUBKEY_STARTUP = @"Software\Microsoft\Windows\CurrentVersion\Run";
@@ -41,9 +41,10 @@ namespace Growl_for_Skype_Notification
             SetVisible(false);
 
             skype = new Skype();
+            growl.Initialize();
             connector = new GrowlConnector();
             connector.EncryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText;
-            application = new Growl.Connector.Application(APPLICATION_NAME);
+            application = new Growl.Connector.Application(growl.ApplicationName);
             application.Icon = (Growl.CoreLibrary.Resource)Properties.Resources.skype.ToBitmap();
 
             notifyIconTray.Text = TRAY_ICON_MESSAGE;

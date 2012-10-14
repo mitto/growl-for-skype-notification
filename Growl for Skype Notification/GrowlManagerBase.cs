@@ -16,7 +16,6 @@ namespace Growl_for_Skype_Notification
         private GrowlConnector connector;
         private Application application;
 
-        private bool _isSubscription = false;
         private GrowlConnector.CallbackEventHandler callbackEventHandler = null;
 
         #endregion
