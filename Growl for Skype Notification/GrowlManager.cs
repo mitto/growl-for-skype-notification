@@ -32,7 +32,7 @@ namespace Growl_for_Skype_Notification
         }
 
         public GrowlManager(string password, Cryptography.SymmetricAlgorithmType encryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText)
-            :base(password, encryptionAlgorithm)
+            : base(password, encryptionAlgorithm) 
         {
         }
 

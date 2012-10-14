@@ -17,6 +17,7 @@ namespace Growl_for_Skype_Notification
         protected Application application;
 
         protected GrowlConnector.CallbackEventHandler callbackEventHandler = null;
+        protected GrowlConnector.ResponseEventHandler errorResponseEventHandler = null;
 
         #endregion
 
@@ -137,10 +138,10 @@ namespace Growl_for_Skype_Notification
         /// <summary>
         /// Growl通知のコールバックイベントハンドラーの登録を行うメソッド
         /// </summary>
-        /// <param name="callbackEventHandler"></param>
+        /// <param name="callback">登録するコールバックメソッド</param>
         public void CallbackSubscription(GrowlConnector.CallbackEventHandler callback)
         {
-            if (IsSubscription)
+            if (IsSubscriptionCallback)
             {
                 connector.NotificationCallback -= callbackEventHandler;
             }
@@ -148,6 +149,19 @@ namespace Growl_for_Skype_Notification
             connector.NotificationCallback += callbackEventHandler;
         }
 
+        /// <summary>
+        /// Growl通知のエラーレスポンスイベントハンドラーの登録を行うメソッド
+        /// </summary>
+        /// <param name="response">登録するエラーレスポンスメソッド</param>
+        public void ErrorResponseSubscription(GrowlConnector.ResponseEventHandler response)
+        {
+            if (IsSubscriptionErrorResponse)
+            {
+                connector.ErrorResponse -= errorResponseEventHandler;
+            }
+            errorResponseEventHandler = response;
+            connector.ErrorResponse += errorResponseEventHandler;
+        }
 
         /// <summary>
         /// CallBackContextオブジェクトを生成するためのメソッド
@@ -190,13 +204,24 @@ namespace Growl_for_Skype_Notification
         }
 
         /// <summary>
-        /// イベントハンドラメソッドの登録が完了しているかどうかのプロパティ
+        /// コールバックイベントハンドラの登録が完了しているかどうかのプロパティ
         /// </summary>
-        public bool IsSubscription
+        public bool IsSubscriptionCallback
         {
             get
             {
                 return callbackEventHandler != null;
+            }
+        }
+
+        /// <summary>
+        /// エラーレスポンスイベントハンドラの登録が完了しているかどうかのプロパティ
+        /// </summary>
+        public bool IsSubscriptionErrorResponse
+        {
+            get
+            {
+                return errorResponseEventHandler != null;
             }
         }
 
