@@ -51,6 +51,15 @@ namespace Growl_for_Skype_Notification
         }
 
         /// <summary>
+        /// 特定のチャットウィンドウを開くためのメソッド
+        /// </summary>
+        /// <param name="chatId">skypeIDまたはchatIdを指定</param>
+        public void OpenChatWindow(string chatId)
+        {
+            skype.Chat[chatId].OpenWindow();
+        }
+
+        /// <summary>
         /// TAttachmentStatusを渡すと該当する簡易メッセージを返すメソッド
         /// </summary>
         /// <param name="status">取得したいTAttachmentStatus</param>
