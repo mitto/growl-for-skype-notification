@@ -51,6 +51,14 @@ namespace Growl_for_Skype_Notification
             base.Initialize("Skype Notification", Properties.Resources.skype.ToBitmap());
         }
 
+        /// <summary>
+        /// Growlへアプリケーションの登録を行うメソッド
+        /// </summary>
+        public void Register()
+        {
+            base.Register(AllNotificationType);
+        }
+
         #endregion
 
         #region "プロパティ"
