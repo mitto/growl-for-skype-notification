@@ -7,16 +7,12 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using SKYPE4COMLib;
-using Growl.Connector;
-
 namespace Growl_for_Skype_Notification
 {
     public partial class FormSetting : Form
     {
-        private Skype skype;
 
-        private GrowlManager growl = new GrowlManager();
+        private SkypeManager skypeManager = new SkypeManager();
 
         private readonly static string TRAY_ICON_MESSAGE = String.Format("{0}[{1}]", System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ProductVersion);
 
@@ -24,8 +20,6 @@ namespace Growl_for_Skype_Notification
 
         private static string LogPath = "";
         private static string FileName = "";
-
-        private bool isOffline = false;
 
         public FormSetting()
         {
@@ -38,8 +32,10 @@ namespace Growl_for_Skype_Notification
         {
             SetVisible(false);
 
-            skype = new Skype();
-            growl.Initialize();
+            skypeManager.Initialize();
+            skypeManager.CallbackSubscription(connector_NotificationCallback);
+            skypeManager.ErrorResponseSubscription(connector_ErrorResponse);
+
 
             notifyIconTray.Text = TRAY_ICON_MESSAGE;
 
@@ -48,8 +44,6 @@ namespace Growl_for_Skype_Notification
             FileName = String.Format("log-{0}.txt", DateTime.Now.ToString("yyyyMMddHHmmss"));
 
             LoadSettings();
-
-            AttachSkype();
         }
 
         private void FormSetting_FormClosing(object sender, FormClosingEventArgs e)
@@ -86,48 +80,48 @@ namespace Growl_for_Skype_Notification
 
         private void timerSkypeStatusCheck_Tick(object sender, EventArgs e)
         {
-            TAttachmentStatus status = ((ISkype)skype).AttachmentStatus;
+            //var status = skypeManager.AttachmentStatus;
 
-            var title = "情報";
-            var body = "";
-            var icon = ToolTipIcon.Info;
+            //var title = "情報";
+            //var body = "";
+            //var icon = ToolTipIcon.Info;
 
-            if (status == TAttachmentStatus.apiAttachSuccess)
-            {
-                return;
-            }
+            //if (skypeManager.IsAttached)
+            //{
+            //    return;
+            //}
 
-            switch (status)
-            {
-                case TAttachmentStatus.apiAttachAvailable:
-                    body = "Skypeへの連携ができますが接続されていません。\n接続を試みます。";
-                    AttachSkype();
-                    break;
-                case TAttachmentStatus.apiAttachNotAvailable:
-                    title = "警告";
-                    body = "Skypeにうまく接続できません。";
-                    icon = ToolTipIcon.Warning;
-                    break;
-                case TAttachmentStatus.apiAttachPendingAuthorization:
-                    body = "Skype側でアプリ連携を許可してください";
-                    icon = ToolTipIcon.Warning;
-                    break;
-                case TAttachmentStatus.apiAttachRefused:
-                    title = "エラー";
-                    body = "Skype側でアプリ連携が拒否されているようです。\nSkypeの設定画面を開き\n「詳細」→「詳細設定」と進み\n「他のプログラムからのSkypeへのアクセスを管理」から\nこのアプリケーションの連携を許可するように変更してください。";
-                    icon = ToolTipIcon.Error;
-                    break;
-                case TAttachmentStatus.apiAttachUnknown:
-                    title = "エラー";
-                    body = "不明なエラー為Skypeへ接続することができませんでした。";
-                    icon = ToolTipIcon.Error;
-                    break;
-            }
+            //switch (status)
+            //{
+            //    case TAttachmentStatus.apiAttachAvailable:
+            //        body = "Skypeへの連携ができますが接続されていません。\n接続を試みます。";
+            //        AttachSkype();
+            //        break;
+            //    case TAttachmentStatus.apiAttachNotAvailable:
+            //        title = "警告";
+            //        body = "Skypeにうまく接続できません。";
+            //        icon = ToolTipIcon.Warning;
+            //        break;
+            //    case TAttachmentStatus.apiAttachPendingAuthorization:
+            //        body = "Skype側でアプリ連携を許可してください";
+            //        icon = ToolTipIcon.Warning;
+            //        break;
+            //    case TAttachmentStatus.apiAttachRefused:
+            //        title = "エラー";
+            //        body = "Skype側でアプリ連携が拒否されているようです。\nSkypeの設定画面を開き\n「詳細」→「詳細設定」と進み\n「他のプログラムからのSkypeへのアクセスを管理」から\nこのアプリケーションの連携を許可するように変更してください。";
+            //        icon = ToolTipIcon.Error;
+            //        break;
+            //    case TAttachmentStatus.apiAttachUnknown:
+            //        title = "エラー";
+            //        body = "不明なエラー為Skypeへ接続することができませんでした。";
+            //        icon = ToolTipIcon.Error;
+            //        break;
+            //}
 
-            notifyIconTray.BalloonTipTitle = title;
-            notifyIconTray.BalloonTipText = body;
-            notifyIconTray.BalloonTipIcon = icon;
-            notifyIconTray.ShowBalloonTip(10000);
+            //notifyIconTray.BalloonTipTitle = title;
+            //notifyIconTray.BalloonTipText = body;
+            //notifyIconTray.BalloonTipIcon = icon;
+            //notifyIconTray.ShowBalloonTip(10000);
         }
 
         private void checkBoxStartupRegister_CheckedChanged(object sender, EventArgs e)
@@ -147,22 +141,22 @@ namespace Growl_for_Skype_Notification
 
         private void toolStripMenuItemAttachSkype_Click(object sender, EventArgs e)
         {
-            AttachSkype();
+            skypeManager.AttachSkype();
         }
 
         private void toolStripMenuItemRegisterGrowl_Click(object sender, EventArgs e)
         {
-            growl.Register();
+            skypeManager.GrowlRegister();
         }
 
         private void toolStripMenuItemTestNotification_Click(object sender, EventArgs e)
         {
-            growl.RunNotification(GrowlManager.NotificationTypeChatReceived, "Test Title", "Test Message");
+            skypeManager.TestNotification(GrowlManager.NotificationTypeChatReceived, "Test Title", "Test Message");
         }
 
         private void toolStripMenuItemGetAttachmentStatus_Click(object sender, EventArgs e)
         {
-            TAttachmentStatus status = ((ISkype)skype).AttachmentStatus;
+            var status = skypeManager.AttachmentStatus;
             MessageBox.Show(String.Format("{0}\n{1}", status.ToString(), SkypeManager.GetAttachmentStatusMessage(status)));
         }
 
@@ -225,7 +219,7 @@ namespace Growl_for_Skype_Notification
 
         #region "Growl"
 
-        private void connector_NotificationCallback(Response response, CallbackData callbackData, object state)
+        private void connector_NotificationCallback(Growl.Connector.Response response, Growl.Connector.CallbackData callbackData, object state)
         {
             Debug.WriteLine("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data);
             Trace.WriteLine(String.Format("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data));
@@ -233,79 +227,14 @@ namespace Growl_for_Skype_Notification
             {
                 if (callbackData.Data != "")
                 {
-                    skype.Chat[callbackData.Data].OpenWindow();
-                    skype.Client.Start();
+                    skypeManager.OpenChatWindow(callbackData.Data);
                 }
             }
         }
 
-        private void connector_ErrorResponse(Response response, object state)
+        private void connector_ErrorResponse(Growl.Connector.Response response, object state)
         {
             MessageBox.Show(response.ErrorDescription, response.ErrorCode.ToString());
-        }
-
-        #endregion
-
-        #region "Skype"
-
-        private void AttachSkype()
-        {
-            skype.Attach(7, false);
-
-            if (((ISkype)skype).AttachmentStatus == TAttachmentStatus.apiAttachSuccess)
-            {
-                notifyIconTray.Text = String.Format("{0}\nLoggin:{1}", TRAY_ICON_MESSAGE, skype.CurrentUser.Handle);
-            }
-
-            //イベントハンドラの多重登録を防ぐため登録解除してから登録し直す
-            skype.MessageStatus -= new _ISkypeEvents_MessageStatusEventHandler(skype_MessageStatus);
-            skype.OnlineStatus -= new _ISkypeEvents_OnlineStatusEventHandler(skype_OnlineStatus);
-            skype.UserMood -= new _ISkypeEvents_UserMoodEventHandler(skype_UserMood);
-            skype.MessageStatus += new _ISkypeEvents_MessageStatusEventHandler(skype_MessageStatus);
-            skype.OnlineStatus += new _ISkypeEvents_OnlineStatusEventHandler(skype_OnlineStatus);
-            skype.UserMood += new _ISkypeEvents_UserMoodEventHandler(skype_UserMood);
-        }
-
-        private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
-        {
-            //オンラインとオフラインの状態が切り替わった際に全アカウント分のオンラインステータスが投げられてくる事への対処
-            if (pUser.Handle == skype.CurrentUser.Handle)
-            {
-                isOffline = (Status == TOnlineStatus.olsOffline) ? true : false;
-                return;
-            }
-
-            if (isOffline) return;
-
-            growl.RunNotification(GrowlManager.NotificationTypeOnlineStatus, 
-                "オンラインステータスの変更",
-                String.Format("{0}({1})さんが\n「{2}」になりました。", pUser.FullName, pUser.Handle, SkypeManager.GetOnlineStatusMessage(Status)),
-                GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeOnlineStatus.Name, pUser.Handle));
-
-            AddLog(DateTime.Now, "オンラインステータス", pUser.FullName, pUser.Handle, String.Format("「{0}」になりました。", SkypeManager.GetOnlineStatusMessage(Status)));
-        }
-
-        private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
-        {
-            switch (Status)
-            {
-                case TChatMessageStatus.cmsReceived:
-                    growl.RunNotification(GrowlManager.NotificationTypeChatReceived,
-                        String.Format("{0}({1})さんからのチャット", pMessage.Sender.FullName, pMessage.Sender.Handle),
-                        pMessage.Body,
-                        GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeChatReceived.Name, pMessage.Chat.Name));
-                    AddLog(DateTime.Now, "チャット", pMessage.Sender.FullName, pMessage.Sender.Handle, pMessage.Body);
-                    break;
-            }
-        }
-
-        private void skype_UserMood(User pUser, string MoodText)
-        {
-            growl.RunNotification(GrowlManager.NotificationTypeMoodMessage,
-                String.Format("{0}({1})さんのムードメッセージ", pUser.FullName, pUser.Handle),
-                MoodText == "" ? "ムードメッセージが削除されました" : MoodText,
-                GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeMoodMessage.Name, pUser.Handle));
-            AddLog(DateTime.Now, "ムードメッセージ", pUser.FullName, pUser.Handle, MoodText);
         }
 
         #endregion
@@ -336,7 +265,7 @@ namespace Growl_for_Skype_Notification
             if (!Properties.Settings.Default.IsFirstRun)
             {
                 MessageBox.Show("初回起動です。\nGrowlへの登録とSkypeへの接続を行います。", "確認");
-                growl.Register();
+                skypeManager.GrowlRegister();
                 Properties.Settings.Default.IsFirstRun = true;
                 string message = "続けてログの保存場所を決定します。\nデフォルト値はアプリケーションの実行ファイルがある場所です。\n[" + System.Windows.Forms.Application.StartupPath + "]\n\n変更しますか？\n変更する場合は：OK\nデフォルト設定を利用する場合は：Cancel\n\n*後で設定画面から変更することも可能です。";
                 if (MessageBox.Show(message, "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.OK)

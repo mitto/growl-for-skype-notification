@@ -110,9 +110,11 @@ namespace Growl_for_Skype_Notification
         {
             string name = String.IsNullOrEmpty(chat.Sender.FullName) ? "表示名がありません" : chat.Sender.FullName;
             string title = String.Format("{0}({1})さんがチャット内容を変更しました", name, chat.Sender.Handle);
-            string body = String.Format("{0}\n\n↓\n\n{1}", from, to);
+            string body = String.Format("{0}\n\n↓\n\n{1}", from, string.IsNullOrEmpty(to) ? "メッセージが削除されました" : to);
 
             var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeChatReceived.Name, chat.Chat.Name);
+
+            RunNotification(GrowlManager.NotificationTypeChatReceived, title, body, context);
         }
 
         #endregion

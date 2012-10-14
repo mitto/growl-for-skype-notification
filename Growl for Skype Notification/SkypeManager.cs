@@ -14,6 +14,7 @@ namespace Growl_for_Skype_Notification
         private GrowlManager growl = new GrowlManager();
 
         private Dictionary<int, ChatMessage> chatChangeHistoryDictionary = new Dictionary<int, ChatMessage>();
+        private Dictionary<int, string> chatChangeMessageDictonary = new Dictionary<int, string>();
 
         #endregion
 
@@ -39,6 +40,36 @@ namespace Growl_for_Skype_Notification
 
         #endregion
 
+        /// <summary>
+        /// GrowlManagerの初期化および登録、Skypeへの接続をまとめて行うメソッド
+        /// </summary>
+        public void Initialize()
+        {
+            growl.Initialize();
+            growl.Register();
+            AttachSkype();
+        }
+
+        public void GrowlRegister()
+        {
+            growl.Register();
+        }
+
+        public void TestNotification(Growl.Connector.NotificationType notificationType, string title, string message)
+        {
+            growl.RunNotification(notificationType, title, message);
+        }
+
+        public void CallbackSubscription(Growl.Connector.GrowlConnector.CallbackEventHandler callback)
+        {
+            growl.CallbackSubscription(callback);
+        }
+
+        public void ErrorResponseSubscription(Growl.Connector.GrowlConnector.ResponseEventHandler response)
+        {
+            growl.ErrorResponseSubscription(response);
+        }
+ 
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
         {
             switch (Status)
@@ -104,8 +135,14 @@ namespace Growl_for_Skype_Notification
                     if (chatChangeHistoryDictionary.ContainsKey(id))
                     {
                         var chat = chatChangeHistoryDictionary[id];
-                        growl.RunNotificationChangeChat(chat, chat.Body, commands[3]);
-                        chat.Body = commands[3];
+                        string from = chat.Body;
+                        string to = commands[3];
+                        if (chatChangeMessageDictonary.ContainsKey(id))
+                        {
+                            from = chatChangeMessageDictonary[id]; 
+                        }
+                        growl.RunNotificationChangeChat(chat, from, to);
+                        chatChangeMessageDictonary[id] = to;
                     }
                     break;
                 default:
@@ -118,7 +155,5 @@ namespace Growl_for_Skype_Notification
         #region "プロパティ"
 
         #endregion
-
-
-    }
+   }
 }
