@@ -162,6 +162,17 @@ namespace Growl_for_Skype_Notification
             }
         }
 
+        /// <summary>
+        /// 現在ログインしているユーザーがオフラインかどうかを返すプロパティ
+        /// </summary>
+        public bool IsOffline
+        {
+            get
+            {
+                return skype.CurrentUser.OnlineStatus == TOnlineStatus.olsOffline;
+            }
+        }
+
         #endregion
     }
 }

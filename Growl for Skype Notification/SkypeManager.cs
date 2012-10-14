@@ -24,7 +24,8 @@ namespace Growl_for_Skype_Notification
         /// <summary>
         /// デフォルトコンストラクタ
         /// </summary>
-        public SkypeManager() : base()
+        public SkypeManager()
+            : base()
         {
             skype.MessageStatus += skype_MessageStatus;
             skype.OnlineStatus += skype_OnlineStatus;
