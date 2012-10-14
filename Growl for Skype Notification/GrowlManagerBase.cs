@@ -125,12 +125,12 @@ namespace Growl_for_Skype_Notification
         /// <summary>
         /// Growl通知のコールバックイベントハンドラーの登録を行うメソッド
         /// </summary>
-        /// <param name="callbackHandler"></param>
-        public void CallbackSubscription(GrowlConnector.CallbackEventHandler callbackHandler)
+        /// <param name="callbackEventHandler"></param>
+        public void CallbackSubscription(GrowlConnector.CallbackEventHandler callbackEventHandler)
         {
             if (!IsSubscription)
             {
-                connector.NotificationCallback += callbackHandler;
+                connector.NotificationCallback += callbackEventHandler;
             }
             IsSubscription = true;
         }
