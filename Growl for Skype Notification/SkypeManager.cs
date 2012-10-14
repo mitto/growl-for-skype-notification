@@ -50,11 +50,20 @@ namespace Growl_for_Skype_Notification
             AttachSkype();
         }
 
+        /// <summary>
+        /// GrowlManagerのRegisterへの中継メソッド
+        /// </summary>
         public void GrowlRegister()
         {
             growl.Register();
         }
 
+        /// <summary>
+        /// Growlへテスト通知を発行するメソッド
+        /// </summary>
+        /// <param name="notificationType"></param>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
         public void TestNotification(Growl.Connector.NotificationType notificationType, string title, string message)
         {
             growl.RunNotification(notificationType, title, message);

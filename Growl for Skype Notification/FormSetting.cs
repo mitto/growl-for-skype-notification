@@ -11,7 +11,6 @@ namespace Growl_for_Skype_Notification
 {
     public partial class FormSetting : Form
     {
-
         private SkypeManager skypeManager = new SkypeManager();
 
         private readonly static string TRAY_ICON_MESSAGE = String.Format("{0}[{1}]", System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ProductVersion);
