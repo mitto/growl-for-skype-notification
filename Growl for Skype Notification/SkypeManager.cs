@@ -8,8 +8,10 @@ using SKYPE4COMLib;
 namespace Growl_for_Skype_Notification
 {
     public class SkypeManager : SkypeManagerBase
-    {   
+    {
         #region "変数"
+
+        private GrowlManager growl = new GrowlManager();
 
         #endregion
 
@@ -42,7 +44,15 @@ namespace Growl_for_Skype_Notification
 
         private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
         {
-            throw new NotImplementedException();
+            //オンラインとオフラインの状態が切り替わった際に
+            //全アカウント分(?)くらいの通知が投げられてくるので
+            //処理しないようにする
+            if (IsOffline)
+            {
+                return;
+            }
+
+            growl.RunNotificationOnlineStatus(pUser, Status);
         }
 
         private void skype_Reply(Command pCommand)

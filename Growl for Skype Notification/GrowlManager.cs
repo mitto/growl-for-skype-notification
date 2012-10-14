@@ -59,6 +59,22 @@ namespace Growl_for_Skype_Notification
             base.Register(AllNotificationType);
         }
 
+        /// <summary>
+        /// オンラインステータスの通知を発行するメソッド
+        /// </summary>
+        /// <param name="user">ステータス変更のあったユーザー</param>
+        /// <param name="status">変更後のステータス情報</param>
+        public void RunNotificationOnlineStatus(SKYPE4COMLib.User user, SKYPE4COMLib.TOnlineStatus status)
+        {
+            string title = "オンラインステータスの変更";
+            string name = String.IsNullOrEmpty(user.FullName) ? "表示名がありません" : user.FullName;
+            string message = String.Format("{0}({1})さんが\n「{2}」になりました。", name, user.Handle, SkypeManager.GetOnlineStatusMessage(status));
+
+            var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeOnlineStatus.Name, user.Handle);
+
+            RunNotification(GrowlManager.NotificationTypeOnlineStatus, title, message, context);
+        }
+
         #endregion
 
         #region "プロパティ"
