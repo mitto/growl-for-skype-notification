@@ -141,6 +141,18 @@ namespace Growl_for_Skype_Notification
             }
         }
 
+        /// <summary>
+        /// 現在SkypeにログインしているSkype IDを返すプロパティ
+        /// アタッチが済んでいない場合は空の文字列を返す
+        /// </summary>
+        public string CurrentUserHandle
+        {
+            get
+            {
+                return IsAttached ? skype.CurrentUserHandle : "";
+            }
+        }
+
         #endregion
     }
 }
