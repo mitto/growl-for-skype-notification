@@ -15,8 +15,6 @@ namespace Growl_for_Skype_Notification
     public partial class FormSetting : Form
     {
         private Skype skype;
-        private GrowlConnector connector;
-        private Growl.Connector.Application application;
 
         private GrowlManager growl = new GrowlManager();
 
@@ -42,10 +40,6 @@ namespace Growl_for_Skype_Notification
 
             skype = new Skype();
             growl.Initialize();
-            connector = new GrowlConnector();
-            connector.EncryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText;
-            application = new Growl.Connector.Application(growl.ApplicationName);
-            application.Icon = (Growl.CoreLibrary.Resource)Properties.Resources.skype.ToBitmap();
 
             notifyIconTray.Text = TRAY_ICON_MESSAGE;
 
@@ -56,7 +50,6 @@ namespace Growl_for_Skype_Notification
             LoadSettings();
 
             AttachSkype();
-            RegisterGrowlEvent();
         }
 
         private void FormSetting_FormClosing(object sender, FormClosingEventArgs e)
@@ -159,12 +152,12 @@ namespace Growl_for_Skype_Notification
 
         private void toolStripMenuItemRegisterGrowl_Click(object sender, EventArgs e)
         {
-            RegisterGrowl();
+            growl.Register();
         }
 
         private void toolStripMenuItemTestNotification_Click(object sender, EventArgs e)
         {
-            NotifiGrowl(GrowlManager.NotificationTypeChatReceived, "Test Title", "Test Message");
+            growl.RunNotification(GrowlManager.NotificationTypeChatReceived, "Test Title", "Test Message");
         }
 
         private void toolStripMenuItemGetAttachmentStatus_Click(object sender, EventArgs e)
@@ -232,20 +225,6 @@ namespace Growl_for_Skype_Notification
 
         #region "Growl"
 
-        private void RegisterGrowl()
-        {
-            connector.Register(application, GrowlManager.AllNotificationType);
-            RegisterGrowlEvent();
-        }
-
-        private void RegisterGrowlEvent()
-        {
-            connector.ErrorResponse -= new GrowlConnector.ResponseEventHandler(connector_ErrorResponse);
-            connector.NotificationCallback -= new GrowlConnector.CallbackEventHandler(connector_NotificationCallback);
-            connector.ErrorResponse += new GrowlConnector.ResponseEventHandler(connector_ErrorResponse);
-            connector.NotificationCallback += new GrowlConnector.CallbackEventHandler(connector_NotificationCallback);
-        }
-
         private void connector_NotificationCallback(Response response, CallbackData callbackData, object state)
         {
             Debug.WriteLine("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data);
@@ -258,16 +237,6 @@ namespace Growl_for_Skype_Notification
                     skype.Client.Start();
                 }
             }
-        }
-
-        private void NotifiGrowl(NotificationType type, string title, string message)
-        {
-            connector.Notify(new Notification(application.Name, type.Name, DateTime.Now.Ticks.ToString(), title, message));
-        }
-
-        private void NotifiGrowl(NotificationType type, string title, string message, CallbackContext callbackContext)
-        {
-            connector.Notify(new Notification(application.Name, type.Name, DateTime.Now.Ticks.ToString(), title, message), callbackContext);
         }
 
         private void connector_ErrorResponse(Response response, object state)
@@ -308,9 +277,10 @@ namespace Growl_for_Skype_Notification
 
             if (isOffline) return;
 
-            CallbackContext callbackContext = new CallbackContext(pUser.Handle, "OnlineStatus");
-            NotifiGrowl(GrowlManager.NotificationTypeOnlineStatus, "オンラインステータスの変更",
-                String.Format("{0}({1})さんが\n「{2}」になりました。", pUser.FullName, pUser.Handle, SkypeManager.GetOnlineStatusMessage(Status)), callbackContext);
+            growl.RunNotification(GrowlManager.NotificationTypeOnlineStatus, 
+                "オンラインステータスの変更",
+                String.Format("{0}({1})さんが\n「{2}」になりました。", pUser.FullName, pUser.Handle, SkypeManager.GetOnlineStatusMessage(Status)),
+                GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeOnlineStatus.Name, pUser.Handle));
 
             AddLog(DateTime.Now, "オンラインステータス", pUser.FullName, pUser.Handle, String.Format("「{0}」になりました。", SkypeManager.GetOnlineStatusMessage(Status)));
         }
@@ -320,9 +290,10 @@ namespace Growl_for_Skype_Notification
             switch (Status)
             {
                 case TChatMessageStatus.cmsReceived:
-                    CallbackContext callbackContext = new CallbackContext(pMessage.Chat.Name, "MessageStatus");
-                    NotifiGrowl(GrowlManager.NotificationTypeChatReceived, String.Format("{0}({1})さんからのチャット",
-                        pMessage.Sender.FullName, pMessage.Sender.Handle), pMessage.Body, callbackContext);
+                    growl.RunNotification(GrowlManager.NotificationTypeChatReceived,
+                        String.Format("{0}({1})さんからのチャット", pMessage.Sender.FullName, pMessage.Sender.Handle),
+                        pMessage.Body,
+                        GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeChatReceived.Name, pMessage.Chat.Name));
                     AddLog(DateTime.Now, "チャット", pMessage.Sender.FullName, pMessage.Sender.Handle, pMessage.Body);
                     break;
             }
@@ -330,9 +301,10 @@ namespace Growl_for_Skype_Notification
 
         private void skype_UserMood(User pUser, string MoodText)
         {
-            CallbackContext callbackContext = new CallbackContext(pUser.Handle, "Mood Message");
-            NotifiGrowl(GrowlManager.NotificationTypeMoodMessage, String.Format("{0}({1})さんのムードメッセージ", pUser.FullName, pUser.Handle),
-                MoodText == "" ? "ムードメッセージが削除されました" : MoodText, callbackContext);
+            growl.RunNotification(GrowlManager.NotificationTypeMoodMessage,
+                String.Format("{0}({1})さんのムードメッセージ", pUser.FullName, pUser.Handle),
+                MoodText == "" ? "ムードメッセージが削除されました" : MoodText,
+                GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeMoodMessage.Name, pUser.Handle));
             AddLog(DateTime.Now, "ムードメッセージ", pUser.FullName, pUser.Handle, MoodText);
         }
 
@@ -364,7 +336,7 @@ namespace Growl_for_Skype_Notification
             if (!Properties.Settings.Default.IsFirstRun)
             {
                 MessageBox.Show("初回起動です。\nGrowlへの登録とSkypeへの接続を行います。", "確認");
-                RegisterGrowl();
+                growl.Register();
                 Properties.Settings.Default.IsFirstRun = true;
                 string message = "続けてログの保存場所を決定します。\nデフォルト値はアプリケーションの実行ファイルがある場所です。\n[" + System.Windows.Forms.Application.StartupPath + "]\n\n変更しますか？\n変更する場合は：OK\nデフォルト設定を利用する場合は：Cancel\n\n*後で設定画面から変更することも可能です。";
                 if (MessageBox.Show(message, "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.OK)

@@ -179,7 +179,7 @@ namespace Growl_for_Skype_Notification
         /// <param name="type">コールバックデータの種別を識別するための文字列を指定</param>
         /// <param name="data">コールバック時に渡されるデータを指定</param>
         /// <returns>引数を元に生成したCallbackContext</returns>
-        public static CallbackContext MakeCallBackContext(string type, string data)
+        public static CallbackContext MakeCallbackContext(string type, string data)
         {
             return new CallbackContext(data, type);
         }
