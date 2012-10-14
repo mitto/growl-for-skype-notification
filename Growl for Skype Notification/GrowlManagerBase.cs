@@ -110,6 +110,18 @@ namespace Growl_for_Skype_Notification
         /// <summary>
         /// Growl通知の発行を行うメソッド
         /// </summary>
+        /// <param name="type">NotificationTypeを指定</param>
+        /// <param name="title">通知で表示するタイトルを指定</param>
+        /// <param name="message">通知で表示する本文を指定</param>
+        /// <param name="context">コールバックで渡される値を指定</param>
+        public void RunNotification(NotificationType type, string title, string message, CallbackContext context = null)
+        {
+            RunNotification(new Notification(ApplicationName, type.Name, DateTime.Now.Ticks.ToString(), title, message), context);
+        }
+
+        /// <summary>
+        /// Growl通知の発行を行うメソッド
+        /// </summary>
         /// <param name="notification">通知用データ</param>
         /// <param name="context">コールバック処理をしたい場合に指定</param>
         public void RunNotification(Notification notification, CallbackContext context = null)
