@@ -75,6 +75,21 @@ namespace Growl_for_Skype_Notification
             RunNotification(GrowlManager.NotificationTypeOnlineStatus, title, message, context);
         }
 
+        /// <summary>
+        /// チャットの通知を発行するメソッド
+        /// </summary>
+        /// <param name="message">変更のあったチャット</param>
+        /// <param name="status">変更後のチャットステータス</param>
+        public void RunNotificationMessageStatus(SKYPE4COMLib.ChatMessage message, SKYPE4COMLib.TChatMessageStatus status)
+        {
+            string name = String.IsNullOrEmpty(message.Sender.FullName) ? "表示名がありません" : message.Sender.FullName;
+            string title = String.Format("{0}({1})さんからのチャット", name, message.Sender.Handle); 
+
+            var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeChatReceived.Name, message.Chat.Name);
+
+            RunNotification(GrowlManager.NotificationTypeChatReceived, title, message.Body, context);
+        }
+
         #endregion
 
         #region "プロパティ"

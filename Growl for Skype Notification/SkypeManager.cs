@@ -39,7 +39,20 @@ namespace Growl_for_Skype_Notification
 
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
         {
-            throw new NotImplementedException();
+            switch (Status)
+            {
+                case TChatMessageStatus.cmsRead:
+                    break;
+                case TChatMessageStatus.cmsReceived:
+                    growl.RunNotificationMessageStatus(pMessage, Status);
+                    break;
+                case TChatMessageStatus.cmsSending:
+                    break;
+                case TChatMessageStatus.cmsSent:
+                    break;
+                case TChatMessageStatus.cmsUnknown:
+                    break;
+            }
         }
 
         private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
