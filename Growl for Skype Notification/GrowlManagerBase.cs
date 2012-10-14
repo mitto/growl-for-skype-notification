@@ -13,10 +13,10 @@ namespace Growl_for_Skype_Notification
     {
         #region "変数"
 
-        private GrowlConnector connector;
-        private Application application;
+        protected GrowlConnector connector;
+        protected Application application;
 
-        private GrowlConnector.CallbackEventHandler callbackEventHandler = null;
+        protected GrowlConnector.CallbackEventHandler callbackEventHandler = null;
 
         #endregion
 
