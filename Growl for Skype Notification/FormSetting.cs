@@ -150,7 +150,7 @@ namespace Growl_for_Skype_Notification
 
         private void toolStripMenuItemTestNotification_Click(object sender, EventArgs e)
         {
-            skypeManager.TestNotification(GrowlManager.NotificationTypeChatReceived, "Test Title", "Test Message");
+            skypeManager.TestNotification();
         }
 
         private void toolStripMenuItemGetAttachmentStatus_Click(object sender, EventArgs e)

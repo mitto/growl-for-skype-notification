@@ -117,6 +117,11 @@ namespace Growl_for_Skype_Notification
             RunNotification(GrowlManager.NotificationTypeChatReceived, title, body, context);
         }
 
+        public void TestNotification()
+        {
+            RunNotification(GrowlManager.NotificationTypeChatReceived, "Test Title", "Test Message");
+        }
+
         #endregion
 
         #region "プロパティ"

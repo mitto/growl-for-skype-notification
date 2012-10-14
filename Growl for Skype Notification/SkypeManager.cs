@@ -59,24 +59,29 @@ namespace Growl_for_Skype_Notification
         }
 
         /// <summary>
-        /// Growlへテスト通知を発行するメソッド
+        /// GrowlManagerのCallbackSubscriptionへの中継メソッド
         /// </summary>
-        /// <param name="notificationType"></param>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
-        public void TestNotification(Growl.Connector.NotificationType notificationType, string title, string message)
-        {
-            growl.RunNotification(notificationType, title, message);
-        }
-
+        /// <param name="callback">登録するコールバックメソッド</param>
         public void CallbackSubscription(Growl.Connector.GrowlConnector.CallbackEventHandler callback)
         {
             growl.CallbackSubscription(callback);
         }
 
+        /// <summary>
+        /// GrowlManagerのErrorResponseSubscriptionへの中継メソッド
+        /// </summary>
+        /// <param name="response">登録するエラーレスポンス処理用のメソッド</param>
         public void ErrorResponseSubscription(Growl.Connector.GrowlConnector.ResponseEventHandler response)
         {
             growl.ErrorResponseSubscription(response);
+        }
+
+        /// <summary>
+        /// GrowlManagerのTestNotificationへの中継メソッド
+        /// </summary>
+        public void TestNotification()
+        {
+            growl.TestNotification();
         }
  
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
