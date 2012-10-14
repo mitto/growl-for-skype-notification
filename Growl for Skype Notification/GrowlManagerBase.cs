@@ -17,6 +17,7 @@ namespace Growl_for_Skype_Notification
         private Application application;
 
         private bool _isSubscription = false;
+        private GrowlConnector.CallbackEventHandler callbackEventHandler = null;
 
         #endregion
 
@@ -126,13 +127,14 @@ namespace Growl_for_Skype_Notification
         /// Growl通知のコールバックイベントハンドラーの登録を行うメソッド
         /// </summary>
         /// <param name="callbackEventHandler"></param>
-        public void CallbackSubscription(GrowlConnector.CallbackEventHandler callbackEventHandler)
+        public void CallbackSubscription(GrowlConnector.CallbackEventHandler callback)
         {
-            if (!IsSubscription)
+            if (IsSubscription)
             {
-                connector.NotificationCallback += callbackEventHandler;
+                connector.NotificationCallback -= callbackEventHandler;
             }
-            IsSubscription = true;
+            callbackEventHandler = callback;
+            connector.NotificationCallback += callbackEventHandler;
         }
 
         #endregion
@@ -161,11 +163,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return _isSubscription;
-            }
-            private set
-            {
-                _isSubscription = value;
+                return callbackEventHandler != null;
             }
         }
 
