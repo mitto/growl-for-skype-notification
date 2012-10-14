@@ -148,6 +148,28 @@ namespace Growl_for_Skype_Notification
             connector.NotificationCallback += callbackEventHandler;
         }
 
+
+        /// <summary>
+        /// CallBackContextオブジェクトを生成するためのメソッド
+        /// </summary>
+        /// <param name="url">コールバック時に渡されるURLを指定</param>
+        /// <returns>引数を元に生成したCallbackContext</returns>
+        public static CallbackContext MakeCallbackContext(string url)
+        {
+            return new CallbackContext(url);
+        }
+
+        /// <summary>
+        /// CallBackContextオブジェクトを生成するためのメソッド
+        /// </summary>
+        /// <param name="type">コールバックデータの種別を識別するための文字列を指定</param>
+        /// <param name="data">コールバック時に渡されるデータを指定</param>
+        /// <returns>引数を元に生成したCallbackContext</returns>
+        public static CallbackContext MakeCallBackContext(string type, string data)
+        {
+            return new CallbackContext(data, type);
+        }
+
         #endregion
 
         #region "プロパティ"
