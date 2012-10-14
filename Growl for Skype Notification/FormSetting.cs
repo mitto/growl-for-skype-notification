@@ -314,9 +314,9 @@ namespace Growl_for_Skype_Notification
 
             CallbackContext callbackContext = new CallbackContext(pUser.Handle, "OnlineStatus");
             NotifiGrowl(notificationTypeOnline, "オンラインステータスの変更",
-                String.Format("{0}({1})さんが\n「{2}」になりました。", pUser.FullName, pUser.Handle, GetOnlineStatusMessage(Status)), callbackContext);
+                String.Format("{0}({1})さんが\n「{2}」になりました。", pUser.FullName, pUser.Handle, SkypeManager.GetOnlineStatusMessage(Status)), callbackContext);
 
-            AddLog(DateTime.Now, "オンラインステータス", pUser.FullName, pUser.Handle, String.Format("「{0}」になりました。", GetOnlineStatusMessage(Status)));
+            AddLog(DateTime.Now, "オンラインステータス", pUser.FullName, pUser.Handle, String.Format("「{0}」になりました。", SkypeManager.GetOnlineStatusMessage(Status)));
         }
 
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
@@ -338,31 +338,6 @@ namespace Growl_for_Skype_Notification
             NotifiGrowl(notificationTypeMood, String.Format("{0}({1})さんのムードメッセージ", pUser.FullName, pUser.Handle),
                 MoodText == "" ? "ムードメッセージが削除されました" : MoodText, callbackContext);
             AddLog(DateTime.Now, "ムードメッセージ", pUser.FullName, pUser.Handle, MoodText);
-        }
-
-        private string GetOnlineStatusMessage(TOnlineStatus status)
-        {
-            switch (status)
-            {
-                case TOnlineStatus.olsAway:
-                    return "一時退席中";
-                case TOnlineStatus.olsDoNotDisturb:
-                    return "取り込み中";
-                case TOnlineStatus.olsNotAvailable:
-                    return "退席中";
-                case TOnlineStatus.olsOffline:
-                    return "オフライン";
-                case TOnlineStatus.olsOnline:
-                    return "オンライン";
-                case TOnlineStatus.olsSkypeMe:
-                    return "SkypeMe";
-                case TOnlineStatus.olsSkypeOut:
-                    return "SkypeOut";
-                case TOnlineStatus.olsUnknown:
-                    return "Unknown";
-                default:
-                    return "その他";
-            }
         }
 
         private string GetAttachmentStatusMessage(TAttachmentStatus status)
