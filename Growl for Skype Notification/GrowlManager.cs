@@ -90,6 +90,31 @@ namespace Growl_for_Skype_Notification
             RunNotification(GrowlManager.NotificationTypeChatReceived, title, message.Body, context);
         }
 
+        /// <summary>
+        /// ムードメッセージの通知を発行するメソッド
+        /// </summary>
+        /// <param name="user">ムードメッセージを変更したユーザー</param>
+        /// <param name="moodtext">変更されたムードメッセージの内容</param>
+        public void RunNotificationUserMood(SKYPE4COMLib.User user, string moodtext)
+        {
+            string name = String.IsNullOrEmpty(user.FullName) ? "表示名がありません" : user.FullName;
+            string title = String.Format("{0}({1})さんのムードメッセージ", name, user.Handle);
+            string body = String.IsNullOrEmpty(moodtext) ? "ムードメッセージが削除されました" : moodtext;
+
+            var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeMoodMessage.Name, user.Handle);
+
+            RunNotification(GrowlManager.NotificationTypeMoodMessage, title, body, context);
+        }
+
+        public void RunNotificationChangeChat(SKYPE4COMLib.ChatMessage chat, string from, string to)
+        {
+            string name = String.IsNullOrEmpty(chat.Sender.FullName) ? "表示名がありません" : chat.Sender.FullName;
+            string title = String.Format("{0}({1})さんがチャット内容を変更しました", name, chat.Sender.Handle);
+            string body = String.Format("{0}\n\n↓\n\n{1}", from, to);
+
+            var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeChatReceived.Name, chat.Chat.Name);
+        }
+
         #endregion
 
         #region "プロパティ"

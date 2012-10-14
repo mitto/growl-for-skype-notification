@@ -13,6 +13,8 @@ namespace Growl_for_Skype_Notification
 
         private GrowlManager growl = new GrowlManager();
 
+        private Dictionary<int, ChatMessage> chatChangeHistoryDictionary = new Dictionary<int, ChatMessage>();
+
         #endregion
 
         #region "定数"
@@ -44,6 +46,7 @@ namespace Growl_for_Skype_Notification
                 case TChatMessageStatus.cmsRead:
                     break;
                 case TChatMessageStatus.cmsReceived:
+                    chatChangeHistoryDictionary.Add(pMessage.Id, pMessage);
                     growl.RunNotificationMessageStatus(pMessage, Status);
                     break;
                 case TChatMessageStatus.cmsSending:
@@ -70,12 +73,44 @@ namespace Growl_for_Skype_Notification
 
         private void skype_Reply(Command pCommand)
         {
-            throw new NotImplementedException();
+            var splitCommands = pCommand.Reply.Split(' ');
+
+            switch (splitCommands[0].ToLower())
+            {
+                case "chatmessage":
+                    ParseChatMessageCommand(splitCommands);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void skype_UserMood(User pUser, string MoodText)
         {
-            throw new NotImplementedException();
+            growl.RunNotificationUserMood(pUser, MoodText);
+        }
+
+        /// <summary>
+        /// CHATMESSAGEコマンドの解析を行い処理を行うメソッド
+        /// </summary>
+        /// <param name="commands"></param>
+        private void ParseChatMessageCommand(string[] commands)
+        {
+            int id;
+            int.TryParse(commands[1], out id);
+            switch (commands[2].ToLower())
+            {
+                case "body":
+                    if (chatChangeHistoryDictionary.ContainsKey(id))
+                    {
+                        var chat = chatChangeHistoryDictionary[id];
+                        growl.RunNotificationChangeChat(chat, chat.Body, commands[3]);
+                        chat.Body = commands[3];
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         #endregion
