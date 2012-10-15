@@ -55,6 +55,7 @@ namespace Growl_for_Skype_Notification
         public void AttachSkype(int protocol = 7, bool wait = false)
         {
             skype.Attach(protocol, wait);
+            InitializeUserAvatars();
         }
 
         /// <summary>
@@ -70,7 +71,11 @@ namespace Growl_for_Skype_Notification
         /// 指定したユーザーのアバター画像を指定したパスに出力するようSkype側にコマンドを送るメソッド
         /// </summary>
         /// <param name="userId">取得したいユーザーのSkypeId</param>
-        /// <param name="path">アバター画像の一時保存先(ディレクトリ名)</param>
+        /// <param name="path">
+        /// アバター画像の一時保存先(ディレクトリ名)
+        /// 
+        /// * 何も指定しなければシステムの一時保存領域へ画像を出力させます。
+        /// </param>
         public void PublicationGetUserAvatarCommand(string userId, string path = "")
         {
             if (string.IsNullOrEmpty(path))
@@ -215,6 +220,19 @@ namespace Growl_for_Skype_Notification
             catch (ArgumentException)
             {
                 //TODO: エラーログなどへの出力
+            }
+        }
+
+        public void InitializeUserAvatars()
+        {
+            if (!IsAttached)
+            {
+                return;
+            }
+
+            foreach (User user in skype.Friends)
+            {
+                PublicationGetUserAvatarCommand(user.Handle); 
             }
         }
 
