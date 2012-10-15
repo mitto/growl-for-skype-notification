@@ -132,7 +132,6 @@
             this.toolStripMenuItemAttachSkype.Name = "toolStripMenuItemAttachSkype";
             this.toolStripMenuItemAttachSkype.Size = new System.Drawing.Size(172, 22);
             this.toolStripMenuItemAttachSkype.Text = "Skypeへ接続";
-            this.toolStripMenuItemAttachSkype.Click += new System.EventHandler(this.toolStripMenuItemAttachSkype_Click);
             // 
             // toolStripMenuItemGetAttachmentStatus
             // 
@@ -151,14 +150,12 @@
             this.toolStripMenuItemRegisterGrowl.Name = "toolStripMenuItemRegisterGrowl";
             this.toolStripMenuItemRegisterGrowl.Size = new System.Drawing.Size(172, 22);
             this.toolStripMenuItemRegisterGrowl.Text = "Growlへ登録";
-            this.toolStripMenuItemRegisterGrowl.Click += new System.EventHandler(this.toolStripMenuItemRegisterGrowl_Click);
             // 
             // toolStripMenuItemTestNotification
             // 
             this.toolStripMenuItemTestNotification.Name = "toolStripMenuItemTestNotification";
             this.toolStripMenuItemTestNotification.Size = new System.Drawing.Size(172, 22);
             this.toolStripMenuItemTestNotification.Text = "テスト通知の送信";
-            this.toolStripMenuItemTestNotification.Click += new System.EventHandler(this.toolStripMenuItemTestNotification_Click);
             // 
             // toolStripSeparator1
             // 
@@ -170,14 +167,12 @@
             this.toolStripMenuItemCheckUpdate.Name = "toolStripMenuItemCheckUpdate";
             this.toolStripMenuItemCheckUpdate.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemCheckUpdate.Text = "最新バージョンを確認";
-            this.toolStripMenuItemCheckUpdate.Click += new System.EventHandler(this.toolStripMenuItemCheckUpdate_Click);
             // 
             // toolStripMenuItemExit
             // 
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
             this.toolStripMenuItemExit.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemExit.Text = "終了 (&X)";
-            this.toolStripMenuItemExit.Click += new System.EventHandler(this.toolStripMenuItemExit_Click);
             // 
             // toolStripSeparator2
             // 
@@ -344,7 +339,6 @@
             this.linkLabelHome.TabIndex = 3;
             this.linkLabelHome.TabStop = true;
             this.linkLabelHome.Text = "http://mittostar.info/";
-            this.linkLabelHome.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelHome_LinkClicked);
             // 
             // label3
             // 
@@ -383,7 +377,6 @@
             this.buttonClose.TabIndex = 2;
             this.buttonClose.Text = "閉じる";
             this.buttonClose.UseVisualStyleBackColor = true;
-            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
             // timerSkypeStatusCheck
             // 
