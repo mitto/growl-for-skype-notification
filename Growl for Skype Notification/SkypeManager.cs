@@ -17,6 +17,8 @@ namespace Growl_for_Skype_Notification
         private Dictionary<int, ChatMessage> chatChangeHistoryDictionary = new Dictionary<int, ChatMessage>();
         private Dictionary<int, string> chatChangeMessageDictonary = new Dictionary<int, string>();
 
+        private bool _isInitialized = false;
+
         #endregion
 
         #region "定数"
@@ -48,6 +50,14 @@ namespace Growl_for_Skype_Notification
         {
             growl.Initialize();
             growl.Register();
+
+            if (!IsInitialized)
+            {
+                growl.CallbackSubscription(connector_NotificationCallback);
+                growl.ErrorResponseSubscription(connector_ErrorResponse);
+                _isInitialized = true;
+            }
+
             AttachSkype();
         }
 
@@ -60,21 +70,32 @@ namespace Growl_for_Skype_Notification
         }
 
         /// <summary>
-        /// GrowlManagerのCallbackSubscriptionへの中継メソッド
+        /// Growlが通知を終えた際に呼び出されるコールバックを処理するイベントハンドラ
         /// </summary>
-        /// <param name="callback">登録するコールバックメソッド</param>
-        public void CallbackSubscription(Growl.Connector.GrowlConnector.CallbackEventHandler callback)
+        /// <param name="response"></param>
+        /// <param name="callbackData"></param>
+        /// <param name="state"></param>
+        private void connector_NotificationCallback(Growl.Connector.Response response, Growl.Connector.CallbackData callbackData, object state)
         {
-            growl.CallbackSubscription(callback);
+            Debug.WriteLine("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data);
+            Trace.WriteLine(String.Format("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data));
+            if (callbackData.Result == Growl.CoreLibrary.CallbackResult.CLICK)
+            {
+                if (callbackData.Data != "")
+                {
+                    OpenChatWindow(callbackData.Data);
+                }
+            }
         }
 
         /// <summary>
-        /// GrowlManagerのErrorResponseSubscriptionへの中継メソッド
+        /// Growlにエラーがあった場合に発生するイベントを処理するイベントハンドラ
         /// </summary>
-        /// <param name="response">登録するエラーレスポンス処理用のメソッド</param>
-        public void ErrorResponseSubscription(Growl.Connector.GrowlConnector.ResponseEventHandler response)
+        /// <param name="response"></param>
+        /// <param name="state"></param>
+        private void connector_ErrorResponse(Growl.Connector.Response response, object state)
         {
-            growl.ErrorResponseSubscription(response);
+            System.Windows.Forms.MessageBox.Show(response.ErrorDescription, response.ErrorCode.ToString());
         }
 
         /// <summary>
@@ -186,6 +207,14 @@ namespace Growl_for_Skype_Notification
         #endregion
 
         #region "プロパティ"
+
+        public bool IsInitialized
+        {
+            get
+            {
+                return _isInitialized;
+            }
+        }
 
         #endregion
    }

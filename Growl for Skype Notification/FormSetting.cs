@@ -32,9 +32,6 @@ namespace Growl_for_Skype_Notification
             SetVisible(false);
 
             skypeManager.Initialize();
-            skypeManager.CallbackSubscription(connector_NotificationCallback);
-            skypeManager.ErrorResponseSubscription(connector_ErrorResponse);
-
 
             notifyIconTray.Text = TRAY_ICON_MESSAGE;
 
@@ -212,28 +209,6 @@ namespace Growl_for_Skype_Notification
         private void toolStripMenuItemMonitoringSkype_Click(object sender, EventArgs e)
         {
             ChangeMonitoringSkype();
-        }
-
-        #endregion
-
-        #region "Growl"
-
-        private void connector_NotificationCallback(Growl.Connector.Response response, Growl.Connector.CallbackData callbackData, object state)
-        {
-            Debug.WriteLine("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data);
-            Trace.WriteLine(String.Format("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data));
-            if (callbackData.Result == Growl.CoreLibrary.CallbackResult.CLICK)
-            {
-                if (callbackData.Data != "")
-                {
-                    skypeManager.OpenChatWindow(callbackData.Data);
-                }
-            }
-        }
-
-        private void connector_ErrorResponse(Growl.Connector.Response response, object state)
-        {
-            MessageBox.Show(response.ErrorDescription, response.ErrorCode.ToString());
         }
 
         #endregion
