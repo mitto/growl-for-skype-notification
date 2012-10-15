@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 using SKYPE4COMLib;
+using System.Windows.Forms;
 
 namespace Growl_for_Skype_Notification
 {
@@ -57,6 +59,37 @@ namespace Growl_for_Skype_Notification
         public void OpenChatWindow(string chatId)
         {
             skype.Chat[chatId].OpenWindow();
+        }
+
+        /// <summary>
+        /// アバター画像を取得するメソッド
+        /// </summary>
+        /// <param name="userId">取得したいユーザーのSkypeId</param>
+        /// <param name="path">アバター画像の一時保存先</param>
+        public void LoadUserAvater(string userId, string path = "")
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                path = Path.GetTempPath();
+            }
+
+            path = Path.Combine(path, "avatarimage", userId + ".jpg");
+
+            if (File.Exists(path))
+            {
+                try
+                {
+                    File.Delete(path);
+                }
+                catch (Exception)
+                {
+                    //TODO: エラーログなどへの出力
+                    return;
+                }
+            }
+            string commandline = String.Format("GET USER {0} AVATAR 1 {1}", userId, path);
+            var command = skype.get_Command(DateTime.Now.Millisecond, commandline);
+            skype.SendCommand(command);
         }
 
         /// <summary>

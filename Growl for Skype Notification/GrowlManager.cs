@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
-
 using Growl.Connector;
 using Growl.CoreLibrary;
 
@@ -64,7 +64,7 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         /// <param name="user">ステータス変更のあったユーザー</param>
         /// <param name="status">変更後のステータス情報</param>
-        public void RunNotificationOnlineStatus(SKYPE4COMLib.User user, SKYPE4COMLib.TOnlineStatus status)
+        public void RunNotificationOnlineStatus(SKYPE4COMLib.User user, SKYPE4COMLib.TOnlineStatus status, Bitmap image = null)
         {
             string title = "オンラインステータスの変更";
             string name = String.IsNullOrEmpty(user.FullName) ? "表示名がありません" : user.FullName;
@@ -72,7 +72,13 @@ namespace Growl_for_Skype_Notification
 
             var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeOnlineStatus.Name, user.Handle);
 
-            RunNotification(GrowlManager.NotificationTypeOnlineStatus, title, message, context);
+            var notification = new Notification(ApplicationName, GrowlManager.NotificationTypeOnlineStatus.Name, DateTime.Now.Millisecond.ToString(), title, message);
+            if (image != null)
+            {
+                notification.Icon = (Resource)image;
+            }
+
+            RunNotification(notification, context);
         }
 
         /// <summary>
