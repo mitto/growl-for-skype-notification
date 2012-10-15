@@ -64,15 +64,16 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         /// <param name="user">ステータス変更のあったユーザー</param>
         /// <param name="status">変更後のステータス情報</param>
+        /// <param name="image">通知に使うビットマップイメージ</param>
         public void RunNotificationOnlineStatus(SKYPE4COMLib.User user, SKYPE4COMLib.TOnlineStatus status, Bitmap image = null)
         {
             string title = "オンラインステータスの変更";
             string name = String.IsNullOrEmpty(user.FullName) ? "表示名がありません" : user.FullName;
             string message = String.Format("{0}({1})さんが\n「{2}」になりました。", name, user.Handle, SkypeManager.GetOnlineStatusMessage(status));
 
-            var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeOnlineStatus.Name, user.Handle);
+            var context = MakeCallbackContext(NotificationTypeOnlineStatus.Name, user.Handle);
 
-            var notification = new Notification(ApplicationName, GrowlManager.NotificationTypeOnlineStatus.Name, DateTime.Now.Millisecond.ToString(), title, message);
+            var notification = new Notification(ApplicationName, NotificationTypeOnlineStatus.Name, DateTime.Now.Millisecond.ToString(), title, message);
             if (image != null)
             {
                 notification.Icon = (Resource)image;
@@ -86,14 +87,21 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         /// <param name="message">変更のあったチャット</param>
         /// <param name="status">変更後のチャットステータス</param>
-        public void RunNotificationMessageStatus(SKYPE4COMLib.ChatMessage message, SKYPE4COMLib.TChatMessageStatus status)
+        /// <param name="image">通知に使うビットマップイメージ</param>
+        public void RunNotificationMessageStatus(SKYPE4COMLib.ChatMessage message, SKYPE4COMLib.TChatMessageStatus status, Bitmap image = null)
         {
             string name = String.IsNullOrEmpty(message.Sender.FullName) ? "表示名がありません" : message.Sender.FullName;
             string title = String.Format("{0}({1})さんからのチャット", name, message.Sender.Handle); 
 
-            var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeChatReceived.Name, message.Chat.Name);
+            var context = MakeCallbackContext(NotificationTypeChatReceived.Name, message.Chat.Name);
 
-            RunNotification(GrowlManager.NotificationTypeChatReceived, title, message.Body, context);
+            var notification = new Notification(ApplicationName, NotificationTypeChatReceived.Name, DateTime.Now.Millisecond.ToString(), title, message.Body);
+            if (image != null)
+            {
+                notification.Icon = (Resource)image;
+            }
+
+            RunNotification(notification, context);
         }
 
         /// <summary>
@@ -101,18 +109,32 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         /// <param name="user">ムードメッセージを変更したユーザー</param>
         /// <param name="moodtext">変更されたムードメッセージの内容</param>
-        public void RunNotificationUserMood(SKYPE4COMLib.User user, string moodtext)
+        /// <param name="image">通知に使うビットマップイメージ</param>
+        public void RunNotificationUserMood(SKYPE4COMLib.User user, string moodtext, Bitmap image = null)
         {
             string name = String.IsNullOrEmpty(user.FullName) ? "表示名がありません" : user.FullName;
             string title = String.Format("{0}({1})さんのムードメッセージ", name, user.Handle);
             string body = String.IsNullOrEmpty(moodtext) ? "ムードメッセージが削除されました" : moodtext;
 
-            var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeMoodMessage.Name, user.Handle);
+            var context = MakeCallbackContext(NotificationTypeMoodMessage.Name, user.Handle);
 
-            RunNotification(GrowlManager.NotificationTypeMoodMessage, title, body, context);
+            var notification = new Notification(ApplicationName, NotificationTypeMoodMessage.Name, DateTime.Now.Millisecond.ToString(), title, moodtext);
+            if (image != null)
+            {
+                notification.Icon = (Resource)image;
+            }
+
+            RunNotification(notification, context);
         }
 
-        public void RunNotificationChangeChat(SKYPE4COMLib.ChatMessage chat, string from, string to)
+        /// <summary>
+        /// チャットに変更があった場合の通知を発行するメソッド
+        /// </summary>
+        /// <param name="chat">大元の詳細なチャット情報</param>
+        /// <param name="from">変更前のチャット本文</param>
+        /// <param name="to">変更後のチャット本文</param>
+        /// <param name="image">通知に使うビットマップイメージ</param>
+        public void RunNotificationChangeChat(SKYPE4COMLib.ChatMessage chat, string from, string to, Bitmap image = null)
         {
             string name = String.IsNullOrEmpty(chat.Sender.FullName) ? "表示名がありません" : chat.Sender.FullName;
             string title = String.Format("{0}({1})さんがチャット内容を変更しました", name, chat.Sender.Handle);
@@ -120,9 +142,18 @@ namespace Growl_for_Skype_Notification
 
             var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeChatReceived.Name, chat.Chat.Name);
 
-            RunNotification(GrowlManager.NotificationTypeChatReceived, title, body, context);
+            var notification = new Notification(ApplicationName, NotificationTypeChatReceived.Name, DateTime.Now.Millisecond.ToString(), title, body);
+            if (image != null)
+            {
+                notification.Icon = (Resource)image; 
+            }
+
+            RunNotification(notification, context);
         }
 
+        /// <summary>
+        /// テスト用の通知を発行するメソッド
+        /// </summary>
         public void TestNotification()
         {
             RunNotification(GrowlManager.NotificationTypeChatReceived, "Test Title", "Test Message");

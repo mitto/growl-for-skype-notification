@@ -85,6 +85,11 @@ namespace Growl_for_Skype_Notification
             growl.TestNotification();
         }
  
+        /// <summary>
+        /// チャットが飛んできたときに発生するイベントを処理するイベントハンドラ
+        /// </summary>
+        /// <param name="pMessage">イベントを発生させたチャットの詳細データ</param>
+        /// <param name="Status">イベントを発生させたチャットの状態</param>
         private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
         {
             switch (Status)
@@ -93,7 +98,7 @@ namespace Growl_for_Skype_Notification
                     break;
                 case TChatMessageStatus.cmsReceived:
                     chatChangeHistoryDictionary.Add(pMessage.Id, pMessage);
-                    growl.RunNotificationMessageStatus(pMessage, Status);
+                    growl.RunNotificationMessageStatus(pMessage, Status, GetUserAvatar(pMessage.Sender.Handle));
                     break;
                 case TChatMessageStatus.cmsSending:
                     break;
@@ -104,6 +109,11 @@ namespace Growl_for_Skype_Notification
             }
         }
 
+        /// <summary>
+        /// オンラインステータスに変更があったときに発生するイベントを処理するイベントハンドラ
+        /// </summary>
+        /// <param name="pUser">オンラインステータスに変更があったユーザーの詳細データ</param>
+        /// <param name="Status">変更後のオンラインステータス</param>
         private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
         {
             //オンラインとオフラインの状態が切り替わった際に
@@ -114,9 +124,13 @@ namespace Growl_for_Skype_Notification
                 return;
             }
 
-            growl.RunNotificationOnlineStatus(pUser, Status);
+            growl.RunNotificationOnlineStatus(pUser, Status, GetUserAvatar(pUser.Handle));
         }
 
+        /// <summary>
+        /// Skypeから飛んでくる生のコマンドを処理するイベントハンドラー
+        /// </summary>
+        /// <param name="pCommand">受け取るコマンド</param>
         private void skype_Reply(Command pCommand)
         {
             var splitCommands = pCommand.Reply.Split(' ');
@@ -130,9 +144,14 @@ namespace Growl_for_Skype_Notification
 
         }
 
+        /// <summary>
+        /// ムードメッセージに変更があった場合に発生するイベントを処理するイベントハンドラ
+        /// </summary>
+        /// <param name="pUser"></param>
+        /// <param name="MoodText"></param>
         private void skype_UserMood(User pUser, string MoodText)
         {
-            growl.RunNotificationUserMood(pUser, MoodText);
+            growl.RunNotificationUserMood(pUser, MoodText, GetUserAvatar(pUser.Handle));
         }
 
         /// <summary>
@@ -155,7 +174,7 @@ namespace Growl_for_Skype_Notification
                         {
                             from = chatChangeMessageDictonary[id]; 
                         }
-                        growl.RunNotificationChangeChat(chat, from, to);
+                        growl.RunNotificationChangeChat(chat, from, to, GetUserAvatar(chat.Sender.Handle));
                         chatChangeMessageDictonary[id] = to;
                     }
                     break;

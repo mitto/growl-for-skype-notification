@@ -90,7 +90,7 @@ namespace Growl_for_Skype_Notification
                 Directory.CreateDirectory(path);
             }
 
-            path = userId + ".jpg";
+            path = Path.Combine(path, userId + ".jpg");
 
             if (File.Exists(path))
             {
@@ -176,7 +176,7 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         /// <param name="userId">アバターを取得したいユーザーのSkypeID</param>
         /// <returns>見つかった場合はアバター画像が、見つからなかった場合はnullが返ります。</returns>
-        public Image GetUserAvatar(string userId)
+        public Bitmap GetUserAvatar(string userId)
         {
             if (userAvatarDictonary.ContainsKey(userId))
             {
@@ -195,8 +195,26 @@ namespace Growl_for_Skype_Notification
             return userAvatarDictonary.ContainsKey(userId);
         }
 
+        /// <summary>
+        /// アバター画像をディクショナリーへ登録
+        /// </summary>
+        /// <param name="userId">登録するユーザー名</param>
+        /// <param name="path">登録する画像へのパス</param>
         private void UserAvatarImageRegister(string userId, string path)
         {
+            if (new FileInfo(path).Length == 0)
+            {
+                try
+                {
+                    File.Delete(path);
+                }
+                catch (Exception)
+                {
+                    //TODO: エラーログなどへ出力
+                } 
+                return;
+            }
+
             if (ExistsUserAvatar(userId))
             {
                 userAvatarDictonary.Remove(userId);
@@ -223,6 +241,9 @@ namespace Growl_for_Skype_Notification
             }
         }
 
+        /// <summary>
+        /// コンタクトリストにあるユーザーのアバター画像の登録を行う
+        /// </summary>
         public void InitializeUserAvatars()
         {
             if (!IsAttached)
@@ -240,6 +261,10 @@ namespace Growl_for_Skype_Notification
 
         #region "イベントハンドラ系"
 
+        /// <summary>
+        /// Skypeから飛んでくる生のコマンドを処理するイベントハンドラー
+        /// </summary>
+        /// <param name="pCommand">受け取るコマンド</param>
         private void skype_Reply(Command pCommand)
         {
             Debug.WriteLine("{0}:{1}", "Command", pCommand.Command);
