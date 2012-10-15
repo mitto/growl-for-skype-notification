@@ -16,7 +16,6 @@ namespace Growl_for_Skype_Notification
 
         private Dictionary<int, ChatMessage> chatChangeHistoryDictionary = new Dictionary<int, ChatMessage>();
         private Dictionary<int, string> chatChangeMessageDictonary = new Dictionary<int, string>();
-        private Dictionary<string, Bitmap> userAvatarDictonary = new Dictionary<string, Bitmap>();
 
         #endregion
 
@@ -122,8 +121,6 @@ namespace Growl_for_Skype_Notification
         {
             var splitCommands = pCommand.Reply.Split(' ');
 
-            Debug.WriteLine("{0}:{1}", "Command", pCommand.Command);
-            Debug.WriteLine("{0}:{1}", "Reply", pCommand.Reply);
             switch (splitCommands[0].ToLower())
             {
                 case "chatmessage":
@@ -131,22 +128,6 @@ namespace Growl_for_Skype_Notification
                     break;
             }
 
-            switch (splitCommands[1].ToLower())
-            {
-                case "user":
-                    if (splitCommands[3].ToLower() == "avatar")
-                    {
-                        System.Diagnostics.Debug.WriteLine("avater:{0}", splitCommands[5]);
-                        if (!userAvatarDictonary.ContainsKey(splitCommands[2]))
-                        {
-                            using (var image = Image.FromFile(splitCommands[5]))
-                            {
-                                userAvatarDictonary.Add(splitCommands[2], new Bitmap(image));
-                            }
-                        }
-                    }
-                    break;
-            }
         }
 
         private void skype_UserMood(User pUser, string MoodText)

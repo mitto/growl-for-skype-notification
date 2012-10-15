@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 
 using SKYPE4COMLib;
-using System.Windows.Forms;
 
 namespace Growl_for_Skype_Notification
 {
@@ -14,6 +15,8 @@ namespace Growl_for_Skype_Notification
         #region "変数"
 
         protected Skype skype;
+
+        private Dictionary<string, Bitmap> userAvatarDictonary = new Dictionary<string, Bitmap>();
 
         #endregion
 
@@ -73,7 +76,14 @@ namespace Growl_for_Skype_Notification
                 path = Path.GetTempPath();
             }
 
-            path = Path.Combine(path, "avatarimage", userId + ".jpg");
+            path = Path.Combine(path, "avatarimage");
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            path = userId + ".jpg";
 
             if (File.Exists(path))
             {
@@ -144,6 +154,64 @@ namespace Growl_for_Skype_Notification
                     return "不明 or 未知";
             }
             return "";
+        }
+
+        /// <summary>
+        /// 指定されたユーザーのアバター画像を返すメソッド
+        /// </summary>
+        /// <param name="userId">アバターを取得したいユーザーのSkypeID</param>
+        /// <returns>見つかった場合はアバター画像が、見つからなかった場合はnullが返ります。</returns>
+        public Image GetUserAvatar(string userId)
+        {
+            if (userAvatarDictonary.ContainsKey(userId))
+            {
+                return userAvatarDictonary[userId];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 指定したユーザーのアバター画像が存在しているかいないかを返すメソッド
+        /// </summary>
+        /// <param name="userId">存在を確認したいSkypeID</param>
+        /// <returns>利用可能な場合はtrue、不可能の場合はfalseを返します</returns>
+        public bool ExistsUserAvatar(string userId)
+        {
+            return userAvatarDictonary.ContainsKey(userId);
+        }
+
+        private void skype_Reply(Command pCommand)
+        {
+            Debug.WriteLine("{0}:{1}", "Command", pCommand.Command);
+            Debug.WriteLine("{0}:{1}", "Reply", pCommand.Reply);
+
+            var splitReply = pCommand.Reply.Split(' ');
+
+            switch (splitReply[1].ToLower())
+            {
+                case "user":
+                    switch (splitReply[3].ToLower())
+                   	{
+                        case "avatar":
+                            Debug.WriteLine("avater:{0}", splitReply[5]);
+
+                            var id = splitReply[2];
+                            var path = splitReply[5];
+
+                            if (ExistsUserAvatar(id))
+                            {
+                                userAvatarDictonary.Remove(id);
+                        	}
+
+                        	using (var image = Image.FromFile(path))
+                        	{
+                        	    userAvatarDictonary.Add(id, new Bitmap(image));
+                        	}
+
+                            break;
+	                }
+                    break;
+            }
         }
 
         #endregion
