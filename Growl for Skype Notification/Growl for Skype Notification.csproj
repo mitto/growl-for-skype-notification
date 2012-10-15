@@ -115,6 +115,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="SkypeManager.cs" />
     <Compile Include="SkypeManagerBase.cs" />
+    <Compile Include="Utilities.cs" />
     <EmbeddedResource Include="FormSetting.resx">
       <DependentUpon>FormSetting.cs</DependentUpon>
     </EmbeddedResource>
