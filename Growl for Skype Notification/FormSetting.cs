@@ -40,6 +40,24 @@ namespace Growl_for_Skype_Notification
             FileName = String.Format("log-{0}.txt", DateTime.Now.ToString("yyyyMMddHHmmss"));
 
             LoadSettings();
+
+            RegisterEventHandler();
+        }
+
+        /// <summary>
+        /// 簡単なイベントハンドラーを登録するメソッド
+        /// </summary>
+        private void RegisterEventHandler()
+        {
+            buttonClose.Click += (sender, e) => this.Close();
+
+            linkLabelHome.LinkClicked += (sender, e) => Process.Start(linkLabelHome.Text);
+
+            toolStripMenuItemExit.Click += (sender, e) => Application.Exit();
+
+            toolStripMenuItemAttachSkype.Click += (sender, e) => skypeManager.AttachSkype();
+            toolStripMenuItemRegisterGrowl.Click += (sender, e) => skypeManager.GrowlRegister();
+            toolStripMenuItemTestNotification.Click += (sender,e) => skypeManager.TestNotification();
         }
 
         private void FormSetting_FormClosing(object sender, FormClosingEventArgs e)
@@ -51,24 +69,14 @@ namespace Growl_for_Skype_Notification
             }
         }
 
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private void buttonChangeLogPath_Click(object sender, EventArgs e)
         {
             ChangeLogPath(Properties.Settings.Default.LogPath);
         }
 
-        private void linkLabelHome_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(linkLabelHome.Text);
-        }
-
         private void notifyIconTray_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
                 SetVisible(!this.Visible);
             }
@@ -125,29 +133,9 @@ namespace Growl_for_Skype_Notification
             ChangeStartupRegister();
         }
 
-        private void toolStripMenuItemExit_Click(object sender, EventArgs e)
-        {
-            System.Windows.Forms.Application.Exit();
-        }
-
         private void toolStripMenuItemOpenSetting_Click(object sender, EventArgs e)
         {
             SetVisible(true);
-        }
-
-        private void toolStripMenuItemAttachSkype_Click(object sender, EventArgs e)
-        {
-            skypeManager.AttachSkype();
-        }
-
-        private void toolStripMenuItemRegisterGrowl_Click(object sender, EventArgs e)
-        {
-            skypeManager.GrowlRegister();
-        }
-
-        private void toolStripMenuItemTestNotification_Click(object sender, EventArgs e)
-        {
-            skypeManager.TestNotification();
         }
 
         private void toolStripMenuItemGetAttachmentStatus_Click(object sender, EventArgs e)
@@ -199,7 +187,7 @@ namespace Growl_for_Skype_Notification
                     }
                     if ((MessageBox.Show(this, "更新が完了しました。更新を有効にするにはアプリケーションを再起動する必要があります。再起動しますか？", "再起動の確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question)) == DialogResult.Yes)
                     {
-                        System.Windows.Forms.Application.Restart();
+                        Application.Restart();
                     }
 
                 }

@@ -208,6 +208,9 @@ namespace Growl_for_Skype_Notification
 
         #region "プロパティ"
 
+        /// <summary>
+        /// Initializeメソッドを一度でも呼び出しているかのプロパティ
+        /// </summary>
         public bool IsInitialized
         {
             get
