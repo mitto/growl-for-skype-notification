@@ -190,6 +190,34 @@ namespace Growl_for_Skype_Notification
             return userAvatarDictonary.ContainsKey(userId);
         }
 
+        private void UserAvatarImageRegister(string userId, string path)
+        {
+            if (ExistsUserAvatar(userId))
+            {
+                userAvatarDictonary.Remove(userId);
+        	}
+
+            try
+            {
+                using (var image = Image.FromFile(path))
+                {
+                    userAvatarDictonary.Add(userId, new Bitmap(image));
+                }
+            }
+            catch (OutOfMemoryException)
+            {
+                //TODO: エラーログなどへの出力
+            }
+            catch (FileNotFoundException)
+            {
+                //TODO: エラーログなどへの出力
+            }
+            catch (ArgumentException)
+            {
+                //TODO: エラーログなどへの出力
+            }
+        }
+
         #endregion
 
         #region "イベントハンドラ系"
@@ -207,21 +235,9 @@ namespace Growl_for_Skype_Notification
                     switch (splitReply[3].ToLower())
                    	{
                         case "avatar":
-                            Debug.WriteLine("avater:{0}", splitReply[5]);
-
                             var id = splitReply[2];
                             var path = splitReply[5];
-
-                            if (ExistsUserAvatar(id))
-                            {
-                                userAvatarDictonary.Remove(id);
-                        	}
-
-                        	using (var image = Image.FromFile(path))
-                        	{
-                        	    userAvatarDictonary.Add(id, new Bitmap(image));
-                        	}
-
+                            UserAvatarImageRegister(id, path);
                             break;
 	                }
                     break;
