@@ -65,11 +65,11 @@ namespace Growl_for_Skype_Notification
         }
 
         /// <summary>
-        /// アバター画像を取得するメソッド
+        /// 指定したユーザーのアバター画像を指定したパスに出力するようSkype側にコマンドを送るメソッド
         /// </summary>
         /// <param name="userId">取得したいユーザーのSkypeId</param>
-        /// <param name="path">アバター画像の一時保存先</param>
-        public void LoadUserAvater(string userId, string path = "")
+        /// <param name="path">アバター画像の一時保存先(ディレクトリ名)</param>
+        public void PublicationGetUserAvatarCommand(string userId, string path = "")
         {
             if (string.IsNullOrEmpty(path))
             {
