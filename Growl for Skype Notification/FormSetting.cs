@@ -15,8 +15,6 @@ namespace Growl_for_Skype_Notification
 
         private readonly static string TRAY_ICON_MESSAGE = String.Format("{0}[{1}]", System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ProductVersion);
 
-        private readonly static string SUBKEY_STARTUP = @"Software\Microsoft\Windows\CurrentVersion\Run";
-
         private static string LogPath = "";
         private static string FileName = "";
 
@@ -50,6 +48,8 @@ namespace Growl_for_Skype_Notification
         private void RegisterEventHandler()
         {
             buttonClose.Click += (sender, e) => this.Close();
+
+            checkBoxStartupRegister.CheckedChanged += (sender, e) => SettingManager.ChangeStartupRegister();
 
             linkLabelHome.LinkClicked += (sender, e) => Process.Start(linkLabelHome.Text);
 
@@ -129,11 +129,6 @@ namespace Growl_for_Skype_Notification
             //notifyIconTray.ShowBalloonTip(10000);
         }
 
-        private void checkBoxStartupRegister_CheckedChanged(object sender, EventArgs e)
-        {
-            ChangeStartupRegister();
-        }
-
         private void toolStripMenuItemOpenSetting_Click(object sender, EventArgs e)
         {
             SetVisible(true);
@@ -195,7 +190,7 @@ namespace Growl_for_Skype_Notification
             timerSkypeStatusCheck.Enabled = Properties.Settings.Default.IsMonitoringSkype;
             toolStripMenuItemMonitoringSkype.Checked = Properties.Settings.Default.IsMonitoringSkype;
 
-            checkBoxStartupRegister.Checked = IsExistsStartupRegistryKey();
+            checkBoxStartupRegister.Checked = SettingManager.IsExistsStartupRegistryKey();
         }
 
         private void ChangeLogPath()
@@ -254,49 +249,6 @@ namespace Growl_for_Skype_Notification
             if (isVisible)
             {
                 this.Focus();
-            }
-        }
-
-        private void ChangeStartupRegister()
-        {
-            if (IsExistsStartupRegistryKey())
-            {
-                DeleteStartupRegistryKey();
-            }
-            else
-            {
-                SetStartupRegistryKey();
-            }
-
-            checkBoxStartupRegister.Checked = IsExistsStartupRegistryKey();
-        }
-
-        private bool IsExistsStartupRegistryKey()
-        {
-            using (var regkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(SUBKEY_STARTUP))
-            {
-                var value = regkey.GetValue(System.Windows.Forms.Application.ProductName);
-                if (value != null)
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
-
-        private void SetStartupRegistryKey()
-        {
-            using (var regkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(SUBKEY_STARTUP))
-            {
-                regkey.SetValue(System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ExecutablePath);
-            }
-        }
-
-        private void DeleteStartupRegistryKey()
-        {
-            using (var regkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(SUBKEY_STARTUP))
-            {
-                regkey.DeleteValue(System.Windows.Forms.Application.ProductName);
             }
         }
 

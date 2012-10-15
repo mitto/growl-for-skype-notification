@@ -222,7 +222,6 @@
             this.checkBoxStartupRegister.TabIndex = 3;
             this.checkBoxStartupRegister.Text = "OS起動時に自動的に起動するようにする";
             this.checkBoxStartupRegister.UseVisualStyleBackColor = true;
-            this.checkBoxStartupRegister.CheckedChanged += new System.EventHandler(this.checkBoxStartupRegister_CheckedChanged);
             // 
             // buttonChangeLogPath
             // 
