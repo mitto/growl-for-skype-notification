@@ -35,6 +35,8 @@ namespace Growl_for_Skype_Notification
 
         #endregion
 
+        #region "Skype操作系"
+
         /// <summary>
         /// Skype自体を起動させるためのメソッド
         /// </summary>
@@ -102,6 +104,10 @@ namespace Growl_for_Skype_Notification
             skype.SendCommand(command);
         }
 
+        #endregion
+
+        #region "メッセージ生成系"
+
         /// <summary>
         /// TAttachmentStatusを渡すと該当する簡易メッセージを返すメソッド
         /// </summary>
@@ -156,6 +162,10 @@ namespace Growl_for_Skype_Notification
             return "";
         }
 
+        #endregion
+
+        #region "アバター系"
+
         /// <summary>
         /// 指定されたユーザーのアバター画像を返すメソッド
         /// </summary>
@@ -179,6 +189,10 @@ namespace Growl_for_Skype_Notification
         {
             return userAvatarDictonary.ContainsKey(userId);
         }
+
+        #endregion
+
+        #region "イベントハンドラ系"
 
         private void skype_Reply(Command pCommand)
         {
@@ -213,6 +227,8 @@ namespace Growl_for_Skype_Notification
                     break;
             }
         }
+
+        #endregion
 
         #endregion
 
