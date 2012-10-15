@@ -13,8 +13,6 @@ namespace Growl_for_Skype_Notification
     {
         private SkypeManager skypeManager = new SkypeManager();
 
-        private readonly static string TRAY_ICON_MESSAGE = String.Format("{0}[{1}]", System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ProductVersion);
-
         private static string LogPath = "";
         private static string FileName = "";
 
@@ -30,10 +28,11 @@ namespace Growl_for_Skype_Notification
             SetVisible(false);
 
             skypeManager.Initialize();
+            skypeManager.GrowlRegister();
 
-            notifyIconTray.Text = TRAY_ICON_MESSAGE;
+            notifyIconTray.Text = String.Format("{0}[{1}]", Application.ProductName, Application.ProductVersion);
 
-            labelVersion.Text += System.Windows.Forms.Application.ProductVersion;
+            labelVersion.Text += Application.ProductVersion;
 
             FileName = String.Format("log-{0}.txt", DateTime.Now.ToString("yyyyMMddHHmmss"));
 
@@ -172,12 +171,11 @@ namespace Growl_for_Skype_Notification
             if (!Properties.Settings.Default.IsFirstRun)
             {
                 MessageBox.Show("初回起動です。\nGrowlへの登録とSkypeへの接続を行います。", "確認");
-                skypeManager.GrowlRegister();
                 Properties.Settings.Default.IsFirstRun = true;
                 string message = "続けてログの保存場所を決定します。\nデフォルト値はアプリケーションの実行ファイルがある場所です。\n[" + System.Windows.Forms.Application.StartupPath + "]\n\n変更しますか？\n変更する場合は：OK\nデフォルト設定を利用する場合は：Cancel\n\n*後で設定画面から変更することも可能です。";
                 if (MessageBox.Show(message, "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.OK)
                 {
-                    ChangeLogPath(System.Windows.Forms.Application.StartupPath);
+                    ChangeLogPath(Application.StartupPath);
                 }
                 else
                 {
@@ -195,7 +193,7 @@ namespace Growl_for_Skype_Notification
 
         private void ChangeLogPath()
         {
-            Properties.Settings.Default.LogPath = Properties.Settings.Default.LogPath == "" ? AppendBackSlash(System.Windows.Forms.Application.StartupPath) : Properties.Settings.Default.LogPath;
+            Properties.Settings.Default.LogPath = Properties.Settings.Default.LogPath == "" ? System.Windows.Forms.Application.StartupPath : Properties.Settings.Default.LogPath;
             Properties.Settings.Default.Save();
         }
 
@@ -207,7 +205,7 @@ namespace Growl_for_Skype_Notification
                 dialog.SelectedPath = oldpath;
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    Properties.Settings.Default.LogPath = AppendBackSlash(dialog.SelectedPath);
+                    Properties.Settings.Default.LogPath = dialog.SelectedPath;
                 }
                 else
                 {
@@ -226,19 +224,13 @@ namespace Growl_for_Skype_Notification
             toolStripMenuItemMonitoringSkype.Checked = Properties.Settings.Default.IsMonitoringSkype;
         }
 
-        private string AppendBackSlash(string path)
-        {
-            path += path.EndsWith("\\") ? "" : "\\";
-            return path;
-        }
-
         private void UpdateLogPath()
         {
             if (Properties.Settings.Default.LogPath == "")
             {
                 ChangeLogPath();
             }
-            LogPath = Properties.Settings.Default.LogPath + FileName;
+            LogPath = Path.Combine(Properties.Settings.Default.LogPath, FileName);
             textBoxLogPath.Text = Properties.Settings.Default.LogPath;
         }
 
