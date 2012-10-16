@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using SKYPE4COMLib;
 using System.Diagnostics;
 
@@ -12,12 +10,12 @@ namespace Growl_for_Skype_Notification
     {
         #region "変数"
 
-        private GrowlManager growl = new GrowlManager();
+        private readonly GrowlManager _growl = new GrowlManager();
 
-        private Dictionary<int, ChatMessage> chatChangeHistoryDictionary = new Dictionary<int, ChatMessage>();
-        private Dictionary<int, string> chatChangeMessageDictonary = new Dictionary<int, string>();
+        private readonly Dictionary<int, ChatMessage> _chatChangeHistoryDictionary = new Dictionary<int, ChatMessage>();
+        private readonly Dictionary<int, string> _chatChangeMessageDictonary = new Dictionary<int, string>();
 
-        private bool _isInitialized = false;
+        private bool _isInitialized;
 
         #endregion
 
@@ -33,12 +31,11 @@ namespace Growl_for_Skype_Notification
         /// デフォルトコンストラクタ
         /// </summary>
         public SkypeManager()
-            : base()
         {
-            skype.MessageStatus += skype_MessageStatus;
-            skype.OnlineStatus += skype_OnlineStatus;
-            skype.Reply += skype_Reply;
-            skype.UserMood += skype_UserMood;
+            skype.MessageStatus += SkypeMessageStatus;
+            skype.OnlineStatus += SkypeOnlineStatus;
+            skype.Reply += SkypeReply;
+            skype.UserMood += SkypeUserMood;
         }
 
         #endregion
@@ -48,13 +45,13 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         public void Initialize()
         {
-            growl.Initialize();
-            growl.Register();
+            _growl.Initialize();
+            _growl.Register();
 
             if (!IsInitialized)
             {
-                growl.CallbackSubscription(connector_NotificationCallback);
-                growl.ErrorResponseSubscription(connector_ErrorResponse);
+                _growl.CallbackSubscription(ConnectorNotificationCallback);
+                _growl.ErrorResponseSubscription(connector_ErrorResponse);
                 _isInitialized = true;
             }
 
@@ -66,7 +63,7 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         public void GrowlRegister()
         {
-            growl.Register();
+            _growl.Register();
         }
 
         /// <summary>
@@ -75,7 +72,7 @@ namespace Growl_for_Skype_Notification
         /// <param name="response"></param>
         /// <param name="callbackData"></param>
         /// <param name="state"></param>
-        private void connector_NotificationCallback(Growl.Connector.Response response, Growl.Connector.CallbackData callbackData, object state)
+        private void ConnectorNotificationCallback(Growl.Connector.Response response, Growl.Connector.CallbackData callbackData, object state)
         {
             Debug.WriteLine("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data);
             Trace.WriteLine(String.Format("{0}:{1}", DateTime.Now.ToLongTimeString(), callbackData.Data));
@@ -95,7 +92,7 @@ namespace Growl_for_Skype_Notification
         /// <param name="state"></param>
         private void connector_ErrorResponse(Growl.Connector.Response response, object state)
         {
-            System.Windows.Forms.MessageBox.Show(response.ErrorDescription, response.ErrorCode.ToString());
+            System.Windows.Forms.MessageBox.Show(response.ErrorDescription, response.ErrorCode.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -103,23 +100,23 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         public void TestNotification()
         {
-            growl.TestNotification();
+            _growl.TestNotification();
         }
  
         /// <summary>
         /// チャットが飛んできたときに発生するイベントを処理するイベントハンドラ
         /// </summary>
         /// <param name="pMessage">イベントを発生させたチャットの詳細データ</param>
-        /// <param name="Status">イベントを発生させたチャットの状態</param>
-        private void skype_MessageStatus(ChatMessage pMessage, TChatMessageStatus Status)
+        /// <param name="status">イベントを発生させたチャットの状態</param>
+        private void SkypeMessageStatus(ChatMessage pMessage, TChatMessageStatus status)
         {
-            switch (Status)
+            switch (status)
             {
                 case TChatMessageStatus.cmsRead:
                     break;
                 case TChatMessageStatus.cmsReceived:
-                    chatChangeHistoryDictionary.Add(pMessage.Id, pMessage);
-                    growl.RunNotificationMessageStatus(pMessage, Status, GetUserAvatar(pMessage.Sender.Handle));
+                    _chatChangeHistoryDictionary.Add(pMessage.Id, pMessage);
+                    _growl.RunNotificationMessageStatus(pMessage, status, GetUserAvatar(pMessage.Sender.Handle));
                     break;
                 case TChatMessageStatus.cmsSending:
                     break;
@@ -134,8 +131,8 @@ namespace Growl_for_Skype_Notification
         /// オンラインステータスに変更があったときに発生するイベントを処理するイベントハンドラ
         /// </summary>
         /// <param name="pUser">オンラインステータスに変更があったユーザーの詳細データ</param>
-        /// <param name="Status">変更後のオンラインステータス</param>
-        private void skype_OnlineStatus(User pUser, TOnlineStatus Status)
+        /// <param name="status">変更後のオンラインステータス</param>
+        private void SkypeOnlineStatus(User pUser, TOnlineStatus status)
         {
             //オンラインとオフラインの状態が切り替わった際に
             //全アカウント分(?)くらいの通知が投げられてくるので
@@ -145,14 +142,14 @@ namespace Growl_for_Skype_Notification
                 return;
             }
 
-            growl.RunNotificationOnlineStatus(pUser, Status, GetUserAvatar(pUser.Handle));
+            _growl.RunNotificationOnlineStatus(pUser, status, GetUserAvatar(pUser.Handle));
         }
 
         /// <summary>
         /// Skypeから飛んでくる生のコマンドを処理するイベントハンドラー
         /// </summary>
         /// <param name="pCommand">受け取るコマンド</param>
-        private void skype_Reply(Command pCommand)
+        private void SkypeReply(Command pCommand)
         {
             var splitCommands = pCommand.Reply.Split(' ');
 
@@ -169,10 +166,10 @@ namespace Growl_for_Skype_Notification
         /// ムードメッセージに変更があった場合に発生するイベントを処理するイベントハンドラ
         /// </summary>
         /// <param name="pUser"></param>
-        /// <param name="MoodText"></param>
-        private void skype_UserMood(User pUser, string MoodText)
+        /// <param name="moodText"></param>
+        private void SkypeUserMood(User pUser, string moodText)
         {
-            growl.RunNotificationUserMood(pUser, MoodText, GetUserAvatar(pUser.Handle));
+            _growl.RunNotificationUserMood(pUser, moodText, GetUserAvatar(pUser.Handle));
         }
 
         /// <summary>
@@ -186,20 +183,18 @@ namespace Growl_for_Skype_Notification
             switch (commands[2].ToLower())
             {
                 case "body":
-                    if (chatChangeHistoryDictionary.ContainsKey(id))
+                    if (_chatChangeHistoryDictionary.ContainsKey(id))
                     {
-                        var chat = chatChangeHistoryDictionary[id];
+                        var chat = _chatChangeHistoryDictionary[id];
                         string from = chat.Body;
                         string to = commands[3];
-                        if (chatChangeMessageDictonary.ContainsKey(id))
+                        if (_chatChangeMessageDictonary.ContainsKey(id))
                         {
-                            from = chatChangeMessageDictonary[id]; 
+                            from = _chatChangeMessageDictonary[id]; 
                         }
-                        growl.RunNotificationChangeChat(chat, from, to, GetUserAvatar(chat.Sender.Handle));
-                        chatChangeMessageDictonary[id] = to;
+                        _growl.RunNotificationChangeChat(chat, from, to, GetUserAvatar(chat.Sender.Handle));
+                        _chatChangeMessageDictonary[id] = to;
                     }
-                    break;
-                default:
                     break;
             }
         }
