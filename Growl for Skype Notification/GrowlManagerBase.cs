@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-
+using System.Globalization;
 using Growl.Connector;
-using Growl.CoreLibrary;
 
 namespace Growl_for_Skype_Notification
 {
@@ -13,11 +9,11 @@ namespace Growl_for_Skype_Notification
     {
         #region "変数"
 
-        protected GrowlConnector connector;
-        protected Application application;
+        protected GrowlConnector Connector;
+        protected Application Application;
 
-        protected GrowlConnector.CallbackEventHandler callbackEventHandler = null;
-        protected GrowlConnector.ResponseEventHandler errorResponseEventHandler = null;
+        protected GrowlConnector.CallbackEventHandler CallbackEventHandler = null;
+        protected GrowlConnector.ResponseEventHandler ErrorResponseEventHandler = null;
 
         #endregion
 
@@ -37,9 +33,8 @@ namespace Growl_for_Skype_Notification
         /// デフォルトは「plaintext」
         /// </param>
         public GrowlManagerBase(Cryptography.SymmetricAlgorithmType encryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText)
+            : this ("", encryptionAlgorithm)
         {
-            connector = new GrowlConnector();
-            connector.EncryptionAlgorithm = encryptionAlgorithm;
         }
 
         /// <summary>
@@ -52,8 +47,7 @@ namespace Growl_for_Skype_Notification
         /// </param>
         public GrowlManagerBase(string password, Cryptography.SymmetricAlgorithmType encryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText)
         {
-            connector = new GrowlConnector(password);
-            connector.EncryptionAlgorithm = encryptionAlgorithm;
+            Connector = new GrowlConnector(password) { EncryptionAlgorithm = encryptionAlgorithm };
         }
 
         /// <summary>
@@ -68,8 +62,7 @@ namespace Growl_for_Skype_Notification
         /// </param>
         public GrowlManagerBase(string password, string hostname, int port, Cryptography.SymmetricAlgorithmType encryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText)
         {
-            connector = new GrowlConnector(password, hostname, port);
-            connector.EncryptionAlgorithm = encryptionAlgorithm;
+            Connector = new GrowlConnector(password, hostname, port) { EncryptionAlgorithm = encryptionAlgorithm };
         }
 
         #endregion
@@ -86,11 +79,11 @@ namespace Growl_for_Skype_Notification
                 throw new ArgumentException("アプリケーション名が空です。");
             }
 
-            application = new Application(name);
+            Application = new Application(name);
 
             if (image != null)
             {
-                application.Icon = (Resource)image;
+                Application.Icon = image;
             }
         }
 
@@ -100,12 +93,12 @@ namespace Growl_for_Skype_Notification
         /// <param name="notificationTypeArray">通知の種類を表したNotifcationTypeの配列</param>
         public void Register(NotificationType[] notificationTypeArray)
         {
-            if (application == null)
+            if (Application == null)
             {
                 throw new NullReferenceException("初期化が完了していません。Initializeメソッドを用いて初期化を行ってください"); 
             }
 
-            connector.Register(application, notificationTypeArray);
+            Connector.Register(Application, notificationTypeArray);
         }
 
         /// <summary>
@@ -117,7 +110,7 @@ namespace Growl_for_Skype_Notification
         /// <param name="context">コールバックで渡される値を指定</param>
         public void RunNotification(NotificationType type, string title, string message, CallbackContext context = null)
         {
-            RunNotification(new Notification(ApplicationName, type.Name, DateTime.Now.Ticks.ToString(), title, message), context);
+            RunNotification(new Notification(ApplicationName, type.Name, DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture), title, message), context);
         }
 
         /// <summary>
@@ -129,10 +122,10 @@ namespace Growl_for_Skype_Notification
         {
             if (notification == null)
             {
-                throw new ArgumentNullException("notificationがnullです。");
+                throw new ArgumentNullException("notification");
             }
 
-            connector.Notify(notification, context);
+            Connector.Notify(notification, context);
         }
 
         /// <summary>
@@ -143,10 +136,10 @@ namespace Growl_for_Skype_Notification
         {
             if (IsSubscriptionCallback)
             {
-                connector.NotificationCallback -= callbackEventHandler;
+                Connector.NotificationCallback -= CallbackEventHandler;
             }
-            callbackEventHandler = callback;
-            connector.NotificationCallback += callbackEventHandler;
+            CallbackEventHandler = callback;
+            Connector.NotificationCallback += CallbackEventHandler;
         }
 
         /// <summary>
@@ -157,10 +150,10 @@ namespace Growl_for_Skype_Notification
         {
             if (IsSubscriptionErrorResponse)
             {
-                connector.ErrorResponse -= errorResponseEventHandler;
+                Connector.ErrorResponse -= ErrorResponseEventHandler;
             }
-            errorResponseEventHandler = response;
-            connector.ErrorResponse += errorResponseEventHandler;
+            ErrorResponseEventHandler = response;
+            Connector.ErrorResponse += ErrorResponseEventHandler;
         }
 
         /// <summary>
@@ -195,11 +188,11 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                if (application == null)
+                if (Application == null)
                 {
                     return "アプリケーションの登録が完了していません。"; 
                 }
-                return application.Name;
+                return Application.Name;
             }
         }
 
@@ -210,7 +203,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return callbackEventHandler != null;
+                return CallbackEventHandler != null;
             }
         }
 
@@ -221,7 +214,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return errorResponseEventHandler != null;
+                return ErrorResponseEventHandler != null;
             }
         }
 
