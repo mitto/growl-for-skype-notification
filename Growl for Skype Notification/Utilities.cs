@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Deployment.Application;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Growl_for_Skype_Notification.Properties;
 
 namespace Growl_for_Skype_Notification
 {
@@ -16,9 +14,10 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         public static void CheckNewDeployment()
         {
+            //TODO: 最新版の確認もフォームを用意するなりしてわかりやすく状況を表示できるようにする
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                bool updateAvailable = false;
+                bool updateAvailable;
                 var ad = ApplicationDeployment.CurrentDeployment;
 
                 try
@@ -27,21 +26,21 @@ namespace Growl_for_Skype_Notification
                 }
                 catch (DeploymentDownloadException dde)
                 {
-                    MessageBox.Show("更新を確認中にエラーが発生しました。\nネットワークに繋がっているかを確認して再度お試しください。\n\nError:" + dde);
+                    MessageBox.Show(Resources.DeploymentDownloadExceptionMessage + dde, Resources.Error);
                     return;
                 }
                 catch (InvalidDeploymentException ide)
                 {
-                    MessageBox.Show("アプリケーションがうまく配置されていない可能性があります。\n再インストールをお試しください。\n\nError: " + ide.Message);
+                    MessageBox.Show(Resources.InvalidDeploymentExceptionMessage + ide.Message, Resources.Error);
                     return;
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    MessageBox.Show("すでに更新を確認中です。\n\nError: " + ioe.Message);
+                    MessageBox.Show(Resources.InvalidOperationExceptionMessage + ioe.Message, Resources.Error);
                     return;
                 }
 
-                if (updateAvailable && MessageBox.Show("最新版が利用できます。更新しますか？", "更新の確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+                if (updateAvailable && MessageBox.Show(Resources.UpdateConfirmMessage, Resources.Error, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     try
                     {
@@ -49,13 +48,13 @@ namespace Growl_for_Skype_Notification
                     }
                     catch (DeploymentDownloadException dde)
                     {
-                        MessageBox.Show("更新をインストールできませんでした。\n更新サーバーがダウンしているかネットワークに接続していない可能性があります。\nネットワークに接続しているか確認して再度お試しください。\n\nError: " + dde.Message);
+                        MessageBox.Show(Resources.DeploymentDownloadExceptionMessage + dde.Message, Resources.Error);
                     }
                     catch (TrustNotGrantedException tnge)
                     {
-                        MessageBox.Show("更新をインストールできませんでした。\n\n\nError: " + tnge.Message);
+                        MessageBox.Show(Resources.TrustNotGrantedExceptionMessage + tnge.Message, Resources.Error);
                     }
-                    if ((MessageBox.Show("更新が完了しました。更新を有効にするにはアプリケーションを再起動する必要があります。再起動しますか？", "再起動の確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question)) == DialogResult.Yes)
+                    if ((MessageBox.Show(Resources.CompleteAndRestartRequestMessage, Resources.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question)) == DialogResult.Yes)
                     {
                         Application.Restart();
                     }

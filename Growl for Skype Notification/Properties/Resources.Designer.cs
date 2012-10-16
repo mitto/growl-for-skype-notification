@@ -70,11 +70,34 @@ namespace Growl_for_Skype_Notification.Properties {
         }
         
         /// <summary>
+        ///   更新が完了しました。
+        ///
+        ///更新を有効にするにはアプリケーションを再起動する必要があります。
+        ///再起動しますか？ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string CompleteAndRestartRequestMessage {
+            get {
+                return ResourceManager.GetString("CompleteAndRestartRequestMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   確認 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string Confirm {
             get {
                 return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   最新版を確認中にエラーが発生しました。
+        ///ネットワークに繋がっているかを確認して再度お試しください。
+        /// に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string DeploymentDownloadExceptionMessage {
+            get {
+                return ResourceManager.GetString("DeploymentDownloadExceptionMessage", resourceCulture);
             }
         }
         
@@ -88,12 +111,53 @@ namespace Growl_for_Skype_Notification.Properties {
         }
         
         /// <summary>
+        ///   アプリケーションがうまく配置されていない可能性があります。
+        ///再インストールをお試しください。
+        /// に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string InvalidDeploymentExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidDeploymentExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   すでに更新を確認中です。
+        ///  に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string InvalidOperationExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidOperationExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
         /// </summary>
         internal static System.Drawing.Icon skype {
             get {
                 object obj = ResourceManager.GetObject("skype", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   アプリケーションに必要なアクセス許可が足りないため更新できません。
+        ///
+        /// に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TrustNotGrantedExceptionMessage {
+            get {
+                return ResourceManager.GetString("TrustNotGrantedExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   最新版が利用できます。更新しますか？ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string UpdateConfirmMessage {
+            get {
+                return ResourceManager.GetString("UpdateConfirmMessage", resourceCulture);
             }
         }
     }

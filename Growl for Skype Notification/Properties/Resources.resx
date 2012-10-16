@@ -129,8 +129,42 @@
     <value>Error</value>
     <comment>英語の「Error」というテキスト</comment>
   </data>
-  <data name="Confirm">
-    <value xml:space="preserve">確認</value>
+  <data name="Confirm" xml:space="preserve">
+    <value>確認</value>
     <comment>「確認」の文字列</comment>
+  </data>
+  <data name="DeploymentDownloadExceptionMessage" xml:space="preserve">
+    <value>最新版を確認中にエラーが発生しました。
+ネットワークに繋がっているかを確認して再度お試しください。
+</value>
+    <comment>例外発生時に使用するメッセージ</comment>
+  </data>
+  <data name="InvalidDeploymentExceptionMessage" xml:space="preserve">
+    <value>アプリケーションがうまく配置されていない可能性があります。
+再インストールをお試しください。
+</value>
+    <comment>例外発生時に使用するメッセージ</comment>
+  </data>
+  <data name="InvalidOperationExceptionMessage" xml:space="preserve">
+    <value>すでに更新を確認中です。
+ </value>
+    <comment>例外発生時に使用するメッセージ</comment>
+  </data>
+  <data name="UpdateConfirmMessage" xml:space="preserve">
+    <value>最新版が利用できます。更新しますか？</value>
+    <comment>最新版が利用できる際に表示するメッセージ</comment>
+  </data>
+  <data name="TrustNotGrantedExceptionMessage" xml:space="preserve">
+    <value>アプリケーションに必要なアクセス許可が足りないため更新できません。
+
+</value>
+    <comment>例外発生時に使用するメッセージ</comment>
+  </data>
+  <data name="CompleteAndRestartRequestMessage" xml:space="preserve">
+    <value>更新が完了しました。
+
+更新を有効にするにはアプリケーションを再起動する必要があります。
+再起動しますか？</value>
+    <comment>無事にアップデートが完了し再起動を要求する際に表示するメッセージ</comment>
   </data>
 </root>
