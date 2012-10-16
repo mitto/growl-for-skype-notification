@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 using SKYPE4COMLib;
 
@@ -14,9 +12,9 @@ namespace Growl_for_Skype_Notification
     {
         #region "変数"
 
-        protected Skype skype;
+        protected Skype Skype;
 
-        private Dictionary<string, Bitmap> userAvatarDictonary = new Dictionary<string, Bitmap>();
+        private readonly Dictionary<string, Bitmap> _userAvatarDictonary = new Dictionary<string, Bitmap>();
 
         #endregion
 
@@ -30,7 +28,8 @@ namespace Growl_for_Skype_Notification
 
         public SkypeManagerBase()
         {
-            skype = new Skype();
+            Skype = new Skype();
+            Skype.Reply += SkypeReply;
         }
 
         #endregion
@@ -44,7 +43,7 @@ namespace Growl_for_Skype_Notification
         /// <param name="nosplash">起動時にスプラッシュ画面を表示させるか</param>
         public void StartingSkype(bool minized = false, bool nosplash = false)
         {
-            skype.Client.Start(minized, nosplash);
+            Skype.Client.Start(minized, nosplash);
         }
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace Growl_for_Skype_Notification
         /// <param name="wait">接続が完了するまで処理を待つか待たないか</param>
         public void AttachSkype(int protocol = 7, bool wait = false)
         {
-            skype.Attach(protocol, wait);
+            Skype.Attach(protocol, wait);
             InitializeUserAvatars();
         }
 
@@ -64,7 +63,7 @@ namespace Growl_for_Skype_Notification
         /// <param name="chatId">skypeIDまたはchatIdを指定</param>
         public void OpenChatWindow(string chatId)
         {
-            skype.Chat[chatId].OpenWindow();
+            Skype.Chat[chatId].OpenWindow();
         }
 
         /// <summary>
@@ -105,8 +104,8 @@ namespace Growl_for_Skype_Notification
                 }
             }
             string commandline = String.Format("GET USER {0} AVATAR 1 {1}", userId, path);
-            var command = skype.get_Command(DateTime.Now.Millisecond, commandline);
-            skype.SendCommand(command);
+            var command = Skype.get_Command(DateTime.Now.Millisecond, commandline);
+            Skype.SendCommand(command);
         }
 
         #endregion
@@ -178,9 +177,9 @@ namespace Growl_for_Skype_Notification
         /// <returns>見つかった場合はアバター画像が、見つからなかった場合はnullが返ります。</returns>
         public Bitmap GetUserAvatar(string userId)
         {
-            if (userAvatarDictonary.ContainsKey(userId))
+            if (_userAvatarDictonary.ContainsKey(userId))
             {
-                return userAvatarDictonary[userId];
+                return _userAvatarDictonary[userId];
             }
             return null;
         }
@@ -192,7 +191,7 @@ namespace Growl_for_Skype_Notification
         /// <returns>利用可能な場合はtrue、不可能の場合はfalseを返します</returns>
         public bool ExistsUserAvatar(string userId)
         {
-            return userAvatarDictonary.ContainsKey(userId);
+            return _userAvatarDictonary.ContainsKey(userId);
         }
 
         /// <summary>
@@ -208,23 +207,24 @@ namespace Growl_for_Skype_Notification
                 {
                     File.Delete(path);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     //TODO: エラーログなどへ出力
+                    Debug.WriteLine("{0}:{1}", ex.Source, ex.Message);
                 } 
                 return;
             }
 
             if (ExistsUserAvatar(userId))
             {
-                userAvatarDictonary.Remove(userId);
+                _userAvatarDictonary.Remove(userId);
         	}
 
             try
             {
                 using (var image = Image.FromFile(path))
                 {
-                    userAvatarDictonary.Add(userId, new Bitmap(image));
+                    _userAvatarDictonary.Add(userId, new Bitmap(image));
                 }
             }
             catch (OutOfMemoryException)
@@ -251,7 +251,7 @@ namespace Growl_for_Skype_Notification
                 return;
             }
 
-            foreach (User user in skype.Friends)
+            foreach (User user in Skype.Friends)
             {
                 PublicationGetUserAvatarCommand(user.Handle); 
             }
@@ -265,7 +265,7 @@ namespace Growl_for_Skype_Notification
         /// Skypeから飛んでくる生のコマンドを処理するイベントハンドラー
         /// </summary>
         /// <param name="pCommand">受け取るコマンド</param>
-        private void skype_Reply(Command pCommand)
+        private void SkypeReply(Command pCommand)
         {
             Debug.WriteLine("{0}:{1}", "Command", pCommand.Command);
             Debug.WriteLine("{0}:{1}", "Reply", pCommand.Reply);
@@ -300,7 +300,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return skype.Client.IsRunning;
+                return Skype.Client.IsRunning;
             }
         }
 
@@ -311,7 +311,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return ((ISkype)skype).AttachmentStatus;
+                return ((ISkype)Skype).AttachmentStatus;
             }
         }
 
@@ -322,7 +322,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return ((ISkype)skype).AttachmentStatus == TAttachmentStatus.apiAttachSuccess;
+                return ((ISkype)Skype).AttachmentStatus == TAttachmentStatus.apiAttachSuccess;
             }
         }
 
@@ -334,7 +334,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return IsAttached ? skype.CurrentUserHandle : "";
+                return IsAttached ? Skype.CurrentUserHandle : "";
             }
         }
 
@@ -345,7 +345,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return skype.CurrentUser.OnlineStatus == TOnlineStatus.olsOffline;
+                return Skype.CurrentUser.OnlineStatus == TOnlineStatus.olsOffline;
             }
         }
 

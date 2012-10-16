@@ -32,10 +32,10 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         public SkypeManager()
         {
-            skype.MessageStatus += SkypeMessageStatus;
-            skype.OnlineStatus += SkypeOnlineStatus;
-            skype.Reply += SkypeReply;
-            skype.UserMood += SkypeUserMood;
+            Skype.MessageStatus += SkypeMessageStatus;
+            Skype.OnlineStatus += SkypeOnlineStatus;
+            Skype.Reply += SkypeReply;
+            Skype.UserMood += SkypeUserMood;
         }
 
         #endregion
