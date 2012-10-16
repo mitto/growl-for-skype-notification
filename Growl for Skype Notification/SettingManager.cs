@@ -75,6 +75,7 @@ namespace Growl_for_Skype_Notification
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     SettingsDefault.LogPath = dialog.SelectedPath;
+                    SettingsDefault.Save();
                 }
             }
         }

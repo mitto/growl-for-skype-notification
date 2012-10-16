@@ -232,7 +232,6 @@
             this.buttonChangeLogPath.TabIndex = 2;
             this.buttonChangeLogPath.Text = "変更";
             this.buttonChangeLogPath.UseVisualStyleBackColor = true;
-            this.buttonChangeLogPath.Click += new System.EventHandler(this.buttonChangeLogPath_Click);
             // 
             // textBoxLogPath
             // 

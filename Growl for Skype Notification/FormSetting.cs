@@ -33,6 +33,8 @@ namespace Growl_for_Skype_Notification
 
             SettingManager.LoadSettings();
 
+            textBoxLogPath.Text = SettingManager.LogFileDirectoryPath;
+
             RegisterEventHandler();
         }
 
@@ -42,6 +44,12 @@ namespace Growl_for_Skype_Notification
         private void RegisterEventHandler()
         {
             buttonClose.Click += (sender, e) => this.Close();
+            buttonChangeLogPath.Click +=
+                (sender, e) =>
+                    {
+                        SettingManager.ChangeLogFilesPath();
+                        textBoxLogPath.Text = SettingManager.LogFileDirectoryPath;
+                    };
 
             checkBoxStartupRegister.CheckedChanged += (sender, e) => SettingManager.ToggleRegistryStartupRun();
 
@@ -62,11 +70,6 @@ namespace Growl_for_Skype_Notification
                 e.Cancel = true;
                 SetVisible(false);
             }
-        }
-
-        private void buttonChangeLogPath_Click(object sender, EventArgs e)
-        {
-            SettingManager.ChangeLogFilesPath();
         }
 
         private void notifyIconTray_MouseClick(object sender, MouseEventArgs e)
