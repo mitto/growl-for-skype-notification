@@ -19,18 +19,13 @@ namespace Growl_for_Skype_Notification
         {
             SetVisible(false);
 
+            SettingManager.LoadSettings();
             _skypeManager.Initialize();
-            _skypeManager.GrowlRegister();
+            RegisterEventHandler();
 
             notifyIconTray.Text = String.Format("{0}[{1}]", Application.ProductName, Application.ProductVersion);
-
             labelVersion.Text += Application.ProductVersion;
-
-            SettingManager.LoadSettings();
-
             textBoxLogPath.Text = SettingManager.LogFileDirectoryPath;
-
-            RegisterEventHandler();
         }
 
         /// <summary>
