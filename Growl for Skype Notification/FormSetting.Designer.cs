@@ -79,7 +79,7 @@
             this.notifyIconTray.ContextMenuStrip = this.contextMenuStripRightClick;
             this.notifyIconTray.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIconTray.Icon")));
             this.notifyIconTray.Visible = true;
-            this.notifyIconTray.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIconTray_MouseClick);
+            this.notifyIconTray.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIconTrayMouseClick);
             // 
             // contextMenuStripRightClick
             // 
@@ -99,7 +99,7 @@
             this.toolStripMenuItemOpenSetting.Name = "toolStripMenuItemOpenSetting";
             this.toolStripMenuItemOpenSetting.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemOpenSetting.Text = "設定画面を表示";
-            this.toolStripMenuItemOpenSetting.Click += new System.EventHandler(this.toolStripMenuItemOpenSetting_Click);
+            this.toolStripMenuItemOpenSetting.Click += new System.EventHandler(this.ToolStripMenuItemOpenSettingClick);
             // 
             // toolStripSeparator4
             // 
@@ -113,7 +113,7 @@
             this.toolStripMenuItemMonitoringSkype.Name = "toolStripMenuItemMonitoringSkype";
             this.toolStripMenuItemMonitoringSkype.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemMonitoringSkype.Text = "Skypeの状態を監視";
-            this.toolStripMenuItemMonitoringSkype.Click += new System.EventHandler(this.toolStripMenuItemMonitoringSkype_Click);
+            this.toolStripMenuItemMonitoringSkype.Click += new System.EventHandler(this.ToolStripMenuItemMonitoringSkypeClick);
             // 
             // toolStripMenuItemCommands
             // 
@@ -138,7 +138,7 @@
             this.toolStripMenuItemGetAttachmentStatus.Name = "toolStripMenuItemGetAttachmentStatus";
             this.toolStripMenuItemGetAttachmentStatus.Size = new System.Drawing.Size(172, 22);
             this.toolStripMenuItemGetAttachmentStatus.Text = "接続状況の確認";
-            this.toolStripMenuItemGetAttachmentStatus.Click += new System.EventHandler(this.toolStripMenuItemGetAttachmentStatus_Click);
+            this.toolStripMenuItemGetAttachmentStatus.Click += new System.EventHandler(this.ToolStripMenuItemGetAttachmentStatusClick);
             // 
             // toolStripSeparator3
             // 
@@ -379,7 +379,7 @@
             // timerSkypeStatusCheck
             // 
             this.timerSkypeStatusCheck.Interval = 30000;
-            this.timerSkypeStatusCheck.Tick += new System.EventHandler(this.timerSkypeStatusCheck_Tick);
+            this.timerSkypeStatusCheck.Tick += new System.EventHandler(this.TimerSkypeStatusCheckTick);
             // 
             // FormSetting
             // 
@@ -393,8 +393,8 @@
             this.MinimumSize = new System.Drawing.Size(300, 300);
             this.Name = "FormSetting";
             this.Text = "設定";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSetting_FormClosing);
-            this.Load += new System.EventHandler(this.FormSetting_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSettingFormClosing);
+            this.Load += new System.EventHandler(this.FormSettingLoad);
             this.contextMenuStripRightClick.ResumeLayout(false);
             this.tabControlSetting.ResumeLayout(false);
             this.tabPageSetting.ResumeLayout(false);
