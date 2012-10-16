@@ -58,6 +58,9 @@ namespace Growl_for_Skype_Notification
             {
                 ChangeLogFilesPath();
             }
+
+            SettingsDefault.IsFirstRun = false;
+            SettingsDefault.Save();
         }
 
         /// <summary>
