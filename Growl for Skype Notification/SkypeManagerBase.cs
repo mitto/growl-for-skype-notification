@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-
+using System.Windows.Forms;
 using SKYPE4COMLib;
 
 namespace Growl_for_Skype_Notification
@@ -106,6 +106,18 @@ namespace Growl_for_Skype_Notification
             string commandline = String.Format("GET USER {0} AVATAR 1 {1}", userId, path);
             var command = Skype.get_Command(DateTime.Now.Millisecond, commandline);
             Skype.SendCommand(command);
+        }
+
+        #endregion
+
+        #region "ステータス系"
+
+        /// <summary>
+        /// 現在のアタッチ状況をメッセージぼっくに表示するメソッド
+        /// </summary>
+        public void ShowAttachmentStatus()
+        {
+            MessageBox.Show(String.Format("{0}\n{1}", AttachmentStatus.ToString(), GetAttachmentStatusMessage(AttachmentStatus)));
         }
 
         #endregion

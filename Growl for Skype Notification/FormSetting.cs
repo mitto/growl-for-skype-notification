@@ -77,6 +77,7 @@ namespace Growl_for_Skype_Notification
             toolStripMenuItemAttachSkype.Click += (sender, e) => _skypeManager.AttachSkype();
             toolStripMenuItemRegisterGrowl.Click += (sender, e) => _skypeManager.GrowlRegister();
             toolStripMenuItemTestNotification.Click += (sender,e) => _skypeManager.TestNotification();
+            toolStripMenuItemGetAttachmentStatus.Click += (sender, e) => _skypeManager.ShowAttachmentStatus();
             //toolStripMenuItemMonitoringSkype.Click += (sender, e) => ChangeMonitoringSkype();
         }
 
@@ -122,11 +123,6 @@ namespace Growl_for_Skype_Notification
             //notifyIconTray.BalloonTipText = body;
             //notifyIconTray.BalloonTipIcon = icon;
             //notifyIconTray.ShowBalloonTip(10000);
-        }
-
-        private void ToolStripMenuItemGetAttachmentStatusClick(object sender, EventArgs e)
-        {
-            MessageBox.Show(String.Format("{0}\n{1}", _skypeManager.AttachmentStatus.ToString(), SkypeManagerBase.GetAttachmentStatusMessage(_skypeManager.AttachmentStatus)));
         }
 
         #endregion

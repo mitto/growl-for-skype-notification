@@ -135,7 +135,6 @@
             this.toolStripMenuItemGetAttachmentStatus.Name = "toolStripMenuItemGetAttachmentStatus";
             this.toolStripMenuItemGetAttachmentStatus.Size = new System.Drawing.Size(172, 22);
             this.toolStripMenuItemGetAttachmentStatus.Text = "接続状況の確認";
-            this.toolStripMenuItemGetAttachmentStatus.Click += new System.EventHandler(this.ToolStripMenuItemGetAttachmentStatusClick);
             // 
             // toolStripSeparator3
             // 
