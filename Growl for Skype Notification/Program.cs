@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows.Forms;
+using Growl_for_Skype_Notification.Properties;
 
 namespace Growl_for_Skype_Notification
 {
@@ -16,7 +15,7 @@ namespace Growl_for_Skype_Notification
         {
             if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
             {
-                MessageBox.Show("すでに起動しています。", "Error");
+                MessageBox.Show(Resources.AlreadyStartedApplication, Resources.Error);
                 return;
             }
             Application.EnableVisualStyles();

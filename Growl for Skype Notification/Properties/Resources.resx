@@ -121,4 +121,12 @@
   <data name="skype" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\skype.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="AlreadyStartedApplication" xml:space="preserve">
+    <value>すでに起動しています。</value>
+    <comment>二重起動確認のメッセージボックスで使うテキスト</comment>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+    <comment>英語の「Error」というテキスト</comment>
+  </data>
 </root>
