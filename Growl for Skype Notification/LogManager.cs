@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Growl_for_Skype_Notification
 {
@@ -10,7 +7,7 @@ namespace Growl_for_Skype_Notification
     {
         private static readonly string FileName = String.Format("log-{0}", DateTime.Now.ToString("yyyyMMddHHmmss"));
 
-        public static void WriteLineTSV(DateTime time, string type, string name, string id, string message)
+        public static void WriteLineTsv(DateTime time, string type, string name, string id, string message)
         {
             string date = time.ToLongDateString() + time.ToLongTimeString();
             string path = Path.Combine(SettingManager.LogFileDirectoryPath, FileName + ".tsv");
@@ -21,7 +18,7 @@ namespace Growl_for_Skype_Notification
             }
         }
 
-        public static void WriteLineCSV(DateTime time, string type, string name, string id, string message)
+        public static void WriteLineCsv(DateTime time, string type, string name, string id, string message)
         {
             string date = time.ToLongDateString() + time.ToLongTimeString();
             string path = Path.Combine(SettingManager.LogFileDirectoryPath, FileName + ".csv");
