@@ -86,7 +86,7 @@ namespace Growl_for_Skype_Notification
                 throw new ArgumentException("アプリケーション名が空です。");
             }
 
-            application = new Application(ApplicationName);
+            application = new Application(name);
 
             if (image != null)
             {
