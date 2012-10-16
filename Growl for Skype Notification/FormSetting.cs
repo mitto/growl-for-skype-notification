@@ -13,9 +13,6 @@ namespace Growl_for_Skype_Notification
     {
         private SkypeManager skypeManager = new SkypeManager();
 
-        private static string LogPath = "";
-        private static string FileName = "";
-
         public FormSetting()
         {
             InitializeComponent();
@@ -34,9 +31,7 @@ namespace Growl_for_Skype_Notification
 
             labelVersion.Text += Application.ProductVersion;
 
-            FileName = String.Format("log-{0}.txt", DateTime.Now.ToString("yyyyMMddHHmmss"));
-
-            LoadSettings();
+            SettingManager.LoadSettings();
 
             RegisterEventHandler();
         }
@@ -48,7 +43,7 @@ namespace Growl_for_Skype_Notification
         {
             buttonClose.Click += (sender, e) => this.Close();
 
-            checkBoxStartupRegister.CheckedChanged += (sender, e) => SettingManager.ChangeStartupRegister();
+            checkBoxStartupRegister.CheckedChanged += (sender, e) => SettingManager.ToggleRegistryStartupRun();
 
             linkLabelHome.LinkClicked += (sender, e) => Process.Start(linkLabelHome.Text);
 
@@ -71,7 +66,7 @@ namespace Growl_for_Skype_Notification
 
         private void buttonChangeLogPath_Click(object sender, EventArgs e)
         {
-            ChangeLogPath(Properties.Settings.Default.LogPath);
+            SettingManager.ChangeLogFilesPath();
         }
 
         private void notifyIconTray_MouseClick(object sender, MouseEventArgs e)
@@ -84,8 +79,6 @@ namespace Growl_for_Skype_Notification
 
         private void timerSkypeStatusCheck_Tick(object sender, EventArgs e)
         {
-            //var status = skypeManager.AttachmentStatus;
-
             //var title = "情報";
             //var body = "";
             //var icon = ToolTipIcon.Info;
@@ -95,7 +88,7 @@ namespace Growl_for_Skype_Notification
             //    return;
             //}
 
-            //switch (status)
+            //switch (skypeManager.AttachmentStatus)
             //{
             //    case TAttachmentStatus.apiAttachAvailable:
             //        body = "Skypeへの連携ができますが接続されていません。\n接続を試みます。";
@@ -140,99 +133,12 @@ namespace Growl_for_Skype_Notification
 
         private void toolStripMenuItemMonitoringSkype_Click(object sender, EventArgs e)
         {
-            ChangeMonitoringSkype();
+            //ChangeMonitoringSkype();
         }
 
         #endregion
 
         #region "Other"
-
-        private void AddLog(DateTime time, string type, string name, string id, string message)
-        {
-            string date = time.ToLongDateString() + time.ToLongTimeString();
-            string[] item = { date, type, name, id, message };
-            listViewLog.Items.Add(new ListViewItem(item));
-
-            using (var writer = File.AppendText(LogPath))
-            {
-                writer.WriteLine("{0}\t{1}\t{2}\t{3}", date, type, name, message);
-            }
-        }
-
-        private void LoadSettings()
-        {
-            if (Properties.Settings.Default.IsUpgrade == false)
-            {
-                Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default.IsUpgrade = true;
-                Properties.Settings.Default.Save();
-            }
-
-            if (!Properties.Settings.Default.IsFirstRun)
-            {
-                MessageBox.Show("初回起動です。\nGrowlへの登録とSkypeへの接続を行います。", "確認");
-                Properties.Settings.Default.IsFirstRun = true;
-                string message = "続けてログの保存場所を決定します。\nデフォルト値はアプリケーションの実行ファイルがある場所です。\n[" + System.Windows.Forms.Application.StartupPath + "]\n\n変更しますか？\n変更する場合は：OK\nデフォルト設定を利用する場合は：Cancel\n\n*後で設定画面から変更することも可能です。";
-                if (MessageBox.Show(message, "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.OK)
-                {
-                    ChangeLogPath(Application.StartupPath);
-                }
-                else
-                {
-                    ChangeLogPath();
-                }
-            }
-
-            UpdateLogPath();
-
-            timerSkypeStatusCheck.Enabled = Properties.Settings.Default.IsMonitoringSkype;
-            toolStripMenuItemMonitoringSkype.Checked = Properties.Settings.Default.IsMonitoringSkype;
-
-            checkBoxStartupRegister.Checked = SettingManager.IsExistsStartupRegistryKey();
-        }
-
-        private void ChangeLogPath()
-        {
-            Properties.Settings.Default.LogPath = Properties.Settings.Default.LogPath == "" ? System.Windows.Forms.Application.StartupPath : Properties.Settings.Default.LogPath;
-            Properties.Settings.Default.Save();
-        }
-
-        private void ChangeLogPath(string oldpath)
-        {
-            using (var dialog = new FolderBrowserDialog())
-            {
-                dialog.ShowNewFolderButton = true;
-                dialog.SelectedPath = oldpath;
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    Properties.Settings.Default.LogPath = dialog.SelectedPath;
-                }
-                else
-                {
-                    ChangeLogPath();
-                }
-            }
-            Properties.Settings.Default.Save();
-            UpdateLogPath();
-        }
-
-        private void ChangeMonitoringSkype()
-        {
-            Properties.Settings.Default.IsMonitoringSkype = !Properties.Settings.Default.IsMonitoringSkype;
-            Properties.Settings.Default.Save();
-            timerSkypeStatusCheck.Enabled = Properties.Settings.Default.IsMonitoringSkype;
-            toolStripMenuItemMonitoringSkype.Checked = Properties.Settings.Default.IsMonitoringSkype;
-        }
-
-        private void UpdateLogPath()
-        {
-            if (Properties.Settings.Default.LogPath == "")
-            {
-                ChangeLogPath();
-            }
-            LogPath = Path.Combine(Properties.Settings.Default.LogPath, FileName);
-            textBoxLogPath.Text = Properties.Settings.Default.LogPath;
-        }
 
         private void SetVisible(Boolean isVisible)
         {
