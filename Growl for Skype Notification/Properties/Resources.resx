@@ -129,4 +129,8 @@
     <value>Error</value>
     <comment>英語の「Error」というテキスト</comment>
   </data>
+  <data name="Confirm">
+    <value xml:space="preserve">確認</value>
+    <comment>「確認」の文字列</comment>
+  </data>
 </root>

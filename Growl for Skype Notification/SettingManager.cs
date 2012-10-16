@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 using System.Windows.Forms;
 
 using Microsoft.Win32;
@@ -51,10 +48,11 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         private static void FirstRunSetting()
         {
-            MessageBox.Show("初回起動です。\nGrowlへの登録とSkypeへの接続を行います。", "確認");
+            //TODO: 初回起動処理をウィザードのようなフォームを用意して実装する
+            MessageBox.Show("初回起動です。\nGrowlへの登録とSkypeへの接続を行います。", Resources.Confirm);
             Settings.Default.IsFirstRun = true;
             string message = "続けてログの保存場所を決定します。\nデフォルト値はアプリケーションの実行ファイルがある場所です。\n[" + Application.StartupPath + "]\n\n変更しますか？\n変更する場合は：OK\nデフォルト設定を利用する場合は：Cancel\n\n*後で設定画面から変更することも可能です。";
-            if (MessageBox.Show(message, "確認", MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1) == DialogResult.OK)
+            if (MessageBox.Show(message, Resources.Confirm, MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1) == DialogResult.OK)
             {
                 ChangeLogFilesPath();
             }
@@ -112,6 +110,7 @@ namespace Growl_for_Skype_Notification
         {
             using (var regkey = Registry.CurrentUser.OpenSubKey(RegistryStartupRunKeyPath))
             {
+                Debug.Assert(regkey != null, "SetStartupRunRegistryKey: regkey != null");
                 regkey.SetValue(Application.ProductName, Application.ExecutablePath);
             }
         }
@@ -123,6 +122,7 @@ namespace Growl_for_Skype_Notification
         {
             using (var regkey = Registry.CurrentUser.OpenSubKey(RegistryStartupRunKeyPath))
             {
+                Debug.Assert(regkey != null, "DeleteStartupRunRegistryKey: regkey != null");
                 regkey.DeleteValue(Application.ProductName);
             }
         }
@@ -142,6 +142,7 @@ namespace Growl_for_Skype_Notification
             {
                 using (var regkey = Registry.CurrentUser.OpenSubKey(RegistryStartupRunKeyPath))
                 {
+                    Debug.Assert(regkey != null, "IsExistsStartupRunRegistryKey: regkey != null");
                     return (regkey.GetValue(Application.ProductName) != null);
                 }
             }
