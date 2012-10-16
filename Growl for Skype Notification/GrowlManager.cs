@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using Growl.Connector;
 using Growl.CoreLibrary;
 
@@ -12,9 +10,9 @@ namespace Growl_for_Skype_Notification
     {
         #region "変数"
 
-        private static readonly NotificationType typeOnline = new NotificationType("Online Status");
-        private static readonly NotificationType typeChat = new NotificationType("Chat Received");
-        private static readonly NotificationType typeMood = new NotificationType("Mood Message");
+        private static readonly NotificationType TypeOnline = new NotificationType("Online Status");
+        private static readonly NotificationType TypeChat = new NotificationType("Chat Received");
+        private static readonly NotificationType TypeMood = new NotificationType("Mood Message");
 
         #endregion
 
@@ -48,7 +46,7 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         public void Initialize()
         {
-            base.Initialize("Skype Notification", Properties.Resources.skype.ToBitmap());
+            Initialize("Skype Notification", Properties.Resources.skype.ToBitmap());
         }
 
         /// <summary>
@@ -56,7 +54,7 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         public void Register()
         {
-            base.Register(AllNotificationType);
+            Register(AllNotificationType);
         }
 
         /// <summary>
@@ -67,16 +65,16 @@ namespace Growl_for_Skype_Notification
         /// <param name="image">通知に使うビットマップイメージ</param>
         public void RunNotificationOnlineStatus(SKYPE4COMLib.User user, SKYPE4COMLib.TOnlineStatus status, Bitmap image = null)
         {
-            string title = "オンラインステータスの変更";
+            const string title = "オンラインステータスの変更";
             string name = String.IsNullOrEmpty(user.FullName) ? "表示名がありません" : user.FullName;
-            string message = String.Format("{0}({1})さんが\n「{2}」になりました。", name, user.Handle, SkypeManager.GetOnlineStatusMessage(status));
+            string message = String.Format("{0}({1})さんが\n「{2}」になりました。", name, user.Handle, SkypeManagerBase.GetOnlineStatusMessage(status));
 
             var context = MakeCallbackContext(NotificationTypeOnlineStatus.Name, user.Handle);
 
-            var notification = new Notification(ApplicationName, NotificationTypeOnlineStatus.Name, DateTime.Now.Millisecond.ToString(), title, message);
+            var notification = new Notification(ApplicationName, NotificationTypeOnlineStatus.Name, DateTime.Now.Millisecond.ToString(CultureInfo.InvariantCulture), title, message);
             if (image != null)
             {
-                notification.Icon = (Resource)image;
+                notification.Icon = image;
             }
 
             RunNotification(notification, context);
@@ -95,10 +93,10 @@ namespace Growl_for_Skype_Notification
 
             var context = MakeCallbackContext(NotificationTypeChatReceived.Name, message.Chat.Name);
 
-            var notification = new Notification(ApplicationName, NotificationTypeChatReceived.Name, DateTime.Now.Millisecond.ToString(), title, message.Body);
+            var notification = new Notification(ApplicationName, NotificationTypeChatReceived.Name, DateTime.Now.Millisecond.ToString(CultureInfo.InvariantCulture), title, message.Body);
             if (image != null)
             {
-                notification.Icon = (Resource)image;
+                notification.Icon = image;
             }
 
             RunNotification(notification, context);
@@ -118,10 +116,10 @@ namespace Growl_for_Skype_Notification
 
             var context = MakeCallbackContext(NotificationTypeMoodMessage.Name, user.Handle);
 
-            var notification = new Notification(ApplicationName, NotificationTypeMoodMessage.Name, DateTime.Now.Millisecond.ToString(), title, moodtext);
+            var notification = new Notification(ApplicationName, NotificationTypeMoodMessage.Name, DateTime.Now.Millisecond.ToString(CultureInfo.InvariantCulture), title, body);
             if (image != null)
             {
-                notification.Icon = (Resource)image;
+                notification.Icon = image;
             }
 
             RunNotification(notification, context);
@@ -140,12 +138,12 @@ namespace Growl_for_Skype_Notification
             string title = String.Format("{0}({1})さんがチャット内容を変更しました", name, chat.Sender.Handle);
             string body = String.Format("{0}\n\n↓\n\n{1}", from, string.IsNullOrEmpty(to) ? "メッセージが削除されました" : to);
 
-            var context = GrowlManager.MakeCallbackContext(GrowlManager.NotificationTypeChatReceived.Name, chat.Chat.Name);
+            var context = MakeCallbackContext(NotificationTypeChatReceived.Name, chat.Chat.Name);
 
-            var notification = new Notification(ApplicationName, NotificationTypeChatReceived.Name, DateTime.Now.Millisecond.ToString(), title, body);
+            var notification = new Notification(ApplicationName, NotificationTypeChatReceived.Name, DateTime.Now.Millisecond.ToString(CultureInfo.InvariantCulture), title, body);
             if (image != null)
             {
-                notification.Icon = (Resource)image; 
+                notification.Icon = image; 
             }
 
             RunNotification(notification, context);
@@ -156,7 +154,7 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         public void TestNotification()
         {
-            RunNotification(GrowlManager.NotificationTypeChatReceived, "Test Title", "Test Message");
+            RunNotification(NotificationTypeChatReceived, "Test Title", "Test Message");
         }
 
         #endregion
@@ -170,7 +168,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return typeOnline;
+                return TypeOnline;
             }
         }
 
@@ -181,7 +179,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return typeChat;
+                return TypeChat;
             }
         }
 
@@ -192,7 +190,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return typeMood;
+                return TypeMood;
             }
         }
 
@@ -203,7 +201,7 @@ namespace Growl_for_Skype_Notification
         {
             get
             {
-                return new NotificationType[] { 
+                return new[] { 
                     NotificationTypeChatReceived,
                     NotificationTypeMoodMessage,
                     NotificationTypeOnlineStatus
