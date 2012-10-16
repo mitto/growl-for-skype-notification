@@ -79,7 +79,6 @@
             this.notifyIconTray.ContextMenuStrip = this.contextMenuStripRightClick;
             this.notifyIconTray.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIconTray.Icon")));
             this.notifyIconTray.Visible = true;
-            this.notifyIconTray.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIconTrayMouseClick);
             // 
             // contextMenuStripRightClick
             // 
@@ -99,7 +98,6 @@
             this.toolStripMenuItemOpenSetting.Name = "toolStripMenuItemOpenSetting";
             this.toolStripMenuItemOpenSetting.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemOpenSetting.Text = "設定画面を表示";
-            this.toolStripMenuItemOpenSetting.Click += new System.EventHandler(this.ToolStripMenuItemOpenSettingClick);
             // 
             // toolStripSeparator4
             // 
@@ -113,7 +111,6 @@
             this.toolStripMenuItemMonitoringSkype.Name = "toolStripMenuItemMonitoringSkype";
             this.toolStripMenuItemMonitoringSkype.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemMonitoringSkype.Text = "Skypeの状態を監視";
-            this.toolStripMenuItemMonitoringSkype.Click += new System.EventHandler(this.ToolStripMenuItemMonitoringSkypeClick);
             // 
             // toolStripMenuItemCommands
             // 
@@ -393,7 +390,6 @@
             this.MinimumSize = new System.Drawing.Size(300, 300);
             this.Name = "FormSetting";
             this.Text = "設定";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSettingFormClosing);
             this.Load += new System.EventHandler(this.FormSettingLoad);
             this.contextMenuStripRightClick.ResumeLayout(false);
             this.tabControlSetting.ResumeLayout(false);

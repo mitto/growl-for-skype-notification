@@ -38,6 +38,26 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         private void RegisterEventHandler()
         {
+            Shown += (sender, e) => SetVisible(false);
+            FormClosing +=
+                (sender, e) =>
+                    {
+                        if (e.CloseReason == CloseReason.UserClosing)
+                        {
+                            e.Cancel = true;
+                            SetVisible(false);
+                        }
+                    };
+
+            notifyIconTray.MouseClick +=
+                (sender, e) =>
+                    {
+                        if (e.Button == MouseButtons.Left)
+                        {
+                            SetVisible(!Visible);
+                        }
+                    };
+
             buttonClose.Click += (sender, e) => Close();
             buttonChangeLogPath.Click +=
                 (sender, e) =>
@@ -52,27 +72,12 @@ namespace Growl_for_Skype_Notification
 
             toolStripMenuItemExit.Click += (sender, e) => Application.Exit();
             toolStripMenuItemCheckUpdate.Click += (sender, e) => Utilities.CheckNewDeployment();
+            toolStripMenuItemOpenSetting.Click += (sender, e) => SetVisible(true);
 
             toolStripMenuItemAttachSkype.Click += (sender, e) => _skypeManager.AttachSkype();
             toolStripMenuItemRegisterGrowl.Click += (sender, e) => _skypeManager.GrowlRegister();
             toolStripMenuItemTestNotification.Click += (sender,e) => _skypeManager.TestNotification();
-        }
-
-        private void FormSettingFormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                e.Cancel = true;
-                SetVisible(false);
-            }
-        }
-
-        private void NotifyIconTrayMouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                SetVisible(!Visible);
-            }
+            //toolStripMenuItemMonitoringSkype.Click += (sender, e) => ChangeMonitoringSkype();
         }
 
         private void TimerSkypeStatusCheckTick(object sender, EventArgs e)
@@ -119,19 +124,9 @@ namespace Growl_for_Skype_Notification
             //notifyIconTray.ShowBalloonTip(10000);
         }
 
-        private void ToolStripMenuItemOpenSettingClick(object sender, EventArgs e)
-        {
-            SetVisible(true);
-        }
-
         private void ToolStripMenuItemGetAttachmentStatusClick(object sender, EventArgs e)
         {
             MessageBox.Show(String.Format("{0}\n{1}", _skypeManager.AttachmentStatus.ToString(), SkypeManagerBase.GetAttachmentStatusMessage(_skypeManager.AttachmentStatus)));
-        }
-
-        private void ToolStripMenuItemMonitoringSkypeClick(object sender, EventArgs e)
-        {
-            //ChangeMonitoringSkype();
         }
 
         #endregion
@@ -140,11 +135,16 @@ namespace Growl_for_Skype_Notification
 
         private void SetVisible(Boolean isVisible)
         {
-            ShowInTaskbar = isVisible;
-            Visible = isVisible;
             if (isVisible)
             {
+                ShowInTaskbar = true;
+                Visible = true;
                 Focus();
+            }
+            else
+            {
+                Visible = false;
+                ShowInTaskbar = false;
             }
         }
 
