@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("Skype to Growl Notification")]
+[assembly: AssemblyTitle("Growl for Skype Notification")]
 [assembly: AssemblyDescription("Skypeの通知をGrowlに流すソフト")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Skype to Growl Notification")]
+[assembly: AssemblyProduct("Growl for Skype Notification")]
 [assembly: AssemblyCopyright("Copyright © mitto 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.9.1.1")]
-[assembly: AssemblyFileVersion("0.9.1.1")]
+[assembly: AssemblyVersion("0.9.1.2")]
+[assembly: AssemblyFileVersion("0.9.1.2")]
