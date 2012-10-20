@@ -102,11 +102,20 @@ namespace Growl_for_Skype_Notification.Properties {
         }
         
         /// <summary>
-        ///   Error に類似しているローカライズされた文字列を検索します。
+        ///   エラー に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   情報 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Information {
+            get {
+                return ResourceManager.GetString("Information", resourceCulture);
             }
         }
         
@@ -158,6 +167,15 @@ namespace Growl_for_Skype_Notification.Properties {
         internal static string UpdateConfirmMessage {
             get {
                 return ResourceManager.GetString("UpdateConfirmMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   警告 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
     }

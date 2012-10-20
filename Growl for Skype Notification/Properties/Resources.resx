@@ -126,7 +126,7 @@
     <comment>二重起動確認のメッセージボックスで使うテキスト</comment>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>エラー</value>
     <comment>英語の「Error」というテキスト</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -166,5 +166,13 @@
 更新を有効にするにはアプリケーションを再起動する必要があります。
 再起動しますか？</value>
     <comment>無事にアップデートが完了し再起動を要求する際に表示するメッセージ</comment>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>情報</value>
+    <comment>メッセージボックスなどで使うタイトル文字列</comment>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>警告</value>
+    <comment>メッセージボックスなどで使う文字列</comment>
   </data>
 </root>

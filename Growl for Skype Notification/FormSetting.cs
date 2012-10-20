@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 
+using Growl_for_Skype_Notification.Properties;
+
 namespace Growl_for_Skype_Notification
 {
     public partial class FormSetting : Form
@@ -26,6 +28,7 @@ namespace Growl_for_Skype_Notification
             notifyIconTray.Text = String.Format("{0}[{1}]", Application.ProductName, Application.ProductVersion);
             labelVersion.Text += Application.ProductVersion;
             textBoxLogPath.Text = SettingManager.LogFileDirectoryPath;
+            toolStripMenuItemMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
         }
 
         /// <summary>
@@ -73,56 +76,75 @@ namespace Growl_for_Skype_Notification
             toolStripMenuItemRegisterGrowl.Click += (sender, e) => _skypeManager.GrowlRegister();
             toolStripMenuItemTestNotification.Click += (sender,e) => _skypeManager.TestNotification();
             toolStripMenuItemGetAttachmentStatus.Click += (sender, e) => _skypeManager.ShowAttachmentStatus();
-            //toolStripMenuItemMonitoringSkype.Click += (sender, e) => ChangeMonitoringSkype();
+            toolStripMenuItemMonitoringSkype.Click += 
+                (sender, e) =>
+                    {
+                        _skypeManager.ToggleMonitorAttachmentStatusTimerEnable();
+                        toolStripMenuItemMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
+                    };
+
+            _skypeManager.ChangeAttachmentStatus += SkypeAttachmentStatusCheck;
         }
 
-        private void TimerSkypeStatusCheckTick(object sender, EventArgs e)
+        private void SkypeAttachmentStatusCheck(object sender, ChangeAttachmentStatusEventArgs e)
         {
-            //var title = "情報";
-            //var body = "";
-            //var icon = ToolTipIcon.Info;
+            var title = Resources.Information;
+            var body = SkypeManager.GetAttachmentStatusMessage(e.AfterAttachmentStatus);
+            var icon = ToolTipIcon.Info;
 
-            //if (skypeManager.IsAttached)
-            //{
-            //    return;
-            //}
+            //標準提供のメッセージは表示用などに向かないため独自の物を表示するようにする
+            switch (e.AfterAttachmentStatus)
+            {
+                case SKYPE4COMLib.TAttachmentStatus.apiAttachSuccess:
+                    body = "Skypeへの接続に成功しました";
+                    break;
+                case SKYPE4COMLib.TAttachmentStatus.apiAttachAvailable:
+                    body = "Skypeへの連携ができますが接続されていません";
+                    break;
+                case SKYPE4COMLib.TAttachmentStatus.apiAttachNotAvailable:
+                    title = Resources.Warning;
+                    icon = ToolTipIcon.Warning;
+                    break;
+                case SKYPE4COMLib.TAttachmentStatus.apiAttachPendingAuthorization:
+                    body += "\nSkype側でアプリ連携を許可してください";
+                    icon = ToolTipIcon.Warning;
+                    break;
+                case SKYPE4COMLib.TAttachmentStatus.apiAttachRefused:
+                    title = Resources.Error;
+                    body = "Skype側でアプリ連携が拒否されているようです。\n\n" +
+                        "Skypeの設定画面を開き\n「詳細」→「詳細設定」と進み\n" + 
+                        "「他のプログラムからのSkypeへのアクセスを管理」から\n" + 
+                        "このアプリケーションの連携を許可するように変更してください。";
+                    icon = ToolTipIcon.Error;
+                    break;
+                case SKYPE4COMLib.TAttachmentStatus.apiAttachUnknown:
+                    title = Resources.Error;
+                    body = "不明なエラー為Skypeへ接続することができません。";
+                    icon = ToolTipIcon.Error;
+                    break;
+            }
 
-            //switch (skypeManager.AttachmentStatus)
-            //{
-            //    case TAttachmentStatus.apiAttachAvailable:
-            //        body = "Skypeへの連携ができますが接続されていません。\n接続を試みます。";
-            //        AttachSkype();
-            //        break;
-            //    case TAttachmentStatus.apiAttachNotAvailable:
-            //        title = "警告";
-            //        body = "Skypeにうまく接続できません。";
-            //        icon = ToolTipIcon.Warning;
-            //        break;
-            //    case TAttachmentStatus.apiAttachPendingAuthorization:
-            //        body = "Skype側でアプリ連携を許可してください";
-            //        icon = ToolTipIcon.Warning;
-            //        break;
-            //    case TAttachmentStatus.apiAttachRefused:
-            //        title = "エラー";
-            //        body = "Skype側でアプリ連携が拒否されているようです。\nSkypeの設定画面を開き\n「詳細」→「詳細設定」と進み\n「他のプログラムからのSkypeへのアクセスを管理」から\nこのアプリケーションの連携を許可するように変更してください。";
-            //        icon = ToolTipIcon.Error;
-            //        break;
-            //    case TAttachmentStatus.apiAttachUnknown:
-            //        title = "エラー";
-            //        body = "不明なエラー為Skypeへ接続することができませんでした。";
-            //        icon = ToolTipIcon.Error;
-            //        break;
-            //}
+            //Debug.WriteLine(body);
 
-            //notifyIconTray.BalloonTipTitle = title;
-            //notifyIconTray.BalloonTipText = body;
-            //notifyIconTray.BalloonTipIcon = icon;
-            //notifyIconTray.ShowBalloonTip(10000);
+            //いずれの場合においてもとりあえずアタッチを仕掛ける方針で
+            //設定として自動的に再接続しないようにする場合はここをいじることとする
+            if (!(e.AfterAttachmentStatus == SKYPE4COMLib.TAttachmentStatus.apiAttachSuccess))
+            {
+                body += "\n\n再接続を試みます。";
+                _skypeManager.AttachSkype();
+            }
+
+            ShowBalloonTip(title, body, icon);
         }
 
         #endregion
 
         #region "Other"
+
+        private void ShowBalloonTip(string title, string body, ToolTipIcon icon)
+        {
+            notifyIconTray.ShowBalloonTip(10000, title, body, icon);
+        }
 
         private void SetVisible(Boolean isVisible)
         {

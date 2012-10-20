@@ -66,7 +66,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonClose = new System.Windows.Forms.Button();
-            this.timerSkypeStatusCheck = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripRightClick.SuspendLayout();
             this.tabControlSetting.SuspendLayout();
             this.tabPageSetting.SuspendLayout();
@@ -372,11 +371,6 @@
             this.buttonClose.Text = "閉じる";
             this.buttonClose.UseVisualStyleBackColor = true;
             // 
-            // timerSkypeStatusCheck
-            // 
-            this.timerSkypeStatusCheck.Interval = 30000;
-            this.timerSkypeStatusCheck.Tick += new System.EventHandler(this.TimerSkypeStatusCheckTick);
-            // 
             // FormSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -436,7 +430,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCheckUpdate;
         private System.Windows.Forms.ColumnHeader columnHeaderId;
-        private System.Windows.Forms.Timer timerSkypeStatusCheck;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemMonitoringSkype;
         private System.Windows.Forms.CheckBox checkBoxStartupRegister;

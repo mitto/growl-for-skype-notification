@@ -101,6 +101,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangeAttachmentStatusEventArgs.cs" />
     <Compile Include="FormSetting.cs">
       <SubType>Form</SubType>
     </Compile>

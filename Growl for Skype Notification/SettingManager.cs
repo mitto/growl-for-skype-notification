@@ -164,13 +164,21 @@ namespace Growl_for_Skype_Notification
             get { return SettingsDefault.IsFirstRun; }
         }
 
-        //public static bool IsMonitoringSkype
-        //{
-        //    get
-        //    {
-        //        return Settings.Default.IsMonitoringSkype;
-        //    }
-        //}
+        /// <summary>
+        /// アタッチ状況を監視するかの設定を表すプロパティ
+        /// </summary>
+        public static bool IsMonitoringSkype
+        {
+            get
+            {
+                return SettingsDefault.IsMonitoringSkype;
+            }
+            set
+            {
+                SettingsDefault.IsMonitoringSkype = value;
+                SettingsDefault.Save();
+            }
+        }
 
         public static string LogFileDirectoryPath
         {

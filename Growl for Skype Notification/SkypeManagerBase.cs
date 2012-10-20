@@ -15,10 +15,21 @@ namespace Growl_for_Skype_Notification
         protected Skype Skype;
 
         private readonly Dictionary<string, Bitmap> _userAvatarDictonary = new Dictionary<string, Bitmap>();
+        private TAttachmentStatus _attachmentStatus;
+        private Timer _timerAttach;
 
         #endregion
 
         #region "定数"
+
+        #endregion
+
+        #region "デリゲート・イベント"
+
+        /// <summary>
+        /// SkypeのAttachmentStatusに変更が起こった場合にイベントが発生します
+        /// </summary>
+        public event EventHandler<ChangeAttachmentStatusEventArgs> ChangeAttachmentStatus;
 
         #endregion
 
@@ -30,6 +41,9 @@ namespace Growl_for_Skype_Notification
         {
             Skype = new Skype();
             Skype.Reply += SkypeReply;
+            _attachmentStatus = AttachmentStatus;
+            _timerAttach = new Timer { Interval = 1000 };
+            _timerAttach.Tick += TimerAttachTick;
         }
 
         #endregion
@@ -279,8 +293,8 @@ namespace Growl_for_Skype_Notification
         /// <param name="pCommand">受け取るコマンド</param>
         private void SkypeReply(Command pCommand)
         {
-            Debug.WriteLine("{0}:{1}", "Command", pCommand.Command);
-            Debug.WriteLine("{0}:{1}", "Reply", pCommand.Reply);
+            //Debug.WriteLine("{0}:{1}", "Command", pCommand.Command);
+            //Debug.WriteLine("{0}:{1}", "Reply", pCommand.Reply);
 
             var splitReply = pCommand.Reply.Split(' ');
 
@@ -296,6 +310,20 @@ namespace Growl_for_Skype_Notification
                             break;
 	                }
                     break;
+            }
+        }
+
+        /// <summary>
+        /// AttachmentStatusに変化があったらChangeAttachmentStatusイベントを発生させるタイマーのイベントハンドラー
+        /// </summary>
+        private void TimerAttachTick(object sender, EventArgs e)
+        {
+            var before = _attachmentStatus;
+            var now = AttachmentStatus;
+            if (before != now)
+            {
+                if (ChangeAttachmentStatus != null) ChangeAttachmentStatus(this, new ChangeAttachmentStatusEventArgs(before, now));
+                _attachmentStatus = now;
             }
         }
 
@@ -358,6 +386,22 @@ namespace Growl_for_Skype_Notification
             get
             {
                 return Skype.CurrentUser.OnlineStatus == TOnlineStatus.olsOffline;
+            }
+        }
+
+        /// <summary>
+        /// Skypeとのアタッチ状況を調べるタイマーの動作状況を調べたり、
+        /// 有効、無効を切り替えるためのプロパティ
+        /// </summary>
+        public bool IsEnabledCheckAttachmentStatusTimer
+        {
+            get
+            {
+                return _timerAttach.Enabled;
+            }
+            set
+            {
+                _timerAttach.Enabled = value;
             }
         }
 

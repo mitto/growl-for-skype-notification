@@ -55,6 +55,8 @@ namespace Growl_for_Skype_Notification
                 _isInitialized = true;
             }
 
+            IsEnabledCheckAttachmentStatusTimer = SettingManager.IsMonitoringSkype;
+
             AttachSkype();
         }
 
@@ -64,6 +66,12 @@ namespace Growl_for_Skype_Notification
         public void GrowlRegister()
         {
             _growl.Register();
+        }
+
+        public void ToggleMonitorAttachmentStatusTimerEnable()
+        {
+            SettingManager.IsMonitoringSkype = !SettingManager.IsMonitoringSkype;
+            IsEnabledCheckAttachmentStatusTimer = SettingManager.IsMonitoringSkype;
         }
 
         /// <summary>
