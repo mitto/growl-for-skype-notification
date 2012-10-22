@@ -26,11 +26,6 @@ namespace Growl_for_Skype_Notification
             {
                 FirstRunSetting();
             }
-
-            //timerSkypeStatusCheck.Enabled = Settings.Default.IsMonitoringSkype;
-            //toolStripMenuItemMonitoringSkype.Checked = Settings.Default.IsMonitoringSkype;
-
-            //checkBoxStartupRegister.Checked = SettingManager.IsExistsStartupRunRegistryKey;
         }
 
         /// <summary>
@@ -58,7 +53,6 @@ namespace Growl_for_Skype_Notification
             }
 
             SettingsDefault.IsFirstRun = false;
-            SettingsDefault.Save();
         }
 
         /// <summary>
@@ -162,6 +156,11 @@ namespace Growl_for_Skype_Notification
         public static bool IsFirstRun
         {
             get { return SettingsDefault.IsFirstRun; }
+            private set
+            {
+                SettingsDefault.IsFirstRun = value;
+                SettingsDefault.Save();
+            }
         }
 
         /// <summary>
