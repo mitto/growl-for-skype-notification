@@ -18,28 +18,24 @@ namespace Growl_for_Skype_Notification
             checkBoxMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
             checkBoxStartup.Checked = SettingManager.IsExistsStartupRunRegistryKey;
 
+            RegisterEventHandler();
+        }
+
+        private void RegisterEventHandler()
+        {
             buttonLogPathChange.Click +=
-                (obj, args) => 
+                (sender, e) => 
                     {
                         SettingManager.ChangeLogFilesPath();
                         textBoxLogPath.Text = SettingManager.LogFileDirectoryPath;
                     };
-            buttonClose.Click +=
-                (obj, args) =>
-                    {
-                        Close();
-                    };
+            buttonClose.Click += (sender, e) => Close();
 
-            checkBoxMonitoringSkype.CheckedChanged +=
-                (obj, args) =>
-                    {
-                        SettingManager.ToggleIsMonitoringSkype();
-                    };
-            checkBoxStartup.CheckedChanged +=
-                (obj, args) =>
-                    {
-                        SettingManager.ToggleRegistryStartupRun();
-                    };
+            checkBoxMonitoringSkype.Click += (sender, e) => SettingManager.ToggleIsMonitoringSkype();
+            checkBoxStartup.Click += (sender, e) => SettingManager.ToggleRegistryStartupRun();
+
+            SettingManager.ChangeIsMonitoringSkype += (sender, e) => checkBoxMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
+            SettingManager.ChangeRegistryStartupRun += (sender, e) => checkBoxStartup.Checked = SettingManager.IsExistsStartupRunRegistryKey;
         }
     }
 }
