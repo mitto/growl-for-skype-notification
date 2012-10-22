@@ -25,12 +25,7 @@ namespace Growl_for_Skype_Notification
             _skypeManager.Initialize();
             RegisterEventHandler();
 
-            notifyIconTray.Text = String.Format("{0}[{1}]", Application.ProductName, Application.ProductVersion);
-            labelVersion.Text += Application.ProductVersion;
-            textBoxLogPath.Text = SettingManager.LogFileDirectoryPath;
-
-            checkBoxMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
-            toolStripMenuItemMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
+            RefreshSettingForm();
         }
 
         /// <summary>
@@ -144,6 +139,16 @@ namespace Growl_for_Skype_Notification
         #endregion
 
         #region "Other"
+
+        private void RefreshSettingForm()
+        {
+            notifyIconTray.Text = String.Format("{0}[{1}]", Application.ProductName, Application.ProductVersion);
+            labelVersion.Text += Application.ProductVersion;
+            textBoxLogPath.Text = SettingManager.LogFileDirectoryPath;
+
+            checkBoxMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
+            toolStripMenuItemMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
+        }
 
         private void ShowBalloonTip(string title, string body, ToolTipIcon icon)
         {
