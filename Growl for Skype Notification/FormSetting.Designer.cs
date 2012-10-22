@@ -66,6 +66,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonClose = new System.Windows.Forms.Button();
+            this.checkBoxMonitoringSkype = new System.Windows.Forms.CheckBox();
             this.contextMenuStripRightClick.SuspendLayout();
             this.tabControlSetting.SuspendLayout();
             this.tabPageSetting.SuspendLayout();
@@ -196,6 +197,7 @@
             // 
             // tabPageSetting
             // 
+            this.tabPageSetting.Controls.Add(this.checkBoxMonitoringSkype);
             this.tabPageSetting.Controls.Add(this.checkBoxStartupRegister);
             this.tabPageSetting.Controls.Add(this.buttonChangeLogPath);
             this.tabPageSetting.Controls.Add(this.textBoxLogPath);
@@ -371,6 +373,16 @@
             this.buttonClose.Text = "閉じる";
             this.buttonClose.UseVisualStyleBackColor = true;
             // 
+            // checkBoxMonitoringSkype
+            // 
+            this.checkBoxMonitoringSkype.AutoSize = true;
+            this.checkBoxMonitoringSkype.Location = new System.Drawing.Point(17, 89);
+            this.checkBoxMonitoringSkype.Name = "checkBoxMonitoringSkype";
+            this.checkBoxMonitoringSkype.Size = new System.Drawing.Size(215, 16);
+            this.checkBoxMonitoringSkype.TabIndex = 4;
+            this.checkBoxMonitoringSkype.Text = "Skypeとの接続状況を監視して通知する";
+            this.checkBoxMonitoringSkype.UseVisualStyleBackColor = true;
+            // 
             // FormSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -433,6 +445,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemMonitoringSkype;
         private System.Windows.Forms.CheckBox checkBoxStartupRegister;
+        private System.Windows.Forms.CheckBox checkBoxMonitoringSkype;
     }
 }
 

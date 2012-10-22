@@ -68,7 +68,7 @@ namespace Growl_for_Skype_Notification
             _growl.Register();
         }
 
-        public void ToggleMonitorAttachmentStatusTimerEnable()
+        public void ToggleMonitorSkypeTimerEnable()
         {
             SettingManager.IsMonitoringSkype = !SettingManager.IsMonitoringSkype;
             IsEnabledCheckAttachmentStatusTimer = SettingManager.IsMonitoringSkype;

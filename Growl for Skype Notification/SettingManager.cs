@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 using Microsoft.Win32;
@@ -12,6 +13,13 @@ namespace Growl_for_Skype_Notification
         private const string RegistryStartupRunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
 
         private static readonly Settings SettingsDefault = Settings.Default;
+
+        #region "デリゲート・イベント"
+
+        public static event EventHandler ChangeIsMonitoringSkype;
+        public static event EventHandler ChangeRegistryStartupRun;
+
+        #endregion
 
         #region "メソッド"
 
@@ -174,6 +182,13 @@ namespace Growl_for_Skype_Notification
             }
             set
             {
+                if (SettingsDefault.IsMonitoringSkype != value)
+                {
+                    if (ChangeIsMonitoringSkype != null)
+                    {
+                        ChangeIsMonitoringSkype(null, new EventArgs()); 
+                    }
+                }
                 SettingsDefault.IsMonitoringSkype = value;
                 SettingsDefault.Save();
             }

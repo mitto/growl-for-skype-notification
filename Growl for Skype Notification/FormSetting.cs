@@ -28,6 +28,8 @@ namespace Growl_for_Skype_Notification
             notifyIconTray.Text = String.Format("{0}[{1}]", Application.ProductName, Application.ProductVersion);
             labelVersion.Text += Application.ProductVersion;
             textBoxLogPath.Text = SettingManager.LogFileDirectoryPath;
+
+            checkBoxMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
             toolStripMenuItemMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
         }
 
@@ -36,6 +38,16 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         private void RegisterEventHandler()
         {
+            _skypeManager.ChangeAttachmentStatus += SkypeAttachmentStatusCheck;
+
+            SettingManager.ChangeIsMonitoringSkype +=
+                (sender, e) =>
+                    {
+                        var enable = SettingManager.IsMonitoringSkype;
+                        toolStripMenuItemMonitoringSkype.Checked = enable;
+                        checkBoxMonitoringSkype.Checked = enable;
+                    };
+
             Shown += (sender, e) => SetVisible(false);
             FormClosing +=
                 (sender, e) =>
@@ -65,6 +77,7 @@ namespace Growl_for_Skype_Notification
                     };
 
             checkBoxStartupRegister.CheckedChanged += (sender, e) => SettingManager.ToggleRegistryStartupRun();
+            checkBoxMonitoringSkype.CheckedChanged += (sender, e) => _skypeManager.ToggleMonitorSkypeTimerEnable();
 
             linkLabelHome.LinkClicked += (sender, e) => Process.Start(linkLabelHome.Text);
 
@@ -76,14 +89,7 @@ namespace Growl_for_Skype_Notification
             toolStripMenuItemRegisterGrowl.Click += (sender, e) => _skypeManager.GrowlRegister();
             toolStripMenuItemTestNotification.Click += (sender,e) => _skypeManager.TestNotification();
             toolStripMenuItemGetAttachmentStatus.Click += (sender, e) => _skypeManager.ShowAttachmentStatus();
-            toolStripMenuItemMonitoringSkype.Click += 
-                (sender, e) =>
-                    {
-                        _skypeManager.ToggleMonitorAttachmentStatusTimerEnable();
-                        toolStripMenuItemMonitoringSkype.Checked = SettingManager.IsMonitoringSkype;
-                    };
-
-            _skypeManager.ChangeAttachmentStatus += SkypeAttachmentStatusCheck;
+            toolStripMenuItemMonitoringSkype.Click += (sender, e) => _skypeManager.ToggleMonitorSkypeTimerEnable();
         }
 
         private void SkypeAttachmentStatusCheck(object sender, ChangeAttachmentStatusEventArgs e)
@@ -123,8 +129,6 @@ namespace Growl_for_Skype_Notification
                     icon = ToolTipIcon.Error;
                     break;
             }
-
-            //Debug.WriteLine(body);
 
             //いずれの場合においてもとりあえずアタッチを仕掛ける方針で
             //設定として自動的に再接続しないようにする場合はここをいじることとする
