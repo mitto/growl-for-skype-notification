@@ -51,13 +51,12 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         private static void FirstRunSetting()
         {
-            //TODO: 初回起動処理をウィザードのようなフォームを用意して実装する
             using (var dialog = new FormFirstRun())
             {
                 dialog.ShowDialog();
             }
 
-            SettingsDefault.IsFirstRun = false;
+            IsFirstRun = false;
         }
 
         /// <summary>
