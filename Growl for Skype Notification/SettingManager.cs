@@ -108,7 +108,7 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         private static void SetStartupRunRegistryKey()
         {
-            using (var regkey = Registry.CurrentUser.OpenSubKey(RegistryStartupRunKeyPath))
+            using (var regkey = Registry.CurrentUser.OpenSubKey(RegistryStartupRunKeyPath, true))
             {
                 Debug.Assert(regkey != null, "SetStartupRunRegistryKey: regkey != null");
                 regkey.SetValue(Application.ProductName, Application.ExecutablePath);
@@ -120,7 +120,7 @@ namespace Growl_for_Skype_Notification
         /// </summary>
         private static void DeleteStartupRunRegistryKey()
         {
-            using (var regkey = Registry.CurrentUser.OpenSubKey(RegistryStartupRunKeyPath))
+            using (var regkey = Registry.CurrentUser.OpenSubKey(RegistryStartupRunKeyPath, true))
             {
                 Debug.Assert(regkey != null, "DeleteStartupRunRegistryKey: regkey != null");
                 regkey.DeleteValue(Application.ProductName);
