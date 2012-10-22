@@ -72,13 +72,13 @@ namespace Growl_for_Skype_Notification
             }
         }
 
-        //private static void ChangeMonitoringSkype()
-        //{
-            //Settings.Default.IsMonitoringSkype = !Settings.Default.IsMonitoringSkype;
-            //Settings.Default.Save();
-            //timerSkypeStatusCheck.Enabled = Settings.Default.IsMonitoringSkype;
-            //toolStripMenuItemMonitoringSkype.Checked = Settings.Default.IsMonitoringSkype;
-        //}
+        /// <summary>
+        /// Skypeとの接続を監視するかの設定を反転させるメソッド
+        /// </summary>
+        public static void ToggleIsMonitoringSkype()
+        {
+            SettingsDefault.IsMonitoringSkype = !IsMonitoringSkype;
+        }
 
         #region "レジストリ操作系"
 
