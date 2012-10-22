@@ -99,6 +99,7 @@ namespace Growl_for_Skype_Notification
             {
                 SetStartupRunRegistryKey();
             }
+            if (ChangeRegistryStartupRun != null) ChangeRegistryStartupRun(null, new EventArgs());
         }
 
         /// <summary>
