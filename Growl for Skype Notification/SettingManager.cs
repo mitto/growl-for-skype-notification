@@ -181,12 +181,12 @@ namespace Growl_for_Skype_Notification
             {
                 if (SettingsDefault.IsMonitoringSkype != value)
                 {
+                    SettingsDefault.IsMonitoringSkype = value;
                     if (ChangeIsMonitoringSkype != null)
                     {
                         ChangeIsMonitoringSkype(null, new EventArgs()); 
                     }
                 }
-                SettingsDefault.IsMonitoringSkype = value;
                 SettingsDefault.Save();
             }
         }
