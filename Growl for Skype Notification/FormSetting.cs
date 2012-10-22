@@ -20,10 +20,10 @@ namespace Growl_for_Skype_Notification
         private void FormSettingLoad(object sender, EventArgs e)
         {
             SetVisible(false);
+            RegisterEventHandler();
 
             SettingManager.LoadSettings();
             _skypeManager.Initialize();
-            RegisterEventHandler();
 
             RefreshSettingForm();
         }
@@ -42,6 +42,7 @@ namespace Growl_for_Skype_Notification
                         toolStripMenuItemMonitoringSkype.Checked = enable;
                         checkBoxMonitoringSkype.Checked = enable;
                     };
+            SettingManager.ChangeRegistryStartupRun += (sender, e) => checkBoxStartupRegister.Checked = SettingManager.IsExistsStartupRunRegistryKey;
 
             Shown += (sender, e) => SetVisible(false);
             FormClosing +=
@@ -71,8 +72,8 @@ namespace Growl_for_Skype_Notification
                         textBoxLogPath.Text = SettingManager.LogFileDirectoryPath;
                     };
 
-            checkBoxStartupRegister.CheckedChanged += (sender, e) => SettingManager.ToggleRegistryStartupRun();
-            checkBoxMonitoringSkype.CheckedChanged += (sender, e) => _skypeManager.ToggleMonitorSkypeTimerEnable();
+            checkBoxStartupRegister.Click += (sender, e) => SettingManager.ToggleRegistryStartupRun();
+            checkBoxMonitoringSkype.Click += (sender, e) => _skypeManager.ToggleMonitorSkypeTimerEnable();
 
             linkLabelHome.LinkClicked += (sender, e) => Process.Start(linkLabelHome.Text);
 
