@@ -52,12 +52,9 @@ namespace Growl_for_Skype_Notification
         private static void FirstRunSetting()
         {
             //TODO: 初回起動処理をウィザードのようなフォームを用意して実装する
-            MessageBox.Show("初回起動です。\nGrowlへの登録とSkypeへの接続を行います。", Resources.Confirm);
-            Settings.Default.IsFirstRun = true;
-            string message = "続けてログの保存場所を決定します。\nデフォルト値はアプリケーションの実行ファイルがある場所です。\n[" + Application.StartupPath + "]\n\n変更しますか？\n変更する場合は：OK\nデフォルト設定を利用する場合は：Cancel\n\n*後で設定画面から変更することも可能です。";
-            if (MessageBox.Show(message, Resources.Confirm, MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1) == DialogResult.OK)
+            using (var dialog = new FormFirstRun())
             {
-                ChangeLogFilesPath();
+                dialog.ShowDialog();
             }
 
             SettingsDefault.IsFirstRun = false;
