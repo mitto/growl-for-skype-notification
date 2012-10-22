@@ -91,7 +91,7 @@
             this.toolStripMenuItemCheckUpdate,
             this.toolStripMenuItemExit});
             this.contextMenuStripRightClick.Name = "contextMenuStripRightClick";
-            this.contextMenuStripRightClick.Size = new System.Drawing.Size(197, 148);
+            this.contextMenuStripRightClick.Size = new System.Drawing.Size(197, 126);
             // 
             // toolStripMenuItemOpenSetting
             // 
