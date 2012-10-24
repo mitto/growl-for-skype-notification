@@ -60,6 +60,10 @@ namespace Growl_for_Skype_Notification
                     }
 
                 }
+                else
+                {
+                    MessageBox.Show("利用可能な更新はありません。", Resources.Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 
