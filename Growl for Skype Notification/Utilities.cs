@@ -62,5 +62,14 @@ namespace Growl_for_Skype_Notification
                 }
             }
         }
+
+        public static void AboutSoftware()
+        {
+            var body = Application.ProductName + "\n\n";
+            body += "Version: " + Application.ProductVersion + "\n";
+            body += "Developer: mitto\n";
+
+            MessageBox.Show(body, Resources.ThisApplication, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

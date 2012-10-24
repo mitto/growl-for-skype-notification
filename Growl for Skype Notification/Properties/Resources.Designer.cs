@@ -111,6 +111,15 @@ namespace Growl_for_Skype_Notification.Properties {
         }
         
         /// <summary>
+        ///   http://mittostar.info/ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string HomepageUri {
+            get {
+                return ResourceManager.GetString("HomepageUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   情報 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string Information {
@@ -147,6 +156,15 @@ namespace Growl_for_Skype_Notification.Properties {
             get {
                 object obj = ResourceManager.GetObject("skype", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   このアプリケーションについて に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ThisApplication {
+            get {
+                return ResourceManager.GetString("ThisApplication", resourceCulture);
             }
         }
         

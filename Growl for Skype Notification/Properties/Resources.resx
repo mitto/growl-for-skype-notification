@@ -175,4 +175,11 @@
     <value>警告</value>
     <comment>メッセージボックスなどで使う文字列</comment>
   </data>
+  <data name="HomepageUri" xml:space="preserve">
+    <value>http://mittostar.info/</value>
+    <comment>ホームページのアドレス</comment>
+  </data>
+  <data name="ThisApplication">
+    <value xml:space="preserve">このアプリケーションについて</value>
+  </data>
 </root>
