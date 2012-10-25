@@ -30,20 +30,27 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.ファイルFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.設定SToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripContainerMain = new System.Windows.Forms.ToolStripContainer();
+            this.statusStripMain = new System.Windows.Forms.StatusStrip();
+            this.tabControlMain = new System.Windows.Forms.TabControl();
+            this.tabPageOnlineStatus = new System.Windows.Forms.TabPage();
+            this.dataGridViewOnlineStatus = new System.Windows.Forms.DataGridView();
+            this.tabPageMoodMessage = new System.Windows.Forms.TabPage();
+            this.dataGridViewMoodMessage = new System.Windows.Forms.DataGridView();
+            this.tabPageChat = new System.Windows.Forms.TabPage();
+            this.dataGridViewChat = new System.Windows.Forms.DataGridView();
+            this.menuStripMain = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemFileSetting = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.終了XToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ヘルプHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.最新バージョンの確認ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemFileExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemWindow = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemWindowToggleVisible = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemHelpCheckUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.growlForSkypeNotificationについてToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.作者のサイトへToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.toolStripMenuItemHelpAboutSoftware = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemHelpOpenDeveloperSite = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconTray = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStripRightClick = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemOpenSetting = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,143 +65,224 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemCheckUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripContainer1.ContentPanel.SuspendLayout();
-            this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
-            this.toolStripContainer1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.toolStripContainerMain.BottomToolStripPanel.SuspendLayout();
+            this.toolStripContainerMain.ContentPanel.SuspendLayout();
+            this.toolStripContainerMain.TopToolStripPanel.SuspendLayout();
+            this.toolStripContainerMain.SuspendLayout();
+            this.tabControlMain.SuspendLayout();
+            this.tabPageOnlineStatus.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOnlineStatus)).BeginInit();
+            this.tabPageMoodMessage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMoodMessage)).BeginInit();
+            this.tabPageChat.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewChat)).BeginInit();
+            this.menuStripMain.SuspendLayout();
             this.contextMenuStripRightClick.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStripContainer1
+            // toolStripContainerMain
             // 
             // 
-            // toolStripContainer1.ContentPanel
+            // toolStripContainerMain.BottomToolStripPanel
             // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.tabControl1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(471, 368);
-            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
-            this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(471, 394);
-            this.toolStripContainer1.TabIndex = 0;
-            this.toolStripContainer1.Text = "toolStripContainer1";
+            this.toolStripContainerMain.BottomToolStripPanel.Controls.Add(this.statusStripMain);
             // 
-            // toolStripContainer1.TopToolStripPanel
+            // toolStripContainerMain.ContentPanel
             // 
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.menuStrip1);
+            this.toolStripContainerMain.ContentPanel.Controls.Add(this.tabControlMain);
+            this.toolStripContainerMain.ContentPanel.Size = new System.Drawing.Size(471, 346);
+            this.toolStripContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStripContainerMain.Location = new System.Drawing.Point(0, 0);
+            this.toolStripContainerMain.Name = "toolStripContainerMain";
+            this.toolStripContainerMain.Size = new System.Drawing.Size(471, 394);
+            this.toolStripContainerMain.TabIndex = 0;
+            this.toolStripContainerMain.Text = "toolStripContainer1";
             // 
-            // menuStrip1
+            // toolStripContainerMain.TopToolStripPanel
             // 
-            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ファイルFToolStripMenuItem,
-            this.ヘルプHToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(471, 26);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.toolStripContainerMain.TopToolStripPanel.Controls.Add(this.menuStripMain);
             // 
-            // tabControl1
+            // statusStripMain
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(471, 368);
-            this.tabControl1.TabIndex = 0;
+            this.statusStripMain.Dock = System.Windows.Forms.DockStyle.None;
+            this.statusStripMain.Location = new System.Drawing.Point(0, 0);
+            this.statusStripMain.Name = "statusStripMain";
+            this.statusStripMain.Size = new System.Drawing.Size(471, 22);
+            this.statusStripMain.TabIndex = 0;
             // 
-            // tabPage1
+            // tabControlMain
             // 
-            this.tabPage1.Controls.Add(this.dataGridView1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(463, 342);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabControlMain.Controls.Add(this.tabPageOnlineStatus);
+            this.tabControlMain.Controls.Add(this.tabPageMoodMessage);
+            this.tabControlMain.Controls.Add(this.tabPageChat);
+            this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlMain.Location = new System.Drawing.Point(0, 0);
+            this.tabControlMain.Name = "tabControlMain";
+            this.tabControlMain.SelectedIndex = 0;
+            this.tabControlMain.Size = new System.Drawing.Size(471, 346);
+            this.tabControlMain.TabIndex = 0;
             // 
-            // ファイルFToolStripMenuItem
+            // tabPageOnlineStatus
             // 
-            this.ファイルFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.設定SToolStripMenuItem,
+            this.tabPageOnlineStatus.Controls.Add(this.dataGridViewOnlineStatus);
+            this.tabPageOnlineStatus.Location = new System.Drawing.Point(4, 22);
+            this.tabPageOnlineStatus.Name = "tabPageOnlineStatus";
+            this.tabPageOnlineStatus.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageOnlineStatus.Size = new System.Drawing.Size(463, 320);
+            this.tabPageOnlineStatus.TabIndex = 0;
+            this.tabPageOnlineStatus.Text = "オンラインステータス";
+            this.tabPageOnlineStatus.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewOnlineStatus
+            // 
+            this.dataGridViewOnlineStatus.AllowUserToAddRows = false;
+            this.dataGridViewOnlineStatus.AllowUserToDeleteRows = false;
+            this.dataGridViewOnlineStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewOnlineStatus.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewOnlineStatus.Name = "dataGridViewOnlineStatus";
+            this.dataGridViewOnlineStatus.ReadOnly = true;
+            this.dataGridViewOnlineStatus.Size = new System.Drawing.Size(457, 314);
+            this.dataGridViewOnlineStatus.TabIndex = 0;
+            // 
+            // tabPageMoodMessage
+            // 
+            this.tabPageMoodMessage.Controls.Add(this.dataGridViewMoodMessage);
+            this.tabPageMoodMessage.Location = new System.Drawing.Point(4, 22);
+            this.tabPageMoodMessage.Name = "tabPageMoodMessage";
+            this.tabPageMoodMessage.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageMoodMessage.Size = new System.Drawing.Size(463, 320);
+            this.tabPageMoodMessage.TabIndex = 1;
+            this.tabPageMoodMessage.Text = "ムードメッセージ";
+            this.tabPageMoodMessage.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewMoodMessage
+            // 
+            this.dataGridViewMoodMessage.AllowUserToAddRows = false;
+            this.dataGridViewMoodMessage.AllowUserToDeleteRows = false;
+            this.dataGridViewMoodMessage.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewMoodMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewMoodMessage.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewMoodMessage.Name = "dataGridViewMoodMessage";
+            this.dataGridViewMoodMessage.ReadOnly = true;
+            this.dataGridViewMoodMessage.RowTemplate.Height = 21;
+            this.dataGridViewMoodMessage.Size = new System.Drawing.Size(457, 314);
+            this.dataGridViewMoodMessage.TabIndex = 0;
+            // 
+            // tabPageChat
+            // 
+            this.tabPageChat.Controls.Add(this.dataGridViewChat);
+            this.tabPageChat.Location = new System.Drawing.Point(4, 22);
+            this.tabPageChat.Name = "tabPageChat";
+            this.tabPageChat.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageChat.Size = new System.Drawing.Size(463, 320);
+            this.tabPageChat.TabIndex = 2;
+            this.tabPageChat.Text = "チャット";
+            this.tabPageChat.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewChat
+            // 
+            this.dataGridViewChat.AllowUserToAddRows = false;
+            this.dataGridViewChat.AllowUserToDeleteRows = false;
+            this.dataGridViewChat.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewChat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewChat.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewChat.Name = "dataGridViewChat";
+            this.dataGridViewChat.ReadOnly = true;
+            this.dataGridViewChat.RowTemplate.Height = 21;
+            this.dataGridViewChat.Size = new System.Drawing.Size(457, 314);
+            this.dataGridViewChat.TabIndex = 0;
+            // 
+            // menuStripMain
+            // 
+            this.menuStripMain.Dock = System.Windows.Forms.DockStyle.None;
+            this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemFile,
+            this.toolStripMenuItemWindow,
+            this.toolStripMenuItemHelp});
+            this.menuStripMain.Location = new System.Drawing.Point(0, 0);
+            this.menuStripMain.Name = "menuStripMain";
+            this.menuStripMain.Size = new System.Drawing.Size(471, 26);
+            this.menuStripMain.TabIndex = 0;
+            this.menuStripMain.Text = "menuStrip1";
+            // 
+            // toolStripMenuItemFile
+            // 
+            this.toolStripMenuItemFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemFileSetting,
             this.toolStripSeparator1,
-            this.終了XToolStripMenuItem});
-            this.ファイルFToolStripMenuItem.Name = "ファイルFToolStripMenuItem";
-            this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(89, 22);
-            this.ファイルFToolStripMenuItem.Text = "ファイル (&F)";
+            this.toolStripMenuItemFileExit});
+            this.toolStripMenuItemFile.Name = "toolStripMenuItemFile";
+            this.toolStripMenuItemFile.Size = new System.Drawing.Size(89, 22);
+            this.toolStripMenuItemFile.Text = "ファイル (&F)";
             // 
-            // 設定SToolStripMenuItem
+            // toolStripMenuItemFileSetting
             // 
-            this.設定SToolStripMenuItem.Name = "設定SToolStripMenuItem";
-            this.設定SToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.設定SToolStripMenuItem.Text = "設定 (&S)";
+            this.toolStripMenuItemFileSetting.Name = "toolStripMenuItemFileSetting";
+            this.toolStripMenuItemFileSetting.Size = new System.Drawing.Size(122, 22);
+            this.toolStripMenuItemFileSetting.Text = "設定 (&S)";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(119, 6);
             // 
-            // 終了XToolStripMenuItem
+            // toolStripMenuItemFileExit
             // 
-            this.終了XToolStripMenuItem.Name = "終了XToolStripMenuItem";
-            this.終了XToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.終了XToolStripMenuItem.Text = "終了 (&X)";
+            this.toolStripMenuItemFileExit.Name = "toolStripMenuItemFileExit";
+            this.toolStripMenuItemFileExit.Size = new System.Drawing.Size(122, 22);
+            this.toolStripMenuItemFileExit.Text = "終了 (&X)";
             // 
-            // ヘルプHToolStripMenuItem
+            // toolStripMenuItemWindow
             // 
-            this.ヘルプHToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.最新バージョンの確認ToolStripMenuItem,
+            this.toolStripMenuItemWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemWindowToggleVisible});
+            this.toolStripMenuItemWindow.Name = "toolStripMenuItemWindow";
+            this.toolStripMenuItemWindow.Size = new System.Drawing.Size(106, 22);
+            this.toolStripMenuItemWindow.Text = "ウィンドウ (&W)";
+            // 
+            // toolStripMenuItemWindowToggleVisible
+            // 
+            this.toolStripMenuItemWindowToggleVisible.Name = "toolStripMenuItemWindowToggleVisible";
+            this.toolStripMenuItemWindowToggleVisible.Size = new System.Drawing.Size(160, 22);
+            this.toolStripMenuItemWindowToggleVisible.Text = "通知領域に隠す";
+            // 
+            // toolStripMenuItemHelp
+            // 
+            this.toolStripMenuItemHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemHelpCheckUpdate,
             this.toolStripSeparator2,
-            this.growlForSkypeNotificationについてToolStripMenuItem,
-            this.作者のサイトへToolStripMenuItem});
-            this.ヘルプHToolStripMenuItem.Name = "ヘルプHToolStripMenuItem";
-            this.ヘルプHToolStripMenuItem.Size = new System.Drawing.Size(79, 22);
-            this.ヘルプHToolStripMenuItem.Text = "ヘルプ (&H)";
+            this.toolStripMenuItemHelpAboutSoftware,
+            this.toolStripMenuItemHelpOpenDeveloperSite});
+            this.toolStripMenuItemHelp.Name = "toolStripMenuItemHelp";
+            this.toolStripMenuItemHelp.Size = new System.Drawing.Size(79, 22);
+            this.toolStripMenuItemHelp.Text = "ヘルプ (&H)";
             // 
-            // 最新バージョンの確認ToolStripMenuItem
+            // toolStripMenuItemHelpCheckUpdate
             // 
-            this.最新バージョンの確認ToolStripMenuItem.Name = "最新バージョンの確認ToolStripMenuItem";
-            this.最新バージョンの確認ToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.最新バージョンの確認ToolStripMenuItem.Text = "最新バージョンの確認";
+            this.toolStripMenuItemHelpCheckUpdate.Name = "toolStripMenuItemHelpCheckUpdate";
+            this.toolStripMenuItemHelpCheckUpdate.Size = new System.Drawing.Size(196, 22);
+            this.toolStripMenuItemHelpCheckUpdate.Text = "最新バージョンの確認";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(193, 6);
             // 
-            // growlForSkypeNotificationについてToolStripMenuItem
+            // toolStripMenuItemHelpAboutSoftware
             // 
-            this.growlForSkypeNotificationについてToolStripMenuItem.Name = "growlForSkypeNotificationについてToolStripMenuItem";
-            this.growlForSkypeNotificationについてToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.growlForSkypeNotificationについてToolStripMenuItem.Text = "このソフトについて";
+            this.toolStripMenuItemHelpAboutSoftware.Name = "toolStripMenuItemHelpAboutSoftware";
+            this.toolStripMenuItemHelpAboutSoftware.Size = new System.Drawing.Size(196, 22);
+            this.toolStripMenuItemHelpAboutSoftware.Text = "このソフトについて";
             // 
-            // 作者のサイトへToolStripMenuItem
+            // toolStripMenuItemHelpOpenDeveloperSite
             // 
-            this.作者のサイトへToolStripMenuItem.Name = "作者のサイトへToolStripMenuItem";
-            this.作者のサイトへToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.作者のサイトへToolStripMenuItem.Text = "作者のサイトへ";
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowTemplate.Height = 21;
-            this.dataGridView1.Size = new System.Drawing.Size(457, 336);
-            this.dataGridView1.TabIndex = 0;
+            this.toolStripMenuItemHelpOpenDeveloperSite.Name = "toolStripMenuItemHelpOpenDeveloperSite";
+            this.toolStripMenuItemHelpOpenDeveloperSite.Size = new System.Drawing.Size(196, 22);
+            this.toolStripMenuItemHelpOpenDeveloperSite.Text = "作者のサイトへ";
             // 
             // notifyIconTray
             // 
+            this.notifyIconTray.ContextMenuStrip = this.contextMenuStripRightClick;
             this.notifyIconTray.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIconTray.Icon")));
             this.notifyIconTray.Visible = true;
             // 
@@ -291,20 +379,28 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(471, 394);
-            this.Controls.Add(this.toolStripContainer1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.toolStripContainerMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStripMain;
             this.Name = "FormMain";
             this.Text = "FormMain";
-            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
-            this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
-            this.toolStripContainer1.TopToolStripPanel.PerformLayout();
-            this.toolStripContainer1.ResumeLayout(false);
-            this.toolStripContainer1.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.Load += new System.EventHandler(this.FormSettingLoad);
+            this.toolStripContainerMain.BottomToolStripPanel.ResumeLayout(false);
+            this.toolStripContainerMain.BottomToolStripPanel.PerformLayout();
+            this.toolStripContainerMain.ContentPanel.ResumeLayout(false);
+            this.toolStripContainerMain.TopToolStripPanel.ResumeLayout(false);
+            this.toolStripContainerMain.TopToolStripPanel.PerformLayout();
+            this.toolStripContainerMain.ResumeLayout(false);
+            this.toolStripContainerMain.PerformLayout();
+            this.tabControlMain.ResumeLayout(false);
+            this.tabPageOnlineStatus.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOnlineStatus)).EndInit();
+            this.tabPageMoodMessage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMoodMessage)).EndInit();
+            this.tabPageChat.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewChat)).EndInit();
+            this.menuStripMain.ResumeLayout(false);
+            this.menuStripMain.PerformLayout();
             this.contextMenuStripRightClick.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -312,20 +408,20 @@
 
         #endregion
 
-        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem ファイルFToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 設定SToolStripMenuItem;
+        private System.Windows.Forms.ToolStripContainer toolStripContainerMain;
+        private System.Windows.Forms.TabControl tabControlMain;
+        private System.Windows.Forms.TabPage tabPageOnlineStatus;
+        private System.Windows.Forms.MenuStrip menuStripMain;
+        private System.Windows.Forms.DataGridView dataGridViewOnlineStatus;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFile;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFileSetting;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem 終了XToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ヘルプHToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 最新バージョンの確認ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFileExit;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemHelp;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemHelpCheckUpdate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem growlForSkypeNotificationについてToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 作者のサイトへToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemHelpAboutSoftware;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemHelpOpenDeveloperSite;
         private System.Windows.Forms.NotifyIcon notifyIconTray;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripRightClick;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOpenSetting;
@@ -340,5 +436,12 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCheckUpdate;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemExit;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemWindow;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemWindowToggleVisible;
+        private System.Windows.Forms.StatusStrip statusStripMain;
+        private System.Windows.Forms.TabPage tabPageMoodMessage;
+        private System.Windows.Forms.DataGridView dataGridViewMoodMessage;
+        private System.Windows.Forms.TabPage tabPageChat;
+        private System.Windows.Forms.DataGridView dataGridViewChat;
     }
 }

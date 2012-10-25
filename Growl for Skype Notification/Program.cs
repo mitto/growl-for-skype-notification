@@ -20,7 +20,7 @@ namespace Growl_for_Skype_Notification
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormSetting());
+            Application.Run(new FormMain());
         }
     }
 }
